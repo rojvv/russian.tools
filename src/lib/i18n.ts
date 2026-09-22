@@ -1,0 +1,56 @@
+export type Locale = 'en' | 'ru';
+// Browsers cap persistent cookies; the server renews explicit choices on each visit.
+export const languageCookieMaxAge = 400 * 24 * 60 * 60;
+
+export const messages = {
+	en: {
+		tools: 'Tools', language: 'Language', stressTitle: 'Stress Marker', verbTitle: 'Verb Conjugator',
+		homeDescription: 'Simple tools for working with the Russian language.',
+		stressDescription: 'Type Russian text and automatically add vowel stress marks directly in the editor. All processing stays in your browser.',
+		verbDescription: 'Look up Russian verb conjugations in simple present, future, past, and imperative lists.',
+		russianText: 'Russian text', review: 'Predictions may need review.', extension: 'Get the extension for', or: 'or',
+		loading: 'Loading…', marking: 'Marking…', lookingUp: 'Looking up…',
+		stressLoadError: 'The stress engine could not load. Reload to try again.',
+		stressProcessError: 'Could not process this text. Try a shorter passage or edit the text to try again.',
+		infinitive: 'Infinitive', closestMatch: 'Closest match for', chooseEntry: 'Choose an entry',
+		bothAspectPrompt: 'This verb has both aspects. Show:', imperfectiveUse: 'Imperfective use', perfectiveUse: 'Perfective use',
+		imperfective: 'Imperfective', perfective: 'Perfective', both: 'Both aspects', perfectiveNote: 'Perfective · no present tense',
+		Present: 'Present', Future: 'Future', Past: 'Past', Imperative: 'Imperative',
+		Singular: 'Singular', Plural: 'Plural', singularInformal: 'Singular · informal', pluralFormal: 'Plural / formal',
+		missingForm: '— = no form available in the dictionary.', meaningEnglish: 'Meaning (English)',
+		invalidVerb: 'Enter one Russian infinitive, for example читать.',
+		verbNotFound: 'This verb is not in the dictionary. Check the infinitive or try another verb.',
+		dictionaryError: 'Could not load the verb dictionary. Please try again.'
+	},
+	ru: {
+		tools: 'Инструменты', language: 'Язык', stressTitle: 'Расстановка ударений', verbTitle: 'Спряжение глаголов',
+		homeDescription: 'Простые инструменты для работы с русским языком.',
+		stressDescription: 'Автоматическая расстановка ударений в русском тексте прямо в редакторе. Вся обработка выполняется в браузере.',
+		verbDescription: 'Спряжение русских глаголов: настоящее, будущее и прошедшее время, повелительное наклонение.',
+		russianText: 'Текст на русском', review: 'Ударения могут требовать проверки.', extension: 'Установите расширение для', or: 'или',
+		loading: 'Загрузка…', marking: 'Расставляем ударения…', lookingUp: 'Поиск…',
+		stressLoadError: 'Не удалось загрузить модуль расстановки ударений. Перезагрузите страницу.',
+		stressProcessError: 'Не удалось обработать текст. Сократите или измените его и попробуйте снова.',
+		infinitive: 'Инфинитив', closestMatch: 'Ближайшее совпадение для', chooseEntry: 'Выберите значение',
+		bothAspectPrompt: 'Это двувидовой глагол. Показать:', imperfectiveUse: 'Несовершенный вид', perfectiveUse: 'Совершенный вид',
+		imperfective: 'Несовершенный вид', perfective: 'Совершенный вид', both: 'Двувидовой', perfectiveNote: 'Совершенный вид · настоящего времени нет',
+		Present: 'Настоящее время', Future: 'Будущее время', Past: 'Прошедшее время', Imperative: 'Повелительное наклонение',
+		Singular: 'Единственное число', Plural: 'Множественное число', singularInformal: 'Единственное число · на «ты»', pluralFormal: 'Множественное число / на «Вы»',
+		missingForm: '— = форма отсутствует в словаре.', meaningEnglish: 'Значение (англ.)',
+		invalidVerb: 'Введите один русский глагол в инфинитиве, например читать.',
+		verbNotFound: 'Глагол не найден в словаре. Проверьте инфинитив или попробуйте другой глагол.',
+		dictionaryError: 'Не удалось загрузить словарь глаголов. Попробуйте снова.'
+	}
+} satisfies Record<Locale, Record<string, string>>;
+export type MessageKey = keyof typeof messages.en;
+
+export function preferredLocale(cookie: string | undefined, acceptLanguage: string | null): Locale {
+	if (cookie === 'en' || cookie === 'ru') return cookie;
+	const languages = (acceptLanguage ?? '').split(',').map((entry) => {
+		const [tag, ...params] = entry.trim().toLowerCase().split(';');
+		const quality = params.find((param) => param.trim().startsWith('q='));
+		return { language: tag.split('-')[0], quality: quality ? Number(quality.trim().slice(2)) : 1 };
+	}).filter((entry) => entry.quality > 0 && (entry.language === 'en' || entry.language === 'ru'))
+		.sort((a, b) => b.quality - a.quality);
+	return languages[0]?.language === 'ru' ? 'ru' : 'en';
+}
