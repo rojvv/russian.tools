@@ -6,7 +6,7 @@ export const messages = {
   en: {
     nounTitle: "Noun Decliner",
     nounDescription: "Look up Russian noun declensions in all six cases, singular and plural.",
-    nominative: "Noun in the nominative case",
+    nominative: "Nominative",
     invalidNoun: "Enter one Russian noun, for example книга.",
     nounNotFound: "This noun is not in the dictionary. Try another noun.",
     nounDictionaryError: "Could not load the noun dictionary. Please try again.",
@@ -66,7 +66,7 @@ export const messages = {
   ru: {
     nounTitle: "Склонение существительных",
     nounDescription: "Склонение русских существительных по шести падежам в единственном и множественном числе.",
-    nominative: "Существительное в именительном падеже",
+    nominative: "Именительный",
     invalidNoun: "Введите одно русское существительное, например книга.",
     nounNotFound: "Существительное не найдено в словаре. Попробуйте другое слово.",
     nounDictionaryError: "Не удалось загрузить словарь существительных. Попробуйте снова.",
