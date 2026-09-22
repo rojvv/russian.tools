@@ -87,56 +87,59 @@ onMount(() => {
   <meta name="description" content={i18n.t("stressDescription")} />
 </svelte:head>
 
-<textarea
-  bind:this={editor}
-  aria-label={i18n.t("russianText")}
-  aria-describedby="privacy"
-  lang="ru"
-  spellcheck="false"
-  autocapitalize="off"
-  maxlength={20000}
-  placeholder="Пишите здесь…"
-  oninput={schedule}
-  oncompositionstart={() => {
-    composing = true;
-    clearTimeout(timer);
-    revision++;
-  }}
-  oncompositionend={() => {
-    composing = false;
-    schedule();
-  }}
-></textarea>
-<div class="notes">
-  <p id="privacy">
-    {i18n.t("review")}
-    {i18n.t("extension")}
-    <a
-      href="https://chromewebstore.google.com/detail/russian-stress-marker/dcbcimammngjhlmgdeejadiofgcjipec"
-    >Chrome</a>
-    {i18n.t("or")}
-    <a
-      href="https://addons.mozilla.org/en-US/firefox/addon/russian-stress-marker/"
-    >Firefox</a>.
-  </p>
-  <p class:error role="status">
-    {
-      error
-      ? i18n.t(error)
-      : !ready
-      ? i18n.t("loading")
-      : busy
-      ? i18n.t("marking")
-      : ""
-    }
-  </p>
+<div class="stress-tool">
+  <textarea
+    bind:this={editor}
+    aria-label={i18n.t("russianText")}
+    aria-describedby="privacy"
+    lang="ru"
+    spellcheck="false"
+    autocapitalize="off"
+    maxlength={20000}
+    placeholder="Пишите здесь…"
+    oninput={schedule}
+    oncompositionstart={() => {
+      composing = true;
+      clearTimeout(timer);
+      revision++;
+    }}
+    oncompositionend={() => {
+      composing = false;
+      schedule();
+    }}
+  ></textarea>
+  <div class="notes">
+    <p id="privacy">
+      {i18n.t("review")}
+      {i18n.t("extension")}
+      <a
+        href="https://chromewebstore.google.com/detail/russian-stress-marker/dcbcimammngjhlmgdeejadiofgcjipec"
+      >Chrome</a>
+      {i18n.t("or")}
+      <a
+        href="https://addons.mozilla.org/en-US/firefox/addon/russian-stress-marker/"
+      >Firefox</a>.
+    </p>
+    <p class:error role="status">
+      {
+        error
+        ? i18n.t(error)
+        : !ready
+        ? i18n.t("loading")
+        : busy
+        ? i18n.t("marking")
+        : ""
+      }
+    </p>
+  </div>
 </div>
 
 <style>
-textarea { display: block; width: 100%; min-height: 360px; margin-top: 24px; padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 20px; line-height: 1.8; resize: vertical; }
+.stress-tool { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+textarea { display: block; flex: 1; width: 100%; height: 0; min-height: 80px; margin: 0; padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 20px; line-height: 1.8; resize: none; }
 textarea::placeholder { color: var(--placeholder); }
-.notes { margin-top: 10px; }
+.notes { flex-shrink: 0; margin-top: 10px; }
+.notes [role="status"] { min-height: 1.6em; }
 .notes p { margin: 4px 0; font-size: 12px; }
 .error { color: var(--error); }
-@media (max-width: 600px) { textarea { min-height: 320px; } }
 </style>

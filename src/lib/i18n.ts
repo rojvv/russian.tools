@@ -67,7 +67,7 @@ export const messages = {
     invalidVerb: "Enter one Russian infinitive, for example читать.",
     verbNotFound: "This verb is not in the dictionary. Check the infinitive or try another verb.",
     dictionaryError: "Could not load the verb dictionary. Please try again.",
-    source: "Source:",
+    openRussianAttribution: "Some tools use data from",
   },
   ru: {
     nounTitle: "Склонение существительных",
@@ -133,7 +133,7 @@ export const messages = {
     invalidVerb: "Введите один русский глагол в инфинитиве, например читать.",
     verbNotFound: "Глагол не найден в словаре. Проверьте инфинитив или попробуйте другой глагол.",
     dictionaryError: "Не удалось загрузить словарь глаголов. Попробуйте снова.",
-    source: "Источник:",
+    openRussianAttribution: "Некоторые инструменты используют данные",
   },
 } satisfies Record<Locale, Record<string, string>>;
 export type MessageKey = keyof typeof messages.en;

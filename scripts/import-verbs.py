@@ -4,6 +4,7 @@ See static/data/verbs-SOURCE.md for the pinned source and license.
 """
 
 import csv
+import gzip
 import json
 import re
 import sys
@@ -15,7 +16,8 @@ def accent(text):
 
 
 result = []
-with open(sys.argv[1], encoding="utf-8", newline="") as source:
+open_source = gzip.open if sys.argv[1].endswith(".gz") else open
+with open_source(sys.argv[1], mode="rt", encoding="utf-8", newline="") as source:
     for row in csv.DictReader(source, delimiter="\t"):
         if row["aspect"] not in ("perfective", "imperfective", "both"):
             continue

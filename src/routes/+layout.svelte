@@ -39,7 +39,7 @@ const toolTitle = $derived(
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<main>
+<main class:stress-layout={page.route.id === "/stress"}>
   <header>
     <h1>
       <a href="/">russian.tools</a> {#if toolTitle}<span>{toolTitle}</span>{/if}
@@ -58,7 +58,7 @@ const toolTitle = $derived(
         aria-pressed={i18n.locale === "ru"}
         onclick={() => setLanguage("ru")}
       >
-        Русский
+        русский
       </button>
     </nav>
   </header>
@@ -66,6 +66,9 @@ const toolTitle = $derived(
 </main>
 
 <style>
+.stress-layout { display: flex; flex-direction: column; height: calc(100dvh - 80px); min-height: 260px; }
+.stress-layout header { flex-shrink: 0; }
+@media (max-width: 600px) { .stress-layout { height: calc(100dvh - 64px); } }
 header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 24px; }
 header h1 { margin: 0; }
 header h1 span { margin: 0; font-weight: 400; color: var(--subtle); }

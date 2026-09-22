@@ -208,7 +208,7 @@ async function lookup() {
 
 {#if verb}
   {#if suggested}<p class="match">
-      {i18n.t("closestMatch")} “{query.trim()}”: <strong lang="ru">{
+      {i18n.t("closestMatch")} {i18n.locale === "ru" ? '«' : '“'}{query.trim()}{i18n.locale === "ru" ? '»' : '”'}: <strong lang="ru">{
         verb.infinitive
       }</strong>
     </p>{/if}

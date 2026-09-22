@@ -15,7 +15,13 @@ const i18n = getI18n();
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 
+<p class="source">
+  {i18n.t("openRussianAttribution")} <a href="https://en.openrussian.org/"
+  >OpenRussian</a>.
+</p>
+
 <style>
 nav { margin-top: 32px; display: grid; gap: 24px; }
 nav a { font-weight: 500; }
+.source { margin-top: 32px; font-size: 12px; }
 </style>

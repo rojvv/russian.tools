@@ -53,3 +53,12 @@ test("live lookup completes prefixes and finds spelling mistakes without changin
   assert.deepEqual(suggestVerbs(verbs, ""), []);
   assert.equal(suggestVerbs(verbs, "читтаь")[0].bare, "читать");
 });
+
+test('current OpenRussian export includes additional verbs and complete paradigms', () => {
+  assert.ok(verbs.length >= 15300);
+  assert.ok(verbs.every(v => v.finite.length === 6 && v.past.length === 4 && v.imperative.length === 2));
+  assert.equal(get('гуглить').finite[0], 'гу́глю');
+  assert.equal(get('вложиться').aspect, 'perfective');
+  assert.equal(createTable(get('вложиться'), 'perfective')[0].rows[0].form, 'вложу́сь');
+  assert.equal(get('актуализировать').aspect, 'both');
+});

@@ -185,7 +185,7 @@ async function lookup() {
 
 {#if noun}
   {#if suggested}<p class="match">
-      {i18n.t("closestMatch")} “{query.trim()}”: <strong lang="ru">{
+      {i18n.t("closestMatch")} {i18n.locale === "ru" ? '«' : '“'}{query.trim()}{i18n.locale === "ru" ? '»' : '”'}: <strong lang="ru">{
         noun.nominative
       }</strong>
     </p>{/if}
@@ -242,9 +242,6 @@ async function lookup() {
   {/if}
 {/if}
 
-<p class="source">
-  {i18n.t("source")} <a href="https://en.openrussian.org/">OpenRussian</a>
-</p>
 <style>
 h3 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }
 .lookup { margin-top: 18px; }
@@ -267,6 +264,5 @@ tbody th { padding-top: 7px; }
 td { font-size: 15px; line-height: 1.5; }
 th:last-child, td:last-child { padding-right: 0; }
 .form { display: block; }
-.source { margin-top: 24px; font-size: 12px; }
 @media (max-width: 400px) { th, td { padding-right: 14px; } }
 </style>
