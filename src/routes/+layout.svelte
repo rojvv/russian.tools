@@ -100,12 +100,12 @@ const toolTitle = $derived(
 .stress-layout { display: flex; flex-direction: column; height: calc(100dvh - 80px); min-height: 260px; }
 .stress-layout header { flex-shrink: 0; }
 @media (max-width: 600px) { .stress-layout { height: calc(100dvh - 64px); } }
-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 24px; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-bottom: 24px; }
 header h1 { margin: 0; }
 header h1 span { margin: 0; font-weight: 400; color: var(--subtle); }
 header a { text-decoration: none; }
 nav { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 12px; color: var(--subtle); }
-nav a { border: 0; padding: 4px 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+nav a { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
 nav a[aria-current="true"] { color: var(--foreground); }
 nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
