@@ -5,6 +5,17 @@ import { createTable, exportRows, findVerbs, suggestVerbs, toCsv } from "../src/
 const verbs = JSON.parse(readFileSync(new URL("../static/data/verbs.json", import.meta.url), "utf8"));
 const get = (word) => findVerbs(verbs, word)[0];
 
+test("Russian verb fields contain no Latin letters or leaked source markup", () => {
+  for (const verb of verbs) {
+    for (const form of [verb.bare, verb.infinitive, ...verb.finite, ...verb.past, ...verb.imperative]) {
+      assert.doesNotMatch(form, /[a-zA-Z$]/u, `${verb.bare}: ${form}`);
+    }
+  }
+  assert.equal(get("сбраживать").infinitive, "сбра́живать");
+  assert.equal(get("сбраживать").past[2], "сбра́живало");
+  assert.deepEqual(get("взъесться").past, ["взъе́лся", "взъе́лась", "взъе́лось", "взъе́лись"]);
+});
+
 test("lookup accepts case and stress, preserves homonyms, and rejects unknown verbs", () => {
   assert.equal(get(" ЧИТА́ТЬ ").bare, "читать");
   assert.ok(findVerbs(verbs, "писать").length > 1);
@@ -54,11 +65,11 @@ test("live lookup completes prefixes and finds spelling mistakes without changin
   assert.equal(suggestVerbs(verbs, "читтаь")[0].bare, "читать");
 });
 
-test('current OpenRussian export includes additional verbs and complete paradigms', () => {
+test("current OpenRussian export includes additional verbs and complete paradigms", () => {
   assert.ok(verbs.length >= 15300);
   assert.ok(verbs.every(v => v.finite.length === 6 && v.past.length === 4 && v.imperative.length === 2));
-  assert.equal(get('гуглить').finite[0], 'гу́глю');
-  assert.equal(get('вложиться').aspect, 'perfective');
-  assert.equal(createTable(get('вложиться'), 'perfective')[0].rows[0].form, 'вложу́сь');
-  assert.equal(get('актуализировать').aspect, 'both');
+  assert.equal(get("гуглить").finite[0], "гу́глю");
+  assert.equal(get("вложиться").aspect, "perfective");
+  assert.equal(createTable(get("вложиться"), "perfective")[0].rows[0].form, "вложу́сь");
+  assert.equal(get("актуализировать").aspect, "both");
 });

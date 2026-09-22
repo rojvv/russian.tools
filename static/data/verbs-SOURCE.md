@@ -40,6 +40,11 @@ remain empty; no forms are guessed. The existing correction suppressing the
 synthetic first-person singular of победить is retained. Audio is not imported.
 Dictionary forms may contain errors.
 
+Local corrections also replace the Latin `c` in `cбраживать` with Cyrillic `с`,
+restore its infinitive stress and neuter past form (`сбра́живало`), and replace
+corrupted source markup in the feminine, neuter, and plural past forms of
+`взъесться` with `взъе́лась`, `взъе́лось`, and `взъе́лись`.
+
 ## SHA-256 of original CSV exports
 
 - `words.csv`: `2415038b378a2b0727bd17daac8a1fded1815d62d747e4a775aa805bfac1a64d`

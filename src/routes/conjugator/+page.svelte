@@ -182,7 +182,9 @@ async function lookup() {
 </script>
 
 <svelte:head>
-  <title>{i18n.t("verbTitle")} | russian.tools</title>
+  <title>
+    {verb ? `${verb.bare} — ` : ""}{i18n.t("verbTitle")} | russian.tools
+  </title>
   <meta name="description" content={i18n.t("verbDescription")} />
 </svelte:head>
 
@@ -208,7 +210,9 @@ async function lookup() {
 
 {#if verb}
   {#if suggested}<p class="match">
-      {i18n.t("closestMatch")} {i18n.locale === "ru" ? '«' : '“'}{query.trim()}{i18n.locale === "ru" ? '»' : '”'}: <strong lang="ru">{
+      {i18n.t("closestMatch")} {i18n.locale === "ru" ? "«" : "“"}{
+        query.trim()
+      }{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
         verb.infinitive
       }</strong>
     </p>{/if}

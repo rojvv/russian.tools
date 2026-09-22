@@ -21,6 +21,15 @@ with open_source(sys.argv[1], mode="rt", encoding="utf-8", newline="") as source
     for row in csv.DictReader(source, delimiter="\t"):
         if row["aspect"] not in ("perfective", "imperfective", "both"):
             continue
+        # Corrections for malformed Russian fields in the upstream export.
+        if row["bare"] in ("cбраживать", "сбраживать"):
+            row["bare"] = "сбраживать"
+            row["accented"] = "сбра́живать"
+            row["past_n"] = "сбра́живало"
+        if row["bare"] == "взъесться":
+            row["past_f"] = "взъе́лась"
+            row["past_n"] = "взъе́лось"
+            row["past_pl"] = "взъе́лись"
         forms = [
             accent(row["presfut_" + key])
             for key in ("sg1", "sg2", "sg3", "pl1", "pl2", "pl3")

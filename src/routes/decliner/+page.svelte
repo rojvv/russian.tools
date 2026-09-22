@@ -159,7 +159,9 @@ async function lookup() {
 </script>
 
 <svelte:head>
-  <title>{i18n.t("nounTitle")} | russian.tools</title>
+  <title>
+    {noun ? `${noun.bare} — ` : ""}{i18n.t("nounTitle")} | russian.tools
+  </title>
   <meta name="description" content={i18n.t("nounDescription")} />
 </svelte:head>
 
@@ -185,7 +187,9 @@ async function lookup() {
 
 {#if noun}
   {#if suggested}<p class="match">
-      {i18n.t("closestMatch")} {i18n.locale === "ru" ? '«' : '“'}{query.trim()}{i18n.locale === "ru" ? '»' : '”'}: <strong lang="ru">{
+      {i18n.t("closestMatch")} {i18n.locale === "ru" ? "«" : "“"}{
+        query.trim()
+      }{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
         noun.nominative
       }</strong>
     </p>{/if}
