@@ -11,23 +11,15 @@ const i18n = getI18n();
   home
 />
 
-<p>{i18n.t("homeDescription")}</p>
-
 <nav aria-label={i18n.t("tools")}>
   <div>
-    <a href="/stress">{i18n.t("stressSeoTitle")}</a><p>
-      {i18n.t("stressDescription")}
-    </p>
+    <a href="/stress">{i18n.t("stressSeoTitle")}</a>
   </div>
   <div>
-    <a href="/conjugator">{i18n.t("verbSeoTitle")}</a><p>
-      {i18n.t("verbDescription")}
-    </p>
+    <a href="/conjugator">{i18n.t("verbSeoTitle")}</a>
   </div>
   <div>
-    <a href="/decliner">{i18n.t("nounSeoTitle")}</a><p>
-      {i18n.t("nounDescription")}
-    </p>
+    <a href="/decliner">{i18n.t("nounSeoTitle")}</a>
   </div>
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
