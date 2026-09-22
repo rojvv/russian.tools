@@ -107,7 +107,7 @@ header a { text-decoration: none; }
 nav { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 12px; color: var(--subtle); }
 nav a { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
 nav a[aria-current="true"] { color: var(--foreground); }
-nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (hover: hover) { nav a:hover { text-decoration: underline; text-underline-offset: 3px; } }
 
 @font-face { font-family: 'Golos Text'; src: url('/fonts/GolosText.ttf') format('truetype'); font-style: normal; font-weight: 400 900; font-display: swap; }
 :global(:root) { color-scheme: light; --background: #fff; --foreground: #222; --muted: #666; --subtle: #777; --placeholder: #888; --border: #ddd; --hover: #f7f7f7; --focus: #555; --error: #a02e23; }
@@ -120,7 +120,7 @@ nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 :global(h1) { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -.6px; line-height: 1.3; }
 :global(p) { margin: 0; color: var(--muted); }
 :global(a) { color: inherit; text-underline-offset: 3px; }
-:global(a:hover) { color: var(--focus); }
+@media (hover: hover) { :global(a:hover) { color: var(--focus); } }
 :global(:focus-visible) { outline: 2px solid var(--focus); outline-offset: 3px; }
 @media (max-width: 600px) { :global(main) { margin: 32px auto; padding: 0 20px; } }
 </style>
