@@ -92,7 +92,6 @@ onMount(() => {
 <div class="stress-tool">
   <textarea
     bind:this={editor}
-    aria-label={i18n.t("russianText")}
     aria-describedby="privacy"
     lang="ru"
     spellcheck="false"
