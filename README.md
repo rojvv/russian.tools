@@ -4,7 +4,18 @@ A collection of browser-based Russian language tools, built with SvelteKit and T
 
 ## Development
 
-Use Node.js 24 or later and pnpm 12.4.2.
+Use Node.js 24 or later and pnpm 12.4.2. When using Corepack, version
+0.34.5 or newer is required for pnpm's `.mjs` entry point. For Node.js 24.0–24.14,
+Corepack 0.34.7 is a compatible release:
+
+```sh
+npm install --global corepack@0.34.7
+corepack enable pnpm
+```
+
+If an older Corepack already cached pnpm with a `bin/pnpm.cjs` path, run
+`corepack cache clean` once after updating, then retry `pnpm install`.
+[Corepack's fix](https://github.com/nodejs/corepack/releases/tag/v0.34.5).
 
 ```sh
 pnpm install
@@ -19,7 +30,7 @@ pnpm preview
 
 ## Stress Marker
 
-The first tool adds Russian vowel stress marks with [`@roj/rustress`](https://jsr.io/@roj/rustress) 0.0.8. The home page lists available tools. At `/stress`, type or paste into a single editor and accents appear directly in the text. Stress is recomputed after edits, preserving the cursor, selection, whitespace, and scroll position. Composition input is allowed to finish before marking. Input is limited to 20,000 characters (including accents).
+The first tool adds Russian vowel stress marks with [`@roj/rustress`](https://jsr.io/@roj/rustress) 0.0.9. The home page lists available tools. At `/stress`, type or paste into a single editor and accents appear directly in the text. Stress is recomputed after edits, preserving the cursor, selection, whitespace, and scroll position. Composition input is allowed to finish before marking. Input is limited to 20,000 characters (including accents).
 
 Inference runs in a module Web Worker, with debounced requests, bounded inference batches, and stale-result suppression. The dictionary, model, ONNX WebAssembly runtime, and Golos Text fonts are served locally; text is never submitted to a server. After the engine loads, processing works without a network connection. Reloading offline requires the site's assets to be available in the browser cache; this is not an offline-installable app.
 
@@ -62,19 +73,31 @@ The interface uses `sveltekit-i18n` v3 for English and Russian translations. Eac
 
 Appearance always follows the system color scheme through CSS (`prefers-color-scheme`), including before hydration. Dark mode uses a pure `#000` background across the page, editor, and inputs. There is no theme selector; older theme cookies are ignored. The language attribute is rendered on the server.
 
-## Noun Decliner
+## Noun and Adjective Decliner
 
-At `/decliner`, look up 26,982 OpenRussian noun entries with stressed forms for all
-six cases in singular and plural. The interface matches the Verb Conjugator,
-including automatic lookup, labeled closest matches, homonym selection, English
-and Russian labels, responsive layout, and shareable URLs such as
-`/decliner?книга` (or `?noun=книга`). Initial query results are server-rendered;
-the browser downloads the local dictionary only when another lookup is needed.
-Indeclinable and number-restricted nouns are labeled; missing forms display `—`.
-The older source export can contain gaps and errors. Attribution, the pinned
-source revision, and transformations are in `static/data/nouns-SOURCE.md`;
-the CC BY-SA 4.0 license is in `static/data/nouns-LICENSE.txt`.
-Rebuild with `python3 scripts/import-nouns.py /path/to/nouns.csv`.
+At `/decliner`, look up 26,982 noun entries and 41,948 adjective entries from
+OpenRussian in one search field. Nouns show all six cases in singular and plural;
+adjectives show masculine, feminine, neuter, and plural columns, with separate
+animate and inanimate accusative rows. Dictionary stress marks and alternative
+forms are preserved. Entries that share a spelling can be selected by part of
+speech and meaning. Missing forms display `—`.
+
+The interface includes automatic lookup, labeled closest matches, English and
+Russian labels, and shareable URLs such as `/decliner?книга` and
+`/decliner?новый`. Named queries such as `?noun=книга` and `?adjective=новый`
+also work. Initial results are server-rendered; subsequent lookups load the
+local noun dictionary and four adjective dictionary shards. Noun-only number
+restrictions and indeclinable labels remain supported.
+
+The noun dataset comes from the older OpenRussian export and can contain gaps
+and errors. Rebuild it with `python3 scripts/import-nouns.py /path/to/nouns.csv`.
+The adjective dataset uses the public export retrieved on 2026-09-22. Its source,
+license, transformations, checksums, and reproduction instructions are in
+`static/data/adjectives-SOURCE.md`. Rebuild the retained snapshot with:
+
+```sh
+python3 scripts/import-adjectives.py scripts/data/openrussian-adjectives-2026-09-22.tsv.gz
+```
 
 ## Search indexing
 
@@ -84,7 +107,7 @@ cookies. Word pages include server-rendered forms, word-specific titles and
 headings, localized canonical URLs, and reciprocal `hreflang` links. Inexact
 suggestions and invalid queries remain `noindex`.
 
-`/sitemap.xml` lists separate noun and verb sitemaps for each language, keeping
+`/sitemap.xml` lists separate noun, adjective, and verb sitemaps for each language, keeping
 each file below Google's 50,000-URL limit. After deployment, submit
 `https://russian.tools/sitemap.xml` in Google Search Console and inspect sample
 English and Russian word URLs. Indexing and rankings depend on Google's crawl

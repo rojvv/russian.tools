@@ -7,12 +7,13 @@ const i18n = getI18n();
 import { afterNavigate, replaceState } from "$app/navigation";
 import { page } from "$app/state";
 import {
+  adjectiveDictionaryFiles,
   createTable,
-  normalizeNoun,
-  type Noun,
-  suggestNouns,
+  type Declinable,
+  normalizeWord,
+  suggestDeclinables,
 } from "$lib/declension";
-import { readNounQuery, writeNounQuery } from "$lib/declension-url";
+import { readDeclensionQuery, writeDeclensionQuery } from "$lib/declension-url";
 import { onDestroy, onMount, untrack } from "svelte";
 import type { PageData } from "./$types";
 
@@ -22,28 +23,28 @@ let input: HTMLInputElement;
 let query = $state(initial.query);
 let loading = $state(false);
 let message = $state<MessageKey | "">(initial.message);
-let matches = $state<Noun[]>(initial.matches);
+let matches = $state<Declinable[]>(initial.matches);
 let selected = $state(0);
-let noun = $state<Noun | null>(initial.matches[0] ?? null);
+let word = $state<Declinable | null>(initial.matches[0] ?? null);
 let sections = $state(
   initial.matches[0] ? createTable(initial.matches[0]) : [],
 );
-let dataset: Noun[] | undefined;
-let dictionaryRequest: Promise<Noun[]> | undefined;
+let dataset: Declinable[] | undefined;
+let dictionaryRequest: Promise<Declinable[]> | undefined;
 let timer: ReturnType<typeof setTimeout>;
 onDestroy(() => {
   clearTimeout(timer);
   request++;
 });
 const suggested = $derived(
-  noun
-    && normalizeNoun(query).replaceAll("ё", "е")
-      !== normalizeNoun(noun.bare).replaceAll("ё", "е"),
+  word
+    && normalizeWord(query).replaceAll("ё", "е")
+      !== normalizeWord(word.bare).replaceAll("ё", "е"),
 );
 
 function syncUrl() {
   const current = new URL(window.location.href);
-  const next = writeNounQuery(current, query);
+  const next = writeDeclensionQuery(current, query);
   if (next.href !== current.href) replaceState(next, page.state);
 }
 
@@ -56,7 +57,7 @@ function scheduleLookup(updateUrl = true) {
 let request = 0;
 
 function restoreUrl(url: URL) {
-  const incoming = readNounQuery(url);
+  const incoming = readDeclensionQuery(url);
   if (incoming === query) return;
   query = incoming;
   if (input) input.value = incoming;
@@ -76,7 +77,10 @@ afterNavigate(({ type }) => {
 });
 
 function handleInput() {
-  query = input.value.slice(0, 40);
+  const next = input.value.slice(0, 40);
+  // Blurring the input fires change after input; do not reset a chosen entry.
+  if (next === query) return;
+  query = next;
   scheduleLookup();
 }
 
@@ -90,13 +94,13 @@ function readInput() {
 onMount(() => {
   // Wait for SvelteKit's router before synchronizing a restored value to the URL.
   const startup = setTimeout(() => {
-    if (readNounQuery(new URL(window.location.href)) !== initial.query) {
+    if (readDeclensionQuery(new URL(window.location.href)) !== initial.query) {
       restoreUrl(new URL(window.location.href));
     } else {
       readInput();
       if (query !== initial.query) scheduleLookup();
     }
-    if (query.trim() && !noun && !message) scheduleLookup();
+    if (query.trim() && !word && !message) scheduleLookup();
   }, 0);
   const checks = [100, 500, 1500].map((delay) => setTimeout(readInput, delay));
   const restoreHistory = () => restoreUrl(new URL(window.location.href));
@@ -116,14 +120,14 @@ onMount(() => {
 
 function choose(index: number) {
   selected = index;
-  noun = matches[index];
-  sections = createTable(noun);
+  word = matches[index];
+  sections = createTable(word);
 }
 
 function resetResult() {
   request++;
   loading = false;
-  noun = null;
+  word = null;
   matches = [];
   sections = [];
   message = "";
@@ -131,7 +135,7 @@ function resetResult() {
 
 async function lookup() {
   resetResult();
-  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeNoun(query))) {
+  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeWord(query))) {
     message = "invalidNoun";
     return;
   }
@@ -139,17 +143,22 @@ async function lookup() {
   loading = true;
   try {
     if (!dataset) {
-      dictionaryRequest ??= fetch("/data/nouns.json").then((response) => {
-        if (!response.ok) throw new Error("Could not load nouns");
-        return response.json() as Promise<Noun[]>;
-      }).catch((error) => {
+      dictionaryRequest ??= Promise.all(
+        ["nouns.json", ...adjectiveDictionaryFiles].map(async (name) => {
+          const response = await fetch(`/data/${name}`);
+          if (!response.ok) {
+            throw new Error("Could not load declension dictionary");
+          }
+          return response.json() as Promise<Declinable[]>;
+        }),
+      ).then((dictionaries) => dictionaries.flat()).catch((error) => {
         dictionaryRequest = undefined;
         throw error;
       });
       dataset = await dictionaryRequest;
     }
     if (id !== request) return;
-    matches = suggestNouns(dataset!, query);
+    matches = suggestDeclinables(dataset!, query);
     if (matches.length) choose(0);
     else message = "nounNotFound";
   } catch {
@@ -159,31 +168,31 @@ async function lookup() {
   }
 }
 const resultTitle = $derived(
-  noun
+  word
     ? i18n.locale === "ru"
-      ? `Склонение слова «${noun.bare}»`
-      : `Declensions for ${noun.bare}`
+      ? `Склонение слова «${word.bare}»`
+      : `Declensions for ${word.bare}`
     : i18n.t("nounSeoTitle"),
 );
 </script>
 
 <Seo
   title={`${resultTitle} | russian.tools`}
-  description={noun ? `${noun.bare}: ${i18n.t("nounDescription")}` : i18n.t("nounDescription")}
-  {...dictionarySeo("/decliner", query, noun?.bare)}
+  description={word ? `${word.bare}: ${i18n.t("nounDescription")}` : i18n.t("nounDescription")}
+  {...dictionarySeo("/decliner", query, word?.bare)}
 />
 
 <div class="lookup">
   <input
-    id="noun"
-    name="noun"
+    id="word"
+    name="word"
     lang="ru"
     bind:this={input}
     bind:value={query}
     oninput={handleInput}
     onchange={handleInput}
-    placeholder={i18n.t("nominative")}
-    aria-label={i18n.t("nominative")}
+    placeholder={i18n.t("declensionInput")}
+    aria-label={i18n.t("declensionInput")}
     spellcheck="false"
     autocapitalize="off"
     maxlength="40"
@@ -193,12 +202,12 @@ const resultTitle = $derived(
   {loading ? i18n.t("lookingUp") : message ? i18n.t(message) : ""}
 </p>
 
-{#if noun}
+{#if word}
   {#if suggested}<p class="match">
       {i18n.t("closestMatch")} {i18n.locale === "ru" ? "«" : "“"}{
         query.trim()
       }{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
-        noun.nominative
+        word.nominative
       }</strong>
     </p>{/if}
   {#if matches.length > 1}
@@ -209,20 +218,25 @@ const resultTitle = $derived(
       onchange={(event) => choose(Number(event.currentTarget.value))}
     >
       {#each matches as entry, i}<option value={i}>
-          {entry.nominative} — {entry.meaning}
+          {entry.nominative} — {
+            i18n.t(entry.kind === "adjective" ? "adjective" : "noun")
+          } — {entry.meaning}
         </option>{/each}
     </select>
   {/if}
   <h2>{resultTitle}</h2>
-  <p lang="ru">{noun.nominative}</p>
+  <p lang="ru">{word.nominative}</p>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
           i18n.t("meaningEnglish")
-        }:</span>{" "}{/if}{noun.meaning}
+        }:</span>{" "}{/if}{word.meaning}
   </p>
-  {#if noun.indeclinable}<p class="hint">{i18n.t("indeclinable")}</p>{/if}
-  {#if noun.singularOnly}<p class="hint">{i18n.t("singularOnly")}</p>{/if}
-  {#if noun.pluralOnly}<p class="hint">{i18n.t("pluralOnly")}</p>{/if}
+  <p class="hint">{i18n.t(word.kind === "adjective" ? "adjective" : "noun")}</p>
+  {#if word.kind !== "adjective"}
+    {#if word.indeclinable}<p class="hint">{i18n.t("indeclinable")}</p>{/if}
+    {#if word.singularOnly}<p class="hint">{i18n.t("singularOnly")}</p>{/if}
+    {#if word.pluralOnly}<p class="hint">{i18n.t("pluralOnly")}</p>{/if}
+  {/if}
   <div class="declensions">
     <table>
       <caption>{i18n.t("declension")}</caption>

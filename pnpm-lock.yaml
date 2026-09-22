@@ -193,8 +193,8 @@ importers:
   .:
     dependencies:
       "@roj/rustress":
-        specifier: jsr:0.0.8
-        version: "@jsr/roj__rustress@0.0.8"
+        specifier: jsr:0.0.9
+        version: "@jsr/roj__rustress@0.0.9"
       onnxruntime-web:
         specifier: 1.30.0
         version: 1.30.0
@@ -879,10 +879,10 @@ packages:
       integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==,
     }
 
-  "@jsr/roj__rustress@0.0.8":
+  "@jsr/roj__rustress@0.0.9":
     resolution: {
-      integrity: sha512-KpYxKbPleJOHA8yNdsexY3amQRh/fiD/Pu0MFEKSBPVMm/u3gsSZ8WiYVqz5mKOyTN40sLytmS3DMLnoD+Y70w==,
-      tarball: https://npm.jsr.io/~/11/@jsr/roj__rustress/0.0.8.tgz,
+      integrity: sha512-grJhaNbhSVV4P3H+7/NnR12ZneecqUdjnvBbF8UNPY/VDY/m3bXMDDYr1BDAF4RW67T11+oKKu4BzsPQEqumHA==,
+      tarball: https://npm.jsr.io/~/11/@jsr/roj__rustress/0.0.9.tgz,
     }
 
   "@jsr/std__encoding@1.0.11":
@@ -2050,7 +2050,7 @@ snapshots:
       "@jridgewell/resolve-uri": 3.1.2
       "@jridgewell/sourcemap-codec": 1.6.0
 
-  "@jsr/roj__rustress@0.0.8":
+  "@jsr/roj__rustress@0.0.9":
     dependencies:
       "@jsr/std__encoding": 1.0.11
       onnxruntime-web: 1.30.0

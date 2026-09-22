@@ -3,3 +3,5 @@ allowBuilds:
   esbuild: true
   protobufjs: false
   workerd: true
+minimumReleaseAgeExclude:
+  - "@jsr/roj__rustress@0.0.9"

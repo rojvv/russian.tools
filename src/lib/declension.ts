@@ -1,10 +1,14 @@
 export {
+  findWords as findDeclinables,
   findWords as findNouns,
+  normalizeWord,
   normalizeWord as normalizeNoun,
+  suggestWords as suggestDeclinables,
   suggestWords as suggestNouns,
 } from "./dictionary-lookup.ts";
 
 export interface Noun {
+  kind?: "noun";
   bare: string;
   nominative: string;
   meaning: string;
@@ -17,7 +21,45 @@ export interface Noun {
   plural: string[];
 }
 export const cases = ["Nominative", "Genitive", "Dative", "Accusative", "Instrumental", "Prepositional"] as const;
-export function createTable(noun: Noun) {
+export interface Adjective {
+  kind: "adjective";
+  bare: string;
+  nominative: string;
+  meaning: string;
+  masculine: string[];
+  feminine: string[];
+  neuter: string[];
+  plural: string[];
+}
+export type Declinable = Noun | Adjective;
+
+// Adjectives distinguish animate and inanimate accusatives in each paradigm.
+export const adjectiveCases = [
+  "Nominative",
+  "Genitive",
+  "Dative",
+  "AccusativeInanimate",
+  "AccusativeAnimate",
+  "Instrumental",
+  "Prepositional",
+] as const;
+type Section = {
+  title: "Singular" | "Plural" | "Masculine" | "Feminine" | "Neuter";
+  rows: { label: typeof cases[number] | typeof adjectiveCases[number]; form: string }[];
+};
+
+export function createTable(noun: Declinable): Section[] {
+  if (noun.kind === "adjective") {
+    return ([
+      ["Masculine", noun.masculine],
+      ["Feminine", noun.feminine],
+      ["Neuter", noun.neuter],
+      ["Plural", noun.plural],
+    ] as const).map(([title, forms]) => ({
+      title,
+      rows: adjectiveCases.map((label, index) => ({ label, form: forms[index]?.replace(/^-$/, "") ?? "" })),
+    }));
+  }
   return (["Singular", "Plural"] as const).map((title) => ({
     title,
     rows: cases.map((label, index) => ({
@@ -28,3 +70,10 @@ export function createTable(noun: Noun) {
     })),
   }));
 }
+
+export const adjectiveDictionaryFiles = [
+  "adjectives-1.json",
+  "adjectives-2.json",
+  "adjectives-3.json",
+  "adjectives-4.json",
+] as const;

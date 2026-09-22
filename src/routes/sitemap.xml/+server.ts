@@ -9,5 +9,7 @@ export function GET() {
     "/sitemaps/nouns.xml",
     "/sitemaps/nouns-ru.xml",
     "/sitemaps/verbs-ru.xml",
+    "/sitemaps/adjectives.xml",
+    "/sitemaps/adjectives-ru.xml",
   ], true);
 }

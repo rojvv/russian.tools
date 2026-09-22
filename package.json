@@ -15,7 +15,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "dependencies": {
-    "@roj/rustress": "jsr:0.0.8",
+    "@roj/rustress": "jsr:0.0.9",
     "onnxruntime-web": "1.30.0",
     "sveltekit-i18n": "^3.0.0"
   },

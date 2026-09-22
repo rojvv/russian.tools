@@ -1,15 +1,20 @@
-import { normalizeNoun, suggestNouns } from "$lib/declension";
-import { readNounQuery } from "$lib/declension-url";
-import { getNouns } from "$lib/server/declension";
+import { normalizeWord, suggestDeclinables } from "$lib/declension";
+import { readDeclensionQuery } from "$lib/declension-url";
+import { getDeclinables } from "$lib/server/declension";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ url }) => {
-  const query = readNounQuery(url);
+export const load: PageServerLoad = async ({ url, fetch }) => {
+  const query = readDeclensionQuery(url);
   if (!query.trim()) return { query, matches: [], message: "" as const };
-  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeNoun(query))) {
+  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeWord(query))) {
     return { query, matches: [], message: "invalidNoun" as const };
   }
-  const matches = suggestNouns(await getNouns(), query);
+  let matches;
+  try {
+    matches = suggestDeclinables(await getDeclinables(fetch), query);
+  } catch {
+    return { query, matches: [], message: "nounDictionaryError" as const };
+  }
   return {
     query,
     matches,
