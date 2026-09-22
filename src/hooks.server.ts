@@ -10,8 +10,8 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.request.headers.get("accept-language"),
   );
   event.locals.locale = locale;
-  if (savedLanguage === "en" || savedLanguage === "ru") {
-    event.cookies.set("language", savedLanguage, {
+  if (requestedLanguage === "en" || requestedLanguage === "ru" || savedLanguage === "en" || savedLanguage === "ru") {
+    event.cookies.set("language", locale, {
       path: "/",
       maxAge: languageCookieMaxAge,
       httpOnly: false,

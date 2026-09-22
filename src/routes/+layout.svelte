@@ -10,18 +10,26 @@ import { untrack } from "svelte";
 let { children, data } = $props();
 const i18n = createI18n(untrack(() => data.locale));
 $effect(() => {
-  i18n.locale = data.locale;
+  const requested = page.url.searchParams.get("lang");
+  const locale = requested === "en" || requested === "ru"
+    ? requested
+    : data.locale;
+  // The library setter reads reactive state internally. Do not subscribe this
+  // effect to those reads and overwrite a user's live language selection.
+  untrack(() => {
+    i18n.locale = locale;
+  });
 });
 $effect(() => {
   document.documentElement.lang = i18n.locale ?? "en";
 });
 function setLanguage(locale: Locale) {
-  i18n.locale = locale;
-  replaceState(languageUrl(window.location.href, locale), page.state);
   document.cookie =
     `language=${locale}; Path=/; Max-Age=${languageCookieMaxAge}; SameSite=Lax${
       location.protocol === "https:" ? "; Secure" : ""
     }`;
+  i18n.locale = locale;
+  replaceState(languageUrl(window.location.href, locale), page.state);
 }
 const toolTitle = $derived(
   page.route.id === "/stress"
