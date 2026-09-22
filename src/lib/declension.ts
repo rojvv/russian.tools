@@ -70,10 +70,3 @@ export function createTable(noun: Declinable): Section[] {
     })),
   }));
 }
-
-export const adjectiveDictionaryFiles = [
-  "adjectives-1.json",
-  "adjectives-2.json",
-  "adjectives-3.json",
-  "adjectives-4.json",
-] as const;

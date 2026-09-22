@@ -5,10 +5,9 @@ See static/data/verbs-SOURCE.md for the pinned source and license.
 
 import csv
 import gzip
-import json
 import re
 import sys
-from pathlib import Path
+from dictionary_output import write_dictionary
 
 
 def accent(text):
@@ -50,7 +49,5 @@ with open_source(sys.argv[1], mode="rt", encoding="utf-8", newline="") as source
                 ],
             }
         )
-Path("static/data/verbs.json").write_text(
-    json.dumps(result, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
-)
+write_dictionary("verbs", result)
 print(f"Imported {len(result):,} verb entries.")

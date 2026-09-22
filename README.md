@@ -86,7 +86,7 @@ The interface includes automatic lookup, labeled closest matches, English and
 Russian labels, and shareable URLs such as `/decliner?книга` and
 `/decliner?новый`. Named queries such as `?noun=книга` and `?adjective=новый`
 also work. Initial results are server-rendered; subsequent lookups load the
-local noun dictionary and four adjective dictionary shards. Noun-only number
+compressed local noun and adjective dictionaries. Noun-only number
 restrictions and indeclinable labels remain supported.
 
 The noun dataset comes from the older OpenRussian export and can contain gaps
@@ -98,6 +98,19 @@ license, transformations, checksums, and reproduction instructions are in
 ```sh
 python3 scripts/import-adjectives.py scripts/data/openrussian-adjectives-2026-09-22.tsv.gz
 ```
+
+## Dictionary asset size
+
+Noun, verb, and adjective dictionaries are minified and stored as deterministic
+`static/data/*.json.gz` files (about 6.6 MiB combined). The import scripts write
+these compressed assets directly; the formatter excludes generated dictionaries.
+Both browser and server lookups decode them with the native `DecompressionStream`
+API. A browser supporting gzip `DecompressionStream` is required for live lookup.
+Initial query results remain server-rendered.
+
+Server loaders cache decoded dictionaries and retry failed downloads. All three
+are fetched as local static assets rather than embedded in the Worker JavaScript
+bundle. To verify the upload bundle locally, run `pnpm deploy:check`.
 
 ## Search indexing
 

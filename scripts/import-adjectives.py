@@ -4,10 +4,9 @@ Usage: python3 scripts/import-adjectives.py SNAPSHOT.tsv.gz
 
 import csv
 import gzip
-import json
 import re
 import sys
-from pathlib import Path
+from dictionary_output import write_dictionary
 
 
 def accent(text):
@@ -95,11 +94,5 @@ with open_source(sys.argv[1], mode="rt", encoding="utf-8", newline="") as source
             ]
         result.append(entry)
 
-# Keep each static asset below Cloudflare Workers' 25 MiB limit.
-for index in range(4):
-    chunk = result[index * len(result) // 4 : (index + 1) * len(result) // 4]
-    data = json.dumps(chunk, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
-    if len(data) >= 25 * 1024 * 1024:
-        raise ValueError("Adjective shard exceeds the static asset size limit")
-    Path(f"static/data/adjectives-{index + 1}.json").write_bytes(data)
-print(f"Imported {len(result):,} adjective entries into four shards.")
+write_dictionary("adjectives", result)
+print(f"Imported {len(result):,} adjective entries.")

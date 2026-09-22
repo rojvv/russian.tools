@@ -1,6 +1,4 @@
 import type { Verb } from "$lib/conjugation";
+import { cachedDictionary } from "$lib/dictionary-data";
 
-let dictionary: Promise<Verb[]> | undefined;
-export function getVerbs(): Promise<Verb[]> {
-  return dictionary ??= import("../../../static/data/verbs.json").then(({ default: data }) => data as Verb[]);
-}
+export const getVerbs = cachedDictionary<Verb>("verbs");

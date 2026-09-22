@@ -3,6 +3,6 @@ import { dictionaryPaths, sitemap } from "$lib/server/sitemap";
 
 export const prerender = true;
 
-export async function GET() {
-  return sitemap(dictionaryPaths("/decliner", await getNouns(), "ru"));
+export async function GET({ fetch }: { fetch: typeof globalThis.fetch }) {
+  return sitemap(dictionaryPaths("/decliner", await getNouns(fetch), "ru"));
 }

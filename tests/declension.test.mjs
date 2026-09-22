@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 import { readNounQuery, writeNounQuery } from "../src/lib/declension-url.ts";
 import { cases, createTable, findNouns, suggestNouns } from "../src/lib/declension.ts";
-const nouns = JSON.parse(readFileSync(new URL("../static/data/nouns.json", import.meta.url), "utf8"));
+import { readDictionary } from "./dictionary-fixtures.mjs";
+const nouns = readDictionary("nouns");
 const get = word => findNouns(nouns, word)[0];
 
 test("extensive noun dataset has six forms per number and preserves homonyms", () => {

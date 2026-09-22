@@ -3,10 +3,9 @@ Usage: python3 scripts/import-nouns.py /path/to/nouns.csv
 """
 
 import csv
-import json
 import re
 import sys
-from pathlib import Path
+from dictionary_output import write_dictionary
 
 
 def accent(text):
@@ -57,7 +56,5 @@ for noun in result:
             "но́жницами",
             "но́жницах",
         ]
-Path("static/data/nouns.json").write_text(
-    json.dumps(result, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
-)
+write_dictionary("nouns", result)
 print(f"Imported {len(result):,} noun entries.")

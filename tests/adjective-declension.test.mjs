@@ -1,23 +1,15 @@
 import assert from "node:assert/strict";
-import { readFileSync, statSync } from "node:fs";
 import test from "node:test";
 import { readDeclensionQuery, writeDeclensionQuery } from "../src/lib/declension-url.ts";
-import {
-  adjectiveCases,
-  adjectiveDictionaryFiles,
-  createTable,
-  findDeclinables,
-  suggestDeclinables,
-} from "../src/lib/declension.ts";
+import { adjectiveCases, createTable, findDeclinables, suggestDeclinables } from "../src/lib/declension.ts";
+import { readDictionary } from "./dictionary-fixtures.mjs";
 
-const adjectives = adjectiveDictionaryFiles.flatMap(file =>
-  JSON.parse(readFileSync(new URL(`../static/data/${file}`, import.meta.url), "utf8"))
-);
-const nouns = JSON.parse(readFileSync(new URL("../static/data/nouns.json", import.meta.url), "utf8"));
+const adjectives = readDictionary("adjectives");
+const nouns = readDictionary("nouns");
 const words = [...nouns, ...adjectives];
 const get = word => findDeclinables(adjectives, word)[0];
 
-test("adjective dictionary provides four paradigms and deployable static assets", () => {
+test("adjective dictionary provides four paradigms", () => {
   assert.ok(adjectives.length > 40000);
   for (const adjective of adjectives) {
     assert.equal(adjective.kind, "adjective");
@@ -26,9 +18,6 @@ test("adjective dictionary provides four paradigms and deployable static assets"
       assert.equal(adjective[gender].length, 7);
       assert.ok(adjective[gender].every(form => typeof form === "string"));
     }
-  }
-  for (const file of adjectiveDictionaryFiles) {
-    assert.ok(statSync(new URL(`../static/data/${file}`, import.meta.url)).size < 25 * 1024 * 1024);
   }
 });
 

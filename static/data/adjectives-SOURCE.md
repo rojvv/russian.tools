@@ -47,9 +47,9 @@ is filled from the dictionary headword. No paradigms are generated from endings.
 
 Local corrections: repair the neuter accusative of рабочий from рабо́чое to
 рабо́чее; replace Latin o lookalikes and stray combining dots in headwords;
-trim trailing whitespace. The JSON is split into four files to keep individual
-static assets below 25 MiB. Server lookups fetch these local assets so adjective
-data does not inflate the Worker JavaScript bundle.
+trim trailing whitespace. The minified JSON is stored as one deterministic gzip file,
+`adjectives.json.gz` (about 4 MiB). Server and browser lookups decompress this
+local static asset; dictionary data is not embedded in the Worker JavaScript bundle.
 
 ## SHA-256 of source exports
 

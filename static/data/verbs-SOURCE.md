@@ -53,3 +53,7 @@ corrupted source markup in the feminine, neuter, and plural past forms of
 - `words_forms.csv`: `863236fc9a18dc7fa54b536e4385b1e20c8dd8eb71fe93741cb402db69740c82`
 
 Flattened TSV SHA-256: `27894c9fe82e5044c6ab8725cf0b5122949400c033945d65d8df178792874ec7`.
+
+The generated dataset is stored as minified, deterministic gzip JSON in
+`verbs.json.gz`. Both browser and server loaders decompress this static asset;
+it is not embedded in the Worker JavaScript bundle.

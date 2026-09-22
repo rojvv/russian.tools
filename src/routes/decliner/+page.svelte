@@ -1,4 +1,5 @@
 <script lang="ts">
+import { loadDictionary } from "$lib/dictionary-data";
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
 import { dictionarySeo } from "$lib/seo";
@@ -7,7 +8,6 @@ const i18n = getI18n();
 import { afterNavigate, replaceState } from "$app/navigation";
 import { page } from "$app/state";
 import {
-  adjectiveDictionaryFiles,
   createTable,
   type Declinable,
   normalizeWord,
@@ -77,10 +77,7 @@ afterNavigate(({ type }) => {
 });
 
 function handleInput() {
-  const next = input.value.slice(0, 40);
-  // Blurring the input fires change after input; do not reset a chosen entry.
-  if (next === query) return;
-  query = next;
+  query = input.value.slice(0, 40);
   scheduleLookup();
 }
 
@@ -143,15 +140,10 @@ async function lookup() {
   loading = true;
   try {
     if (!dataset) {
-      dictionaryRequest ??= Promise.all(
-        ["nouns.json", ...adjectiveDictionaryFiles].map(async (name) => {
-          const response = await fetch(`/data/${name}`);
-          if (!response.ok) {
-            throw new Error("Could not load declension dictionary");
-          }
-          return response.json() as Promise<Declinable[]>;
-        }),
-      ).then((dictionaries) => dictionaries.flat()).catch((error) => {
+      dictionaryRequest ??= Promise.all([
+        loadDictionary<Declinable>(fetch, "nouns"),
+        loadDictionary<Declinable>(fetch, "adjectives"),
+      ]).then((dictionaries) => dictionaries.flat()).catch((error) => {
         dictionaryRequest = undefined;
         throw error;
       });
@@ -190,8 +182,8 @@ const resultTitle = $derived(
     bind:this={input}
     bind:value={query}
     oninput={handleInput}
-    onchange={handleInput}
-    placeholder={i18n.t("declensionInput")}
+    onchange={readInput}
+    placeholder={i18n.t("nominative")}
     aria-label={i18n.t("declensionInput")}
     spellcheck="false"
     autocapitalize="off"

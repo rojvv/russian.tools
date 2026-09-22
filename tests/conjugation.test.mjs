@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 import { createTable, exportRows, findVerbs, suggestVerbs, toCsv } from "../src/lib/conjugation.ts";
-const verbs = JSON.parse(readFileSync(new URL("../static/data/verbs.json", import.meta.url), "utf8"));
+import { readDictionary } from "./dictionary-fixtures.mjs";
+const verbs = readDictionary("verbs");
 const get = (word) => findVerbs(verbs, word)[0];
 
 test("Russian verb fields contain no Latin letters or leaked source markup", () => {

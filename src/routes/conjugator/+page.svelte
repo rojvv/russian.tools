@@ -1,4 +1,5 @@
 <script lang="ts">
+import { loadDictionary } from "$lib/dictionary-data";
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
 import { dictionarySeo } from "$lib/seo";
@@ -162,13 +163,12 @@ async function lookup() {
   loading = true;
   try {
     if (!dataset) {
-      dictionaryRequest ??= fetch("/data/verbs.json").then((response) => {
-        if (!response.ok) throw new Error("Could not load verbs");
-        return response.json() as Promise<Verb[]>;
-      }).catch((error) => {
-        dictionaryRequest = undefined;
-        throw error;
-      });
+      dictionaryRequest ??= loadDictionary<Verb>(fetch, "verbs").catch(
+        (error) => {
+          dictionaryRequest = undefined;
+          throw error;
+        },
+      );
       dataset = await dictionaryRequest;
     }
     if (id !== request) return;
