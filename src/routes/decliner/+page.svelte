@@ -216,7 +216,7 @@ const resultTitle = $derived(
         </option>{/each}
     </select>
   {/if}
-  <h2>{resultTitle}</h2>
+  <h2 id="declension-title">{resultTitle}</h2>
   <p lang="ru">{word.nominative}</p>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
@@ -230,8 +230,7 @@ const resultTitle = $derived(
     {#if word.pluralOnly}<p class="hint">{i18n.t("pluralOnly")}</p>{/if}
   {/if}
   <div class="declensions">
-    <table>
-      <caption>{i18n.t("declension")}</caption>
+    <table aria-labelledby="declension-title">
       <thead>
         <tr>
           <td></td>
@@ -275,7 +274,6 @@ select { max-width: 100%; margin-bottom: 10px; }
 .hint  { font-size: 12px; margin-top: 8px; }
  .declensions { margin-top: 24px; max-width: 100%; overflow-x: auto; }
 table { border-collapse: collapse; text-align: left; }
-caption { text-align: left; font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 14px; }
 th, td { vertical-align: top; padding: 5px 24px 5px 0; }
 th { font-size: 13px; font-weight: 400; color: var(--muted); }
 thead th { padding-bottom: 7px; }

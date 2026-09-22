@@ -236,7 +236,7 @@ const resultTitle = $derived(
         </option>{/each}
     </select>
   {/if}
-  <h2>{resultTitle}</h2>
+  <h2 id="conjugation-title">{resultTitle}</h2>
   <p lang="ru">{verb.infinitive}</p>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
@@ -262,7 +262,6 @@ const resultTitle = $derived(
     </p>
   {/if}
   <section class="conjugation" aria-labelledby="conjugation-title">
-    <h3 id="conjugation-title">{i18n.t("conjugation")}</h3>
     <div class="conjugations">
       <div class="table-wrap">
         <table aria-labelledby="conjugation-title">
@@ -344,7 +343,6 @@ select { max-width: 100%; margin-bottom: 10px; }
 .meaning { margin-bottom: 2px; }
 .hint  { font-size: 12px; margin-top: 8px; }
 .conjugation { margin-top: 24px; }
-h3 { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
 .conjugations { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px 48px; }
 .table-wrap { max-width: 100%; overflow-x: auto; }
 table { border-collapse: collapse; text-align: left; }

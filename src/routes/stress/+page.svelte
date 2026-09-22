@@ -138,7 +138,7 @@ onMount(() => {
 
 <style>
 .stress-tool { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-textarea { display: block; flex: 1; width: 100%; height: 0; min-height: 80px; margin: 0; padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 20px; line-height: 1.8; resize: none; }
+textarea { display: block; flex: 1; width: 100%; height: 0; min-height: 80px; margin: 0; padding: 6px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 20px; line-height: 1.8; resize: none; }
 textarea::placeholder { color: var(--placeholder); }
 .notes { flex-shrink: 0; margin-top: 10px; }
 .notes [role="status"] { min-height: 1.6em; }
