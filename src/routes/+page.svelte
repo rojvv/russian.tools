@@ -25,7 +25,8 @@ const i18n = getI18n();
 </nav>
 
 <p class="source">
-  &copy; 2026 russian.tools. <a href="https://t.me/RussianDotTools">Telegram</a>.
+  &copy; 2026 russian.tools. <a href="https://t.me/RussianDotTools"
+  >Telegram</a>.
   {i18n.t("openRussianAttribution")} <a href="https://en.openrussian.org/"
   >OpenRussian</a>.
 </p>
