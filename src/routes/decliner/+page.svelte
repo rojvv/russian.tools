@@ -158,10 +158,17 @@ async function lookup() {
     if (id === request) loading = false;
   }
 }
+const resultTitle = $derived(
+  noun
+    ? i18n.locale === "ru"
+      ? `Склонение слова «${noun.bare}»`
+      : `Declensions for ${noun.bare}`
+    : i18n.t("nounSeoTitle"),
+);
 </script>
 
 <Seo
-  title={`${noun ? `${noun.bare} — ` : ""}${i18n.t("nounSeoTitle")} | russian.tools`}
+  title={`${resultTitle} | russian.tools`}
   description={noun ? `${noun.bare}: ${i18n.t("nounDescription")}` : i18n.t("nounDescription")}
   {...dictionarySeo("/decliner", query, noun?.bare)}
 />
@@ -206,7 +213,8 @@ async function lookup() {
         </option>{/each}
     </select>
   {/if}
-  <h2 lang="ru">{noun.nominative}</h2>
+  <h2>{resultTitle}</h2>
+  <p lang="ru">{noun.nominative}</p>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
           i18n.t("meaningEnglish")

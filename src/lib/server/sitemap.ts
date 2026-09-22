@@ -1,3 +1,4 @@
+import { languageUrl } from "../seo";
 const origin = "https://russian.tools";
 const namespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
 
@@ -16,6 +17,8 @@ export function sitemap(paths: string[], index = false): Response {
   );
 }
 
-export function dictionaryPaths(path: string, entries: { bare: string }[]): string[] {
-  return [...new Set(entries.map(({ bare }) => bare))].sort().map((word) => `${path}?${encodeURIComponent(word)}`);
+export function dictionaryPaths(path: string, entries: { bare: string }[], locale = "en"): string[] {
+  return [...new Set(entries.map(({ bare }) => bare))].sort().map((word) =>
+    languageUrl(`${path}?${encodeURIComponent(word)}`, locale).replace(origin, "")
+  );
 }

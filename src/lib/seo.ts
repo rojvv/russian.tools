@@ -16,3 +16,13 @@ export function dictionarySeo(path: string, query: string, bare?: string) {
 export function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replaceAll("<", "\\u003c");
 }
+
+/** Explicit language URLs give crawlers stable English and Russian versions. */
+export function languageUrl(href: string, locale: string): string {
+  const url = new URL(href, siteOrigin);
+  // Keep bare word queries intact instead of serializing them with a trailing '='.
+  const query = url.search.slice(1).split("&")
+    .filter((part) => part && !new URLSearchParams(part).has("lang")).join("&");
+  url.search = `${query ? `${query}&` : ""}lang=${locale === "ru" ? "ru" : "en"}`;
+  return url.href;
+}

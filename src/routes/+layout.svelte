@@ -1,17 +1,23 @@
 <script lang="ts">
+import { replaceState } from "$app/navigation";
 import { page } from "$app/state";
 import favicon from "$lib/assets/favicon.svg";
 import { languageCookieMaxAge, type Locale } from "$lib/i18n";
 import { createI18n } from "$lib/i18n-context";
+import { languageUrl } from "$lib/seo";
 import { untrack } from "svelte";
 
 let { children, data } = $props();
 const i18n = createI18n(untrack(() => data.locale));
 $effect(() => {
+  i18n.locale = data.locale;
+});
+$effect(() => {
   document.documentElement.lang = i18n.locale ?? "en";
 });
 function setLanguage(locale: Locale) {
   i18n.locale = locale;
+  replaceState(languageUrl(window.location.href, locale), page.state);
   document.cookie =
     `language=${locale}; Path=/; Max-Age=${languageCookieMaxAge}; SameSite=Lax${
       location.protocol === "https:" ? "; Secure" : ""
@@ -45,21 +51,29 @@ const toolTitle = $derived(
       <a href="/">russian.tools</a> {#if toolTitle}<span>{toolTitle}</span>{/if}
     </h1>
     <nav aria-label={i18n.t("language")}>
-      <button
+      <a
+        href={languageUrl(page.url.href, "en")}
         lang="en"
-        aria-pressed={i18n.locale === "en"}
-        onclick={() => setLanguage("en")}
+        aria-current={i18n.locale === "en"}
+        onclick={(event) => {
+          event.preventDefault();
+          setLanguage("en");
+        }}
       >
         English
-      </button>
+      </a>
       <span aria-hidden="true">/</span>
-      <button
+      <a
+        href={languageUrl(page.url.href, "ru")}
         lang="ru"
-        aria-pressed={i18n.locale === "ru"}
-        onclick={() => setLanguage("ru")}
+        aria-current={i18n.locale === "ru"}
+        onclick={(event) => {
+          event.preventDefault();
+          setLanguage("ru");
+        }}
       >
         русский
-      </button>
+      </a>
     </nav>
   </header>
   {@render children()}
@@ -74,9 +88,9 @@ header h1 { margin: 0; }
 header h1 span { margin: 0; font-weight: 400; color: var(--subtle); }
 header a { text-decoration: none; }
 nav { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 12px; color: var(--subtle); }
-button { border: 0; padding: 4px 0; background: none; color: inherit; font: inherit; cursor: pointer; }
-button[aria-pressed="true"] { color: var(--foreground); }
-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+nav a { border: 0; padding: 4px 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+nav a[aria-current="true"] { color: var(--foreground); }
+nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 @font-face { font-family: 'Open Sans'; src: url('/fonts/OpenSans.ttf') format('truetype'); font-style: normal; font-weight: 300 800; font-display: swap; }
 :global(:root) { color-scheme: light; --background: #fff; --foreground: #222; --muted: #666; --subtle: #777; --placeholder: #888; --border: #ddd; --hover: #f7f7f7; --focus: #555; --error: #a02e23; }

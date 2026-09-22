@@ -181,10 +181,17 @@ async function lookup() {
     if (id === request) loading = false;
   }
 }
+const resultTitle = $derived(
+  verb
+    ? i18n.locale === "ru"
+      ? `Спряжение слова «${verb.bare}»`
+      : `Conjugation of ${verb.bare}`
+    : i18n.t("verbSeoTitle"),
+);
 </script>
 
 <Seo
-  title={`${verb ? `${verb.bare} — ` : ""}${i18n.t("verbSeoTitle")} | russian.tools`}
+  title={`${resultTitle} | russian.tools`}
   description={verb ? `${verb.bare}: ${i18n.t("verbDescription")}` : i18n.t("verbDescription")}
   {...dictionarySeo("/conjugator", query, verb?.bare)}
 />
@@ -229,7 +236,8 @@ async function lookup() {
         </option>{/each}
     </select>
   {/if}
-  <h2 lang="ru">{verb.infinitive}</h2>
+  <h2>{resultTitle}</h2>
+  <p lang="ru">{verb.infinitive}</p>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
           i18n.t("meaningEnglish")

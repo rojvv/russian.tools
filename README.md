@@ -75,3 +75,17 @@ The older source export can contain gaps and errors. Attribution, the pinned
 source revision, and transformations are in `static/data/nouns-SOURCE.md`;
 the CC BY-SA 4.0 license is in `static/data/nouns-LICENSE.txt`.
 Rebuild with `python3 scripts/import-nouns.py /path/to/nouns.csv`.
+
+## Search indexing
+
+English and Russian pages have explicit `lang=en` and `lang=ru` URLs, for example
+`/decliner?книга&lang=ru`. The URL language overrides browser preferences and
+cookies. Word pages include server-rendered forms, word-specific titles and
+headings, localized canonical URLs, and reciprocal `hreflang` links. Inexact
+suggestions and invalid queries remain `noindex`.
+
+`/sitemap.xml` lists separate noun and verb sitemaps for each language, keeping
+each file below Google's 50,000-URL limit. After deployment, submit
+`https://russian.tools/sitemap.xml` in Google Search Console and inspect sample
+English and Russian word URLs. Indexing and rankings depend on Google's crawl
+and assessment; deploying these changes does not guarantee placement.

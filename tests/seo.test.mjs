@@ -26,3 +26,25 @@ test("structured data safely round-trips inline script terminators", () => {
   assert.ok(!serialized.includes("<"));
   assert.deepEqual(JSON.parse(serialized), data);
 });
+
+test("explicit language URLs preserve word queries and replace the previous language", async () => {
+  const { languageUrl } = await import("../src/lib/seo.ts");
+  const { readNounQuery, writeNounQuery } = await import("../src/lib/declension-url.ts");
+  const { readVerbQuery, writeVerbQuery } = await import("../src/lib/conjugation-url.ts");
+  for (
+    const [path, word, read, write] of [
+      ["/decliner", "книга", readNounQuery, writeNounQuery],
+      ["/conjugator", "читать", readVerbQuery, writeVerbQuery],
+    ]
+  ) {
+    const canonical = dictionarySeo(path, word, word).canonical;
+    const ru = new URL(languageUrl(canonical, "ru"));
+    assert.equal(ru.href, `${canonical}&lang=ru`);
+    assert.equal(read(ru), word);
+    assert.equal(languageUrl(ru.href, "en"), `${canonical}&lang=en`);
+    assert.equal(write(ru, "мир").searchParams.get("lang"), "ru");
+    assert.equal(read(write(ru, "")), "");
+    assert.equal(read(new URL(`https://russian.tools${path}?lang=ru&${encodeURIComponent(word)}`)), word);
+    assert.equal(read(new URL(`https://russian.tools${path}?lang=ru`)), "");
+  }
+});
