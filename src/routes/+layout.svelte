@@ -43,6 +43,8 @@ function setLanguage(locale: Locale) {
 const toolTitle = $derived(
   page.route.id === "/stress"
     ? i18n.t("stressTitle")
+    : page.route.id === "/stress-practice"
+    ? i18n.t("practiceTitle")
     : page.route.id === "/conjugator"
     ? i18n.t("verbTitle")
     : page.route.id === "/decliner"

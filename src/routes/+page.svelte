@@ -16,6 +16,9 @@ const i18n = getI18n();
     <a href="/stress">{i18n.t("stressTitle")}</a>
   </div>
   <div>
+    <a href="/stress-practice">{i18n.t("practiceTitle")}</a>
+  </div>
+  <div>
     <a href="/conjugator">{i18n.t("verbTitle")}</a>
   </div>
   <div>

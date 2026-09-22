@@ -38,6 +38,22 @@ The runtime has an approximately 14 MB WebAssembly asset (about 3.7 MB with gzip
 
 Golos Text's variable font (weights 400–900) and SIL Open Font License are in `static/fonts`. The font supports Cyrillic text and combining acute stress marks; it is hosted locally without external font requests. Source: [Google Fonts](https://github.com/google/fonts/tree/main/ofl/golostext).
 
+## Stress Practice
+
+At `/stress-practice`, paste Russian text or use the sample passage to practice
+word stress. Each question shows a word in its original context with selectable
+vowels. An answer reveals the expected stress; only correct first answers earn
+points. You can reveal an answer without scoring, view your final score, retry
+the exercise, or edit the source text.
+
+The existing stress worker prepares exercises entirely in the browser. Supplied
+acute stress marks are preserved, and unmarked words use the engine's predictions,
+which may need review. The exercise skips monosyllables, compounds, mixed-script
+tokens, and words without one identifiable stress. Explicit accents take precedence
+over ё; otherwise a single ё identifies stress. Text is limited to 20,000 characters.
+English and Russian interfaces, keyboard controls, and both system color schemes
+are supported.
+
 ## Cloudflare Workers deployment
 
 The app uses `@sveltejs/adapter-cloudflare` with Workers Static Assets. `wrangler.jsonc` defines the `russian-tools` Worker and its `ASSETS` binding. Pages are server-rendered so language cookies, browser language preferences, and conjugation query URLs work on the first request. Dictionary, model, WASM, and font files are deployed as static assets; SvelteKit adds immutable caching for fingerprinted assets.
