@@ -114,7 +114,7 @@ nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 @media (prefers-color-scheme: dark) {
 	:global(:root) { color-scheme: dark; --background: #000; --foreground: #e5e5e5; --muted: #aaa; --subtle: #999; --placeholder: #888; --border: #333; --hover: #151515; --focus: #aaa; --error: #ff9286; }
 }
-:global(*) { box-sizing: border-box; }
+:global(*) { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :global(body) { margin: 0; background: var(--background); color: var(--foreground); font-family: 'Golos Text', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 :global(main) { max-width: 940px; margin: 40px auto; padding: 0 24px; }
 :global(h1) { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -.6px; line-height: 1.3; }
