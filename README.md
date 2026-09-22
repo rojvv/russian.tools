@@ -4,6 +4,8 @@ A collection of browser-based Russian language tools, built with SvelteKit and T
 
 ## Development
 
+Use Node.js 24 or later and pnpm 12.4.2.
+
 ```sh
 pnpm install
 pnpm dev
@@ -25,7 +27,26 @@ The runtime has an approximately 14 MB WebAssembly asset (about 3.7 MB with gzip
 
 Open Sans's variable font and their SIL Open Font License are in `static/fonts`.
 
-SvelteKit currently uses `adapter-auto`; choose a deployment adapter for the intended hosting platform when deploying.
+## Cloudflare Workers deployment
+
+The app uses `@sveltejs/adapter-cloudflare` with Workers Static Assets. `wrangler.jsonc` defines the `russian-tools` Worker and its `ASSETS` binding. Pages are server-rendered so language cookies, browser language preferences, and conjugation query URLs work on the first request. Dictionary, model, WASM, and font files are deployed as static assets; SvelteKit adds immutable caching for fingerprinted assets.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+node --test tests/*.test.mjs
+pnpm deploy:check  # build and bundle locally without publishing
+pnpm preview:worker  # build and serve in the local Workers runtime
+```
+
+To publish from your machine:
+
+```sh
+pnpm exec wrangler login
+pnpm deploy
+```
+
+For Cloudflare Workers Builds, use `pnpm build` as the build command and `pnpm exec wrangler deploy` as the deploy command, with Node.js 24 and the repository root as the project root. For other CI systems, supply `CLOUDFLARE_API_TOKEN` (Workers deployment permissions) and `CLOUDFLARE_ACCOUNT_ID` as CI secrets. The app requires no runtime secrets or database bindings. Connect a custom domain through the Worker's Domains & Routes settings after deployment.
 
 ## Verb Conjugator
 

@@ -11,6 +11,7 @@
 <nav aria-label={i18n.t('tools')}>
  <div><a href="/stress">{i18n.t('stressTitle')}</a></div>
  <div><a href="/conjugator">{i18n.t('verbTitle')}</a></div>
+ <div>{i18n.t('moreToolsComingSoon')}</div>
 </nav>
 
 <style>

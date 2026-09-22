@@ -6,6 +6,7 @@ export const messages = {
 	en: {
 		tools: 'Tools', language: 'Language', stressTitle: 'Stress Marker', verbTitle: 'Verb Conjugator',
 		homeDescription: 'Simple tools for working with the Russian language.',
+		moreToolsComingSoon: 'More tools coming soon.',
 		stressDescription: 'Type Russian text and automatically add vowel stress marks directly in the editor. All processing stays in your browser.',
 		verbDescription: 'Look up Russian verb conjugations in simple present, future, past, and imperative lists.',
 		russianText: 'Russian text', review: 'Predictions may need review.', extension: 'Get the extension for', or: 'or',
@@ -25,6 +26,7 @@ export const messages = {
 	ru: {
 		tools: 'Инструменты', language: 'Язык', stressTitle: 'Расстановка ударений', verbTitle: 'Спряжение глаголов',
 		homeDescription: 'Простые инструменты для работы с русским языком.',
+		moreToolsComingSoon: 'Скоро появятся новые инструменты.',
 		stressDescription: 'Автоматическая расстановка ударений в русском тексте прямо в редакторе. Вся обработка выполняется в браузере.',
 		verbDescription: 'Спряжение русских глаголов: настоящее, будущее и прошедшее время, повелительное наклонение.',
 		russianText: 'Текст на русском', review: 'Ударения могут требовать проверки.', extension: 'Установите расширение для', or: 'или',
