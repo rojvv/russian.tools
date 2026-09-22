@@ -19,7 +19,6 @@ export const messages = {
     indeclinable: "Indeclinable",
     singularOnly: "Singular only",
     pluralOnly: "Plural only",
-    nounDataNote: "Dictionary forms may contain errors.",
 
     tools: "Tools",
     language: "Language",
@@ -62,6 +61,7 @@ export const messages = {
     invalidVerb: "Enter one Russian infinitive, for example читать.",
     verbNotFound: "This verb is not in the dictionary. Check the infinitive or try another verb.",
     dictionaryError: "Could not load the verb dictionary. Please try again.",
+    source: "Source:",
   },
   ru: {
     nounTitle: "Склонение существительных",
@@ -79,7 +79,6 @@ export const messages = {
     indeclinable: "Несклоняемое",
     singularOnly: "Только единственное число",
     pluralOnly: "Только множественное число",
-    nounDataNote: "Словарные формы могут содержать ошибки.",
 
     tools: "Инструменты",
     language: "Язык",
@@ -122,6 +121,7 @@ export const messages = {
     invalidVerb: "Введите один русский глагол в инфинитиве, например читать.",
     verbNotFound: "Глагол не найден в словаре. Проверьте инфинитив или попробуйте другой глагол.",
     dictionaryError: "Не удалось загрузить словарь глаголов. Попробуйте снова.",
+    source: "Источник:",
   },
 } satisfies Record<Locale, Record<string, string>>;
 export type MessageKey = keyof typeof messages.en;

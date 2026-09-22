@@ -230,9 +230,7 @@ async function lookup() {
 {/if}
 
 <p class="source">
-  <a href="https://en.openrussian.org/">OpenRussian</a> · <a
-    href="/data/nouns-SOURCE.md"
-  >CC BY-SA 4.0</a> · {i18n.t("nounDataNote")}
+  {i18n.t("source")} <a href="https://en.openrussian.org/">OpenRussian</a>
 </p>
 <style>
 h3 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }
