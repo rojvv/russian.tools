@@ -5,6 +5,12 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 export const messages = {
   en: {
     nounTitle: "Noun Decliner",
+    declension: "Declension",
+    conjugation: "Conjugation",
+    masculine: "masculine",
+    feminine: "feminine",
+    neuter: "neuter",
+    pluralGender: "plural",
     nounDescription: "Look up Russian noun declensions in all six cases, singular and plural.",
     nominative: "Nominative",
     invalidNoun: "Enter one Russian noun, for example книга.",
@@ -65,6 +71,12 @@ export const messages = {
   },
   ru: {
     nounTitle: "Склонение существительных",
+    declension: "Склонение",
+    conjugation: "Спряжение",
+    masculine: "мужской",
+    feminine: "женский",
+    neuter: "средний",
+    pluralGender: "множественное",
     nounDescription: "Склонение русских существительных по шести падежам в единственном и множественном числе.",
     nominative: "Именительный",
     invalidNoun: "Введите одно русское существительное, например книга.",

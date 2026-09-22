@@ -211,18 +211,31 @@ async function lookup() {
   {#if noun.singularOnly}<p class="hint">{i18n.t("singularOnly")}</p>{/if}
   {#if noun.pluralOnly}<p class="hint">{i18n.t("pluralOnly")}</p>{/if}
   <div class="declensions">
-    {#each sections as section}
-      <section aria-labelledby={section.title}>
-        <h4 id={section.title}>{i18n.t(section.title)}</h4>
-        <ul>
-          {#each section.rows as row}<li>
-              <span class="case">{i18n.t(row.label)}</span><span lang="ru">{
-                row.form || "—"
-              }</span>
-            </li>{/each}
-        </ul>
-      </section>
-    {/each}
+    <table>
+      <caption>{i18n.t("declension")}</caption>
+      <thead>
+        <tr>
+          <td></td>
+          {#each sections as section}<th scope="col">
+              {i18n.t(section.title)}
+            </th>{/each}
+        </tr>
+      </thead>
+      <tbody>
+        {#each sections[0].rows as row, index}
+          <tr>
+            <th scope="row">{i18n.t(row.label)}</th>
+            {#each sections as section}
+              <td lang="ru">
+                {#each (section.rows[index].form || "—").split(/,\s*/) as form}
+                  <span class="form">{form}</span>
+                {/each}
+              </td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
   </div>
   {#if sections.some((section) => section.rows.some((row) => !row.form.trim()))}
     <p class="hint">{i18n.t("missingForm")}</p>
@@ -244,12 +257,16 @@ select { max-width: 100%; margin-bottom: 10px; }
 .status:empty { margin: 0; }
 .meaning { margin-bottom: 2px; }
 .hint  { font-size: 12px; margin-top: 8px; }
-.declensions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; margin-top: 18px; }
-.declensions section { min-width: 0; }
-h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
-ul { list-style: none; margin: 0; padding: 0; }
-li { display: grid; grid-template-columns: minmax(110px, 0.8fr) minmax(0, 1fr); gap: 12px; padding: 1px 0; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
-.case { color: var(--muted); }
+ .declensions { margin-top: 24px; max-width: 100%; overflow-x: auto; }
+table { border-collapse: collapse; text-align: left; }
+caption { text-align: left; font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 14px; }
+th, td { vertical-align: top; padding: 5px 24px 5px 0; }
+th { font-size: 13px; font-weight: 400; color: var(--muted); }
+thead th { padding-bottom: 7px; }
+tbody th { padding-top: 7px; }
+td { font-size: 15px; line-height: 1.5; }
+th:last-child, td:last-child { padding-right: 0; }
+.form { display: block; }
 .source { margin-top: 24px; font-size: 12px; }
-@media (max-width: 800px) { .declensions { grid-template-columns: 1fr; gap: 18px; } }
+@media (max-width: 400px) { th, td { padding-right: 14px; } }
 </style>

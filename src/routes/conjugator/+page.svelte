@@ -43,11 +43,11 @@ const finiteSections = $derived(
   ),
 );
 const otherSections = $derived(
-  sections.filter((section) =>
-    section.title !== "Present" && section.title !== "Future"
+  ["Imperative", "Past"].flatMap((title) =>
+    sections.filter((section) => section.title === title)
   ),
 );
-const shortLabel = (label: string) => label.split(" (")[0];
+const pastLabels = ["masculine", "feminine", "neuter", "pluralGender"] as const;
 let dataset: Verb[] | undefined;
 let dictionaryRequest: Promise<Verb[]> | undefined;
 let timer: ReturnType<typeof setTimeout>;
@@ -248,62 +248,71 @@ async function lookup() {
       {i18n.t(aspect === "perfective" ? "perfectiveNote" : "imperfective")}
     </p>
   {/if}
-  <div class="conjugations">
-    {#each finiteSections as section}
-      <section aria-labelledby={`paired-${section.title.toLowerCase()}`}>
-        <h4 id={`paired-${section.title.toLowerCase()}`}>
-          {i18n.t(section.title as MessageKey)}
-        </h4>
-        <div class="paired">
-          {#each ["Singular", "Plural"] as const as number, group}
-            <div>
-              <h5>{i18n.t(number)}</h5>
-              <ul lang="ru">
-                {#each section.rows.slice(group * 3, group * 3 + 3) as row}<li>
-                    <span class="pronoun">{row.label}</span> {row.form || "—"}
-                  </li>{/each}
-              </ul>
-            </div>
-          {/each}
+  <section class="conjugation" aria-labelledby="conjugation-title">
+    <h4 id="conjugation-title">{i18n.t("conjugation")}</h4>
+    <div class="conjugations">
+      <div class="table-wrap">
+        <table aria-labelledby="conjugation-title">
+          <thead>
+            <tr>
+              <td></td>
+              {#each finiteSections as section}<th scope="col">
+                  {i18n.t(section.title as MessageKey)}
+                </th>{/each}
+            </tr>
+          </thead>
+          <tbody>
+            {#each finiteSections[0].rows as row, index}
+              <tr>
+                <th scope="row" lang="ru">
+                  {row.label.replaceAll(" / ", "/")}
+                </th>
+                {#each finiteSections as section}
+                  <td lang="ru">
+                    {#each (section.rows[index].form || "—").split(/,\s*/) as form}<span
+                        class="form"
+                      >{form}</span>{/each}
+                  </td>
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+      {#each otherSections as section}
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="colgroup" colspan="2">
+                  {i18n.t(section.title as MessageKey)}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each section.rows as row, index}
+                <tr>
+                  <th
+                    scope="row"
+                    lang={section.title === "Past" ? i18n.locale : "ru"}
+                  >
+                    {
+                      section.title === "Past" ? i18n.t(pastLabels[index]) : row.label
+                    }
+                  </th>
+                  <td lang="ru">
+                    {#each (row.form || "—").split(/,\s*/) as form}<span
+                        class="form"
+                      >{form}</span>{/each}
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
         </div>
-      </section>
-    {/each}
-    {#each otherSections as section}
-      <section aria-labelledby={`paired-${section.title.toLowerCase()}`}>
-        <h4 id={`paired-${section.title.toLowerCase()}`}>
-          {i18n.t(section.title as MessageKey)}
-        </h4>
-        <div class="paired">
-          <div>
-            <h5>
-              {
-                i18n.t(section.title === "Past" ? "Singular" : "singularInformal")
-              }
-            </h5>
-            <ul lang="ru">
-              {#each section.rows.slice(0, -1) as row}<li>
-                  <span class="pronoun">{shortLabel(row.label)}</span> {
-                    row.form || "—"
-                  }
-                </li>{/each}
-            </ul>
-          </div>
-          <div>
-            <h5>
-              {i18n.t(section.title === "Past" ? "Plural" : "pluralFormal")}
-            </h5>
-            <ul lang="ru">
-              {#each section.rows.slice(-1) as row}<li>
-                  <span class="pronoun">{shortLabel(row.label)}</span> {
-                    row.form || "—"
-                  }
-                </li>{/each}
-            </ul>
-          </div>
-        </div>
-      </section>
-    {/each}
-  </div>
+      {/each}
+    </div>
+  </section>
   {#if sections.some((section) => section.rows.some((row) => !row.form.trim()))}
     <p class="hint">{i18n.t("missingForm")}</p>
   {/if}
@@ -321,13 +330,17 @@ select { max-width: 100%; margin-bottom: 10px; }
 .status:empty { margin: 0; }
 .meaning { margin-bottom: 2px; }
 .hint  { font-size: 12px; margin-top: 8px; }
-.conjugations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; margin-top: 18px; }
-.conjugations section { min-width: 0; }
-.paired { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
-h5 { margin: 0 0 3px; font-size: 11px; font-weight: 400; color: var(--subtle); }
-ul { list-style: none; margin: 0; padding: 0; }
-li { padding: 1px 0; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
-.pronoun { color: var(--muted); }
-@media (max-width: 800px) { .conjugations { grid-template-columns: 1fr; gap: 18px; } }
+.conjugation { margin-top: 24px; }
+h4 { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
+.conjugations { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px 48px; }
+.table-wrap { max-width: 100%; overflow-x: auto; }
+table { border-collapse: collapse; text-align: left; }
+th, td { vertical-align: top; padding: 5px 24px 5px 0; }
+th { font-size: 13px; font-weight: 400; color: var(--muted); }
+thead th { padding-bottom: 7px; }
+tbody th { padding-top: 7px; }
+td { font-size: 15px; line-height: 1.5; }
+th:last-child, td:last-child { padding-right: 0; }
+.form { display: block; }
+@media (max-width: 400px) { th, td { padding-right: 14px; } }
 </style>
