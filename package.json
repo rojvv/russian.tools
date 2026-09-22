@@ -1,36 +1,37 @@
 {
-	"name": "russian.tools",
-	"private": true,
-	"version": "0.0.1",
-	"type": "module",
-	"packageManager": "pnpm@12.4.2",
-	"engines": {
-		"node": ">=24"
-	},
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"preview:worker": "pnpm build && wrangler dev",
-		"deploy": "pnpm build && wrangler deploy",
-		"deploy:check": "pnpm build && wrangler deploy --dry-run",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-cloudflare": "^7.2.9",
-		"@sveltejs/kit": "^2.63.0",
-		"@sveltejs/vite-plugin-svelte": "^7.1.2",
-		"svelte": "^5.56.1",
-		"svelte-check": "^4.6.0",
-		"typescript": "^6.0.3",
-		"vite": "^8.0.16",
-		"wrangler": "^4.135.0"
-	},
-	"dependencies": {
-		"@roj/rustress": "jsr:0.0.8",
-		"onnxruntime-web": "1.30.0",
-		"sveltekit-i18n": "^3.0.0"
-	}
+  "name": "russian.tools",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "preview:worker": "pnpm build && wrangler dev",
+    "deploy": "pnpm build && wrangler deploy",
+    "deploy:check": "pnpm build && wrangler deploy --dry-run",
+    "prepare": "svelte-kit sync || echo ''",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+  },
+  "dependencies": {
+    "@roj/rustress": "jsr:0.0.8",
+    "onnxruntime-web": "1.30.0",
+    "sveltekit-i18n": "^3.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^7.2.9",
+    "@sveltejs/kit": "^2.63.0",
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "dprint": "^0.57.4",
+    "svelte": "^5.56.1",
+    "svelte-check": "^4.6.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16",
+    "wrangler": "^4.135.0"
+  },
+  "packageManager": "pnpm@12.4.2",
+  "engines": {
+    "node": ">=24"
+  }
 }

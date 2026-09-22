@@ -1,0 +1,29 @@
+{
+  "typescript": {
+  },
+  "json": {
+  },
+  "markdown": {
+  },
+  "ruff": {
+  },
+  "markup": {
+  },
+  "yaml": {
+  },
+  "markup": {
+  },
+  "excludes": [
+    "**/node_modules",
+    "**/*-lock.json"
+  ],
+  "plugins": [
+    "npm:@dprint/typescript@0.96.1",
+    "npm:@dprint/json@0.24.0",
+    "npm:@dprint/markdown@0.24.0",
+    "npm:@dprint/ruff@0.8.8",
+    "npm:dprint-plugin-markup@0.27.3",
+    "npm:dprint-plugin-yaml@0.6.0",
+    "npm:lax-markup@0.3.2"
+  ]
+}

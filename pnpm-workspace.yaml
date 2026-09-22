@@ -1,4 +1,5 @@
 allowBuilds:
+  dprint: true
   esbuild: true
   protobufjs: false
   workerd: true
