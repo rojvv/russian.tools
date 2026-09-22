@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
+import Seo from "$lib/Seo.svelte";
 const i18n = getI18n();
 import StressWorker from "$lib/workers/stress.worker?worker";
 import { onMount } from "svelte";
@@ -82,10 +83,11 @@ onMount(() => {
 });
 </script>
 
-<svelte:head>
-  <title>{i18n.t("stressTitle")} | russian.tools</title>
-  <meta name="description" content={i18n.t("stressDescription")} />
-</svelte:head>
+<Seo
+  title={`${i18n.t("stressSeoTitle")} | russian.tools`}
+  description={i18n.t("stressDescription")}
+  canonical="https://russian.tools/stress"
+/>
 
 <div class="stress-tool">
   <textarea

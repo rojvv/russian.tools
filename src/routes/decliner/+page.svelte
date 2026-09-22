@@ -1,6 +1,8 @@
 <script lang="ts">
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
+import { dictionarySeo } from "$lib/seo";
+import Seo from "$lib/Seo.svelte";
 const i18n = getI18n();
 import { afterNavigate, replaceState } from "$app/navigation";
 import { page } from "$app/state";
@@ -158,12 +160,11 @@ async function lookup() {
 }
 </script>
 
-<svelte:head>
-  <title>
-    {noun ? `${noun.bare} — ` : ""}{i18n.t("nounTitle")} | russian.tools
-  </title>
-  <meta name="description" content={i18n.t("nounDescription")} />
-</svelte:head>
+<Seo
+  title={`${noun ? `${noun.bare} — ` : ""}${i18n.t("nounSeoTitle")} | russian.tools`}
+  description={noun ? `${noun.bare}: ${i18n.t("nounDescription")}` : i18n.t("nounDescription")}
+  {...dictionarySeo("/decliner", query, noun?.bare)}
+/>
 
 <div class="lookup">
   <input
@@ -205,7 +206,7 @@ async function lookup() {
         </option>{/each}
     </select>
   {/if}
-  <h3 lang="ru">{noun.nominative}</h3>
+  <h2 lang="ru">{noun.nominative}</h2>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
           i18n.t("meaningEnglish")
@@ -247,7 +248,7 @@ async function lookup() {
 {/if}
 
 <style>
-h3 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }
+h2 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }
 .lookup { margin-top: 18px; }
 label { display: block; margin-bottom: 6px; font-size: 14px; }
 .lookup input { width: 100%; }

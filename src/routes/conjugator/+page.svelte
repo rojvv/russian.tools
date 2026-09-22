@@ -1,6 +1,8 @@
 <script lang="ts">
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
+import { dictionarySeo } from "$lib/seo";
+import Seo from "$lib/Seo.svelte";
 const i18n = getI18n();
 import { afterNavigate, replaceState } from "$app/navigation";
 import { page } from "$app/state";
@@ -181,12 +183,11 @@ async function lookup() {
 }
 </script>
 
-<svelte:head>
-  <title>
-    {verb ? `${verb.bare} — ` : ""}{i18n.t("verbTitle")} | russian.tools
-  </title>
-  <meta name="description" content={i18n.t("verbDescription")} />
-</svelte:head>
+<Seo
+  title={`${verb ? `${verb.bare} — ` : ""}${i18n.t("verbSeoTitle")} | russian.tools`}
+  description={verb ? `${verb.bare}: ${i18n.t("verbDescription")}` : i18n.t("verbDescription")}
+  {...dictionarySeo("/conjugator", query, verb?.bare)}
+/>
 
 <div class="lookup">
   <input
@@ -228,7 +229,7 @@ async function lookup() {
         </option>{/each}
     </select>
   {/if}
-  <h3 lang="ru">{verb.infinitive}</h3>
+  <h2 lang="ru">{verb.infinitive}</h2>
   <p class="meaning" lang="en">
     {#if i18n.locale === "ru"}<span lang="ru">{
           i18n.t("meaningEnglish")
@@ -253,7 +254,7 @@ async function lookup() {
     </p>
   {/if}
   <section class="conjugation" aria-labelledby="conjugation-title">
-    <h4 id="conjugation-title">{i18n.t("conjugation")}</h4>
+    <h3 id="conjugation-title">{i18n.t("conjugation")}</h3>
     <div class="conjugations">
       <div class="table-wrap">
         <table aria-labelledby="conjugation-title">
@@ -323,7 +324,7 @@ async function lookup() {
 {/if}
 
 <style>
-h3 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }
+h2 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }
 .lookup { margin-top: 18px; }
 label { display: block; margin-bottom: 6px; font-size: 14px; }
 .lookup input { width: 100%; }
@@ -335,7 +336,7 @@ select { max-width: 100%; margin-bottom: 10px; }
 .meaning { margin-bottom: 2px; }
 .hint  { font-size: 12px; margin-top: 8px; }
 .conjugation { margin-top: 24px; }
-h4 { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
+h3 { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
 .conjugations { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px 48px; }
 .table-wrap { max-width: 100%; overflow-x: auto; }
 table { border-collapse: collapse; text-align: left; }

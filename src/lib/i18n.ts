@@ -4,6 +4,11 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    homeSeoTitle: "Russian Language Tools",
+    stressSeoTitle: "Russian Stress Marker – Add Stress Marks Online",
+    verbSeoTitle: "Russian Verb Conjugator",
+    nounSeoTitle: "Russian Noun Decliner",
+    examples: "Try an example",
     nounTitle: "Noun Decliner",
     declension: "Declension",
     conjugation: "Conjugation",
@@ -30,7 +35,8 @@ export const messages = {
     language: "Language",
     stressTitle: "Stress Marker",
     verbTitle: "Verb Conjugator",
-    homeDescription: "Simple tools for working with the Russian language.",
+    homeDescription:
+      "Free online Russian language tools: add stress marks to text, conjugate verbs, and decline nouns in all six cases.",
     moreToolsComingSoon: "More tools coming soon.",
     stressDescription:
       "Type Russian text and automatically add vowel stress marks directly in the editor. All processing stays in your browser.",
@@ -70,6 +76,11 @@ export const messages = {
     openRussianAttribution: "Some tools use data from",
   },
   ru: {
+    homeSeoTitle: "Инструменты для русского языка",
+    stressSeoTitle: "Расстановка ударений в русском тексте онлайн",
+    verbSeoTitle: "Спряжение русских глаголов",
+    nounSeoTitle: "Склонение русских существительных",
+    examples: "Примеры",
     nounTitle: "Склонение существительных",
     declension: "Склонение",
     conjugation: "Спряжение",
@@ -96,7 +107,8 @@ export const messages = {
     language: "Язык",
     stressTitle: "Расстановка ударений",
     verbTitle: "Спряжение глаголов",
-    homeDescription: "Простые инструменты для работы с русским языком.",
+    homeDescription:
+      "Бесплатные инструменты для русского языка: расстановка ударений, спряжение глаголов и склонение существительных по всем шести падежам.",
     moreToolsComingSoon: "Скоро появятся новые инструменты.",
     stressDescription:
       "Автоматическая расстановка ударений в русском тексте прямо в редакторе. Вся обработка выполняется в браузере.",
