@@ -54,7 +54,7 @@ const toolTitle = $derived(
 <svelte:head>
   <link
     rel="preload"
-    href="/fonts/OpenSans.ttf"
+    href="/fonts/GolosText.ttf"
     as="font"
     type="font/ttf"
     crossorigin="anonymous"
@@ -109,13 +109,13 @@ nav a { border: 0; padding: 4px 0; background: none; color: inherit; font: inher
 nav a[aria-current="true"] { color: var(--foreground); }
 nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-@font-face { font-family: 'Open Sans'; src: url('/fonts/OpenSans.ttf') format('truetype'); font-style: normal; font-weight: 300 800; font-display: swap; }
+@font-face { font-family: 'Golos Text'; src: url('/fonts/GolosText.ttf') format('truetype'); font-style: normal; font-weight: 400 900; font-display: swap; }
 :global(:root) { color-scheme: light; --background: #fff; --foreground: #222; --muted: #666; --subtle: #777; --placeholder: #888; --border: #ddd; --hover: #f7f7f7; --focus: #555; --error: #a02e23; }
 @media (prefers-color-scheme: dark) {
 	:global(:root) { color-scheme: dark; --background: #000; --foreground: #e5e5e5; --muted: #aaa; --subtle: #999; --placeholder: #888; --border: #333; --hover: #151515; --focus: #aaa; --error: #ff9286; }
 }
 :global(*) { box-sizing: border-box; }
-:global(body) { margin: 0; background: var(--background); color: var(--foreground); font-family: 'Open Sans', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+:global(body) { margin: 0; background: var(--background); color: var(--foreground); font-family: 'Golos Text', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 :global(main) { max-width: 940px; margin: 40px auto; padding: 0 24px; }
 :global(h1) { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -.6px; line-height: 1.3; }
 :global(p) { margin: 0; color: var(--muted); }

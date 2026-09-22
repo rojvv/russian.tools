@@ -21,11 +21,11 @@ pnpm preview
 
 The first tool adds Russian vowel stress marks with [`@roj/rustress`](https://jsr.io/@roj/rustress) 0.0.8. The home page lists available tools. At `/stress`, type or paste into a single editor and accents appear directly in the text. Stress is recomputed after edits, preserving the cursor, selection, whitespace, and scroll position. Composition input is allowed to finish before marking. Input is limited to 20,000 characters (including accents).
 
-Inference runs in a module Web Worker, with debounced requests, bounded inference batches, and stale-result suppression. The dictionary, model, ONNX WebAssembly runtime, and Open Sans fonts are served locally; text is never submitted to a server. After the engine loads, processing works without a network connection. Reloading offline requires the site's assets to be available in the browser cache; this is not an offline-installable app.
+Inference runs in a module Web Worker, with debounced requests, bounded inference batches, and stale-result suppression. The dictionary, model, ONNX WebAssembly runtime, and Golos Text fonts are served locally; text is never submitted to a server. After the engine loads, processing works without a network connection. Reloading offline requires the site's assets to be available in the browser cache; this is not an offline-installable app.
 
 The runtime has an approximately 14 MB WebAssembly asset (about 3.7 MB with gzip). Enable compression and caching on the deployment host. A modern browser supporting WebAssembly, module workers, and ES2023 is required. Clipboard access requires HTTPS or localhost. Predictions may be uncertain or context-dependent and should be reviewed.
 
-Open Sans's variable font and their SIL Open Font License are in `static/fonts`.
+Golos Text's variable font (weights 400–900) and SIL Open Font License are in `static/fonts`. The font supports Cyrillic text and combining acute stress marks; it is hosted locally without external font requests. Source: [Google Fonts](https://github.com/google/fonts/tree/main/ofl/golostext).
 
 ## Cloudflare Workers deployment
 
