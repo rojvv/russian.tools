@@ -41,4 +41,3 @@ export function suggestWords<T extends { bare: string }>(words: T[], text: strin
   }
   return closest ? findWords(words, closest.bare) : [];
 }
-

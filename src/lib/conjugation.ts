@@ -11,7 +11,11 @@ export interface Section {
   title: string;
   rows: { label: string; form: string }[];
 }
-export { normalizeWord as normalizeVerb, findWords as findVerbs, suggestWords as suggestVerbs } from './dictionary-lookup.ts';
+export {
+  findWords as findVerbs,
+  normalizeWord as normalizeVerb,
+  suggestWords as suggestVerbs,
+} from "./dictionary-lookup.ts";
 
 export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): Section[] {
   const persons = ["я", "ты", "он / она / оно", "мы", "вы", "они"];

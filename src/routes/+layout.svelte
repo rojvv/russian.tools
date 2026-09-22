@@ -22,6 +22,8 @@ const toolTitle = $derived(
     ? i18n.t("stressTitle")
     : page.route.id === "/conjugator"
     ? i18n.t("verbTitle")
+    : page.route.id === "/decliner"
+    ? i18n.t("nounTitle")
     : "",
 );
 </script>

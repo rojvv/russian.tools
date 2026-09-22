@@ -61,3 +61,17 @@ Run conjugation checks with `node --test tests/*.test.mjs` (Node 24 or later).
 The interface uses `sveltekit-i18n` v3 for English and Russian translations. Each layout tree gets its own library instance, keeping concurrent SSR requests isolated; the small catalogs are preloaded for immediate rendering and switching. On the first visit, the server follows the browser's preferred supported language; the header language switch saves a persistent `language` cookie for server rendering. Browsers cap its lifetime at up to 400 days, and it is renewed on visits. Without a valid cookie, the server uses the `Accept-Language` HTTP header, falling back to English when no supported language is preferred. Switching languages updates the interface without resetting the editor or verb query. Dictionary glosses remain in English and are labeled accordingly in the Russian interface.
 
 Appearance always follows the system color scheme through CSS (`prefers-color-scheme`), including before hydration. Dark mode uses a pure `#000` background across the page, editor, and inputs. There is no theme selector; older theme cookies are ignored. The language attribute is rendered on the server.
+
+## Noun Decliner
+
+At `/decliner`, look up 26,982 OpenRussian noun entries with stressed forms for all
+six cases in singular and plural. The interface matches the Verb Conjugator,
+including automatic lookup, labeled closest matches, homonym selection, English
+and Russian labels, responsive layout, and shareable URLs such as
+`/decliner?книга` (or `?noun=книга`). Initial query results are server-rendered;
+the browser downloads the local dictionary only when another lookup is needed.
+Indeclinable and number-restricted nouns are labeled; missing forms display `—`.
+The older source export can contain gaps and errors. Attribution, the pinned
+source revision, and transformations are in `static/data/nouns-SOURCE.md`;
+the CC BY-SA 4.0 license is in `static/data/nouns-LICENSE.txt`.
+Rebuild with `python3 scripts/import-nouns.py /path/to/nouns.csv`.
