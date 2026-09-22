@@ -24,14 +24,6 @@ const i18n = getI18n();
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 
-<p class="examples">
-  {i18n.t("examples")}:
-  <a href="/conjugator?читать" lang="ru">читать</a> ·
-  <a href="/conjugator?быть" lang="ru">быть</a> ·
-  <a href="/decliner?книга" lang="ru">книга</a> ·
-  <a href="/decliner?человек" lang="ru">человек</a>
-</p>
-
 <p class="source">
   {i18n.t("openRussianAttribution")} <a href="https://en.openrussian.org/"
   >OpenRussian</a>.
@@ -40,6 +32,5 @@ const i18n = getI18n();
 <style>
 nav { margin-top: 32px; display: grid; gap: 24px; }
 nav a { font-weight: 500; }
-.examples { margin-top: 24px; }
 .source { margin-top: 32px; font-size: 12px; }
 </style>
