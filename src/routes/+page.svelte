@@ -13,7 +13,7 @@ const i18n = getI18n();
 
 <nav aria-label={i18n.t("tools")}>
   <div>
-    <a href="/stress">{i18n.t("stressSeoTitle")}</a>
+    <a href="/stress">{i18n.t("stressTitle")}</a>
   </div>
   <div>
     <a href="/conjugator">{i18n.t("verbSeoTitle")}</a>
