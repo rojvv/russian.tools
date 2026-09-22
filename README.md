@@ -43,7 +43,7 @@ To publish from your machine:
 
 ```sh
 pnpm exec wrangler login
-pnpm deploy
+pnpm run deploy
 ```
 
 For Cloudflare Workers Builds, use `pnpm build` as the build command and `pnpm exec wrangler deploy` as the deploy command, with Node.js 24 and the repository root as the project root. For other CI systems, supply `CLOUDFLARE_API_TOKEN` (Workers deployment permissions) and `CLOUDFLARE_ACCOUNT_ID` as CI secrets. The app requires no runtime secrets or database bindings. Connect a custom domain through the Worker's Domains & Routes settings after deployment.
