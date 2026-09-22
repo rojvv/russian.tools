@@ -10,7 +10,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.request.headers.get("accept-language"),
   );
   event.locals.locale = locale;
-  if (requestedLanguage === "en" || requestedLanguage === "ru" || savedLanguage === "en" || savedLanguage === "ru") {
+  // Speculative data preloads must not change the user's saved preference.
+  if (
+    !event.isDataRequest
+    && (requestedLanguage === "en" || requestedLanguage === "ru" || savedLanguage === "en" || savedLanguage === "ru")
+  ) {
     event.cookies.set("language", locale, {
       path: "/",
       maxAge: languageCookieMaxAge,

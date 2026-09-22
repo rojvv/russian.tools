@@ -9,25 +9,34 @@ import { untrack } from "svelte";
 
 let { children, data } = $props();
 const i18n = createI18n(untrack(() => data.locale));
+// Keep the current choice across client navigation; preloaded server data may
+// have been rendered with the cookie from before the user switched languages.
+let language = $state(untrack(() => data.locale));
 $effect(() => {
   const requested = page.url.searchParams.get("lang");
   const locale = requested === "en" || requested === "ru"
     ? requested
-    : data.locale;
+    : language;
   // The library setter reads reactive state internally. Do not subscribe this
   // effect to those reads and overwrite a user's live language selection.
   untrack(() => {
+    language = locale;
     i18n.locale = locale;
+    saveLanguage(locale);
   });
 });
 $effect(() => {
   document.documentElement.lang = i18n.locale ?? "en";
 });
-function setLanguage(locale: Locale) {
+function saveLanguage(locale: Locale) {
   document.cookie =
     `language=${locale}; Path=/; Max-Age=${languageCookieMaxAge}; SameSite=Lax${
       location.protocol === "https:" ? "; Secure" : ""
     }`;
+}
+function setLanguage(locale: Locale) {
+  saveLanguage(locale);
+  language = locale;
   i18n.locale = locale;
   replaceState(languageUrl(window.location.href, locale), page.state);
 }
@@ -58,7 +67,7 @@ const toolTitle = $derived(
     <h1>
       <a href="/">russian.tools</a> {#if toolTitle}<span>{toolTitle}</span>{/if}
     </h1>
-    <nav aria-label={i18n.t("language")}>
+    <nav aria-label={i18n.t("language")} data-sveltekit-preload-data="off">
       <a
         href={languageUrl(page.url.href, "en")}
         lang="en"
