@@ -4,7 +4,7 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
-    keyboardTitle: "Virtual Russian Keyboard",
+    keyboardTitle: "Virtual Keyboard",
     keyboardSeoTitle: "Virtual Russian Keyboard – Type Cyrillic Online",
     keyboardDescription:
       "Type Russian with a virtual ЙЦУКЕН keyboard or map your physical keys to Cyrillic. Copy your text instantly.",
@@ -163,7 +163,7 @@ export const messages = {
     dictionaryError: "Could not load the verb dictionary. Please try again.",
   },
   ru: {
-    keyboardTitle: "Виртуальная русская клавиатура",
+    keyboardTitle: "Виртуальная клавиатура",
     keyboardSeoTitle: "Виртуальная русская клавиатура онлайн",
     keyboardDescription:
       "Печатайте по-русски на виртуальной клавиатуре ЙЦУКЕН или с помощью физических клавиш. Сразу копируйте готовый текст.",
