@@ -4,9 +4,12 @@ import { motionEntries } from "../src/lib/motion-catalog.ts";
 import { defaultMotionState, readMotionQuery, writeMotionQuery } from "../src/lib/motion-url.ts";
 const url = (query = "") => new URL(`https://russian.tools/motion${query}`);
 
-test("empty URL restores defaults and defaults keep URLs short", () => {
+test("empty URL restores defaults and persists every selected control", () => {
   assert.deepEqual(readMotionQuery(url()), defaultMotionState);
-  assert.equal(writeMotionQuery(url(), defaultMotionState).search, "");
+  assert.equal(
+    writeMotionQuery(url(), defaultMotionState).search,
+    "?family=transport&meaning=exit&aspect=perfective&situation=direction",
+  );
 });
 
 test("all catalogue pairs round trip in both aspects", () => {
@@ -34,7 +37,10 @@ test("language, unrelated parameters, and hash survive updates without mutating 
   assert.equal(next.searchParams.get("source"), "test");
   assert.equal(next.hash, "#result");
   assert.equal(original.searchParams.has("meaning"), false);
-  assert.equal(writeMotionQuery(next, defaultMotionState).href, original.href);
+  assert.equal(
+    writeMotionQuery(next, defaultMotionState).href,
+    writeMotionQuery(original, defaultMotionState).href,
+  );
 });
 
 test("invalid parameters and unavailable combinations always restore valid controls", () => {

@@ -19,7 +19,7 @@ import {
 } from "$lib/motion-catalog";
 import { readMotionQuery, writeMotionQuery } from "$lib/motion-url";
 import Seo from "$lib/Seo.svelte";
-import { untrack } from "svelte";
+import { onMount, untrack } from "svelte";
 
 const i18n = getI18n();
 const locale = $derived(i18n.locale === "ru" ? "ru" : "en");
@@ -108,6 +108,8 @@ let meaning = $state<MotionMeaning>(initial.meaning);
 let aspect = $state<"imperfective" | "perfective">(initial.aspect);
 let situation = $state<MotionSituation>(initial.situation);
 let query = $state(initial.query);
+
+onMount(persist);
 
 $effect(() => {
   const restored = readMotionQuery(page.url);

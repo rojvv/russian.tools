@@ -44,7 +44,7 @@ export function writeMotionQuery(url: URL, state: MotionState): URL {
   const next = new URL(url);
   for (const key of ["family", "meaning", "aspect", "situation", "query"] as const) {
     const param = key === "query" ? "q" : key;
-    if (state[key] === defaultMotionState[key]) next.searchParams.delete(param);
+    if (key === "query" && state[key] === "") next.searchParams.delete(param);
     else next.searchParams.set(param, state[key]);
   }
   return next;
