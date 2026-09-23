@@ -1,4 +1,6 @@
 <script lang="ts">
+import { goto } from "$app/navigation";
+import { page } from "$app/state";
 import { getI18n } from "$lib/i18n-context";
 import {
   chooseMotion,
@@ -15,7 +17,9 @@ import {
   motionStarts,
   transportPhrases,
 } from "$lib/motion-catalog";
+import { readMotionQuery, writeMotionQuery } from "$lib/motion-url";
 import Seo from "$lib/Seo.svelte";
+import { untrack } from "svelte";
 
 const i18n = getI18n();
 const locale = $derived(i18n.locale === "ru" ? "ru" : "en");
@@ -98,11 +102,36 @@ const simple = $derived(
       },
     },
 );
-let familyId = $state("transport");
-let meaning = $state<MotionMeaning>("exit");
-let aspect = $state<"imperfective" | "perfective">("perfective");
-let situation = $state<MotionSituation>("direction");
-let query = $state("");
+const initial = untrack(() => readMotionQuery(page.url));
+let familyId = $state(initial.family);
+let meaning = $state<MotionMeaning>(initial.meaning);
+let aspect = $state<"imperfective" | "perfective">(initial.aspect);
+let situation = $state<MotionSituation>(initial.situation);
+let query = $state(initial.query);
+
+$effect(() => {
+  const restored = readMotionQuery(page.url);
+  familyId = restored.family;
+  meaning = restored.meaning;
+  aspect = restored.aspect;
+  situation = restored.situation;
+  query = restored.query;
+});
+
+function persist() {
+  const next = writeMotionQuery(new URL(window.location.href), {
+    family: familyId,
+    meaning,
+    aspect,
+    situation,
+    query,
+  });
+  // A router navigation also updates the URL restored by Back/Forward.
+  // Shallow replaceState only changes the address bar in this SvelteKit version.
+  if (next.href !== window.location.href) {
+    void goto(next, { replaceState: true, noScroll: true, keepFocus: true });
+  }
+}
 const family = $derived(motionFamilies.find((item) => item.id === familyId)!);
 const available = $derived(
   motionEntries.filter((entry) => entry.family === familyId),
@@ -176,6 +205,7 @@ function changeFamily() {
       item.family === familyId && item.meaning === meaning
     )
   ) meaning = "base";
+  persist();
 }
 function select(item: typeof browse[number]) {
   familyId = item.family;
@@ -190,6 +220,7 @@ function select(item: typeof browse[number]) {
       ? "imperfective"
       : "perfective";
   }
+  persist();
 }
 const link = (word: string) =>
   `/conjugator?${encodeURIComponent(word)}&lang=${locale}`;
@@ -224,7 +255,14 @@ const link = (word: string) =>
       </optgroup>
     </select>
     <label class="field" for="meaning">{simple.where}</label>
-    <select id="meaning" bind:value={meaning}>
+    <select
+      id="meaning"
+      value={meaning}
+      onchange={(event) => {
+        meaning = event.currentTarget.value as MotionMeaning;
+        persist();
+      }}
+    >
       <optgroup label={simple.basic}>
         <option value="base">{simple.meanings.base}</option>
         <option value="start">{simple.meanings.start}</option>
@@ -248,14 +286,28 @@ const link = (word: string) =>
     </select>
     {#if meaning === "base"}
       <label class="field" for="situation">{simple.action}</label>
-      <select id="situation" bind:value={situation}>
+      <select
+        id="situation"
+        value={situation}
+        onchange={(event) => {
+          situation = event.currentTarget.value as MotionSituation;
+          persist();
+        }}
+      >
         {#each situations as value}<option {value}>
             {simple.situations[value]}
           </option>{/each}
       </select>
     {:else if meaning !== "start"}
       <label class="field" for="aspect">{simple.action}</label>
-      <select id="aspect" bind:value={aspect}>
+      <select
+        id="aspect"
+        value={aspect}
+        onchange={(event) => {
+          aspect = event.currentTarget.value as typeof aspect;
+          persist();
+        }}
+      >
         <option value="perfective">{simple.whole}</option>
         <option value="imperfective">{simple.process}</option>
       </select>
@@ -327,14 +379,19 @@ const link = (word: string) =>
   </section>
 </div>
 
-<details class="catalog">
+<details class="catalog" open={query.length > 0}>
   <summary>{simple.browse}</summary>
   <div class="catalog-content">
     <label class="field" for="search">{labels.search}</label>
     <input
       id="search"
       type="search"
-      bind:value={query}
+      value={query}
+      maxlength="200"
+      oninput={(event) => {
+        query = event.currentTarget.value;
+        persist();
+      }}
       placeholder={labels.placeholder}
     />
     <p class="count" role="status">{matches.length} {labels.results}</p>

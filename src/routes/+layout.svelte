@@ -51,6 +51,8 @@ const toolTitle = $derived(
     ? i18n.t("nounTitle")
     : page.route.id === "/motion"
     ? i18n.t("motionTitle")
+    : page.route.id === "/keyboard"
+    ? i18n.t("keyboardTitle")
     : "",
 );
 </script>
@@ -66,7 +68,7 @@ const toolTitle = $derived(
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<main class:stress-layout={page.route.id === "/stress"}>
+<main class:stress-layout={page.route.id === "/stress" || page.route.id === "/keyboard"}>
   <header>
     <h1>
       <a href="/">russian.tools</a> {#if toolTitle}<span>{toolTitle}</span>{/if}

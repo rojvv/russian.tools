@@ -95,6 +95,12 @@ English and Russian explanations cover context-dependent meanings such as
 переехать (cross by transport or move house). Rare, figurative, and reflexive
 derivatives are not exhaustively listed. Choices stay local and survive language
 switching. The catalogue uses explicit lexical pairs, not automatic prefixing.
+The URL preserves selections and catalogue search using `family`, `meaning`,
+`aspect`, `situation`, and `q`, omitting default values. For example,
+`/motion?family=air&meaning=base&situation=habit` selects летать. Changes replace
+the current history entry; refreshes, shared links, and browser navigation restore
+the selection, including in server-rendered HTML. Invalid choices fall back to
+valid controls, and language parameters are preserved.
 
 ## Language and appearance
 
