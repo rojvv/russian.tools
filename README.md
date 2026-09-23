@@ -103,6 +103,7 @@ without forcing passport uppercase formatting or generating a machine-readable
 passport line.
 
 Run transliteration checks with `node --test tests/transliteration.test.mjs`.
+
 ## Motion Verb Chooser
 
 At `/motion`, choose among 14 standard motion-verb families and common spatial
