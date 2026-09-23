@@ -1,4 +1,4 @@
-import { building } from "$app/environment";
+import { building, dev } from "$app/environment";
 import { languageCookieMaxAge, preferredLocale } from "$lib/i18n";
 import type { Handle, HandleFetch } from "@sveltejs/kit";
 
@@ -6,7 +6,7 @@ import type { Handle, HandleFetch } from "@sveltejs/kit";
 // public origin from the Worker can fail when it points back to the same Worker.
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
   const url = new URL(request.url);
-  const assets = building ? undefined : event.platform?.env?.ASSETS;
+  const assets = building || dev ? undefined : event.platform?.env?.ASSETS;
   if (
     assets
     && url.origin === event.url.origin

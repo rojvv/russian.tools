@@ -43,3 +43,20 @@ test("corrupt gzip and invalid JSON fail instead of poisoning the dictionary cac
   await assert.rejects(get(async () => new Response(gzipSync("not JSON"))));
   assert.deepEqual(await get(async () => new Response(gzipSync("[]"))), []);
 });
+
+test("already decoded HTTP gzip responses are not decompressed twice", async () => {
+  const entries = [{ bare: "лес", type: "noun" }];
+  for (const headers of [{ "Content-Encoding": "gzip" }, {}]) {
+    assert.deepEqual(
+      await loadDictionary(async () => new Response(JSON.stringify(entries), { headers }), "nouns"),
+      entries,
+    );
+  }
+  assert.deepEqual(
+    await loadDictionary(async () =>
+      new Response(gzipSync(JSON.stringify(entries)), {
+        headers: { "Content-Encoding": "gzip" },
+      }), "nouns"),
+    entries,
+  );
+});
