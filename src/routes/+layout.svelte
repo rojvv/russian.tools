@@ -13,7 +13,10 @@ const i18n = createI18n(untrack(() => data.locale));
 // have been rendered with the cookie from before the user switched languages.
 let language = $state(untrack(() => data.locale));
 $effect(() => {
-  const requested = page.url.searchParams.get("lang");
+  // Shallow replaceState keeps SvelteKit's original page.url in history.
+  // Track navigation, but restore the language from the visible URL.
+  void page.url;
+  const requested = new URL(window.location.href).searchParams.get("lang");
   const locale = requested === "en" || requested === "ru"
     ? requested
     : language;
@@ -59,6 +62,8 @@ const toolTitle = $derived(
     ? i18n.t("motionTitle")
     : page.route.id === "/diminutive"
     ? i18n.t("diminutiveTitle")
+    : page.route.id === "/abbreviation"
+    ? i18n.t("abbreviationTitle")
     : page.route.id === "/acknowledgements"
     ? i18n.t("acknowledgementsTitle")
     : "",

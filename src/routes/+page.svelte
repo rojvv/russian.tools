@@ -58,6 +58,11 @@ const i18n = getI18n();
       i18n.t("keyboardTitle")
     }</a>
   </div>
+  <div>
+    <a href={languagePath("/abbreviation", i18n.locale ?? "en")}>{
+      i18n.t("abbreviationTitle")
+    }</a>
+  </div>
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 

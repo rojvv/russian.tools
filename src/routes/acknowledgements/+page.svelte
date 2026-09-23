@@ -71,6 +71,36 @@ const ru = $derived(i18n.locale === "ru");
   </p>
 </section>
 <section>
+  <h2>
+    {ru ? "Сокращения и аббревиатуры" : "Abbreviations"}
+  </h2>
+  <p>
+    {
+      ru
+      ? "Справочник составлен вручную. Для проверки написания и отдельных расшифровок использованы"
+      : "The directory is manually curated. References for spelling and selected expansions include"
+    }
+    <a
+      href="https://gramota.ru/biblioteka/spravochniki/pravila-russkoy-orfografii-i-punktuatsii/graficheskie-sokrashcheniya"
+    >{ru ? "Грамота.ру" : "Gramota.ru"}</a>,
+    <a href="https://www.nalog.gov.ru/rn77/fl/interest/inn/">{
+      ru ? "ФНС" : "the Federal Tax Service"
+    }</a>,
+    <a href="https://sfr.gov.ru/grazhdanam/personificirovannyj_uchet/snils/">{
+      ru ? "Социальный фонд" : "the Social Fund"
+    }</a>
+    {ru ? "и" : "and"}
+    <a href="https://www.cbr.ru/PSystem/sfp">{
+      ru ? "Банк России" : "the Bank of Russia"
+    }</a>.
+    {
+      ru
+      ? "Подборка не является полным словарём; английские пояснения написаны для этого инструмента."
+      : "This is not an exhaustive dictionary; English glosses were written for this tool."
+    }
+  </p>
+</section>
+<section>
   <h2>{ru ? "Транслитерация" : "Transliteration"}</h2>
   <p>
     {

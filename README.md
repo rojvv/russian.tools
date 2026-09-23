@@ -143,6 +143,35 @@ Selection notes and reference links are in `src/lib/diminutives-SOURCE.md`.
 Run lookup, reverse mapping, normalization, directory, and URL checks with
 `node --test tests/diminutive.test.mjs`.
 
+## Abbreviation Decoder
+
+At `/abbreviation`, look up Russian abbreviations and browse a searchable directory
+of 400 meanings across 14 subjects: writing, addresses and housing, documents,
+government, business, finance, education, medicine, technology, transport, science,
+grammar, history, and informal chat. Each entry includes its Russian expansion,
+an English gloss, a subject label, and any listed spelling variants.
+
+Exact lookup retains every listed meaning of ambiguous forms such as `КПП`, `г.`,
+and `ЕГРН`. Capitalization, dots, whitespace, stress marks, and е/ё differences are
+ignored; Latin transliteration such as `SNILS` is accepted. Slashes and hyphens
+remain meaningful. Partial lookup results are labeled separately. The directory
+searches abbreviations, expansions, English glosses, and subject labels, with a
+separate subject filter. The decoder always shows all listed exact meanings,
+independently of the directory filter.
+
+Search state is shareable through `q`, `directory`, and `category`, for example
+`/abbreviation?q=КПП&directory=налог&category=documents&lang=ru`. Results render
+on the server. Decoding and directory search update automatically while typing;
+subject filters apply immediately. Without JavaScript, press Enter in either
+search field to submit its GET form. Subsequent searches with JavaScript run locally.
+English and Russian interfaces, system color schemes, browser history, and language
+switching are supported. Both tool language URLs appear in the sitemap; filtered
+and query URLs are noindex.
+
+This is a curated selection, not a complete dictionary or a contextual prediction
+engine. See `src/lib/abbreviations-SOURCE.md` for editorial decisions and reference
+checks. Run `node --test tests/abbreviation.test.mjs tests/seo-http.test.mjs`.
+
 ## Language and appearance
 
 The shared footer links to `/acknowledgements`, which collects the OpenRussian

@@ -4,6 +4,7 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    abbreviationTitle: "Abbreviation Decoder",
     keyboardTitle: "Virtual Keyboard",
     keyboardSeoTitle: "Virtual Russian Keyboard – Type Cyrillic Online",
     keyboardDescription:
@@ -163,6 +164,7 @@ export const messages = {
     dictionaryError: "Could not load the verb dictionary. Please try again.",
   },
   ru: {
+    abbreviationTitle: "Расшифровка сокращений",
     keyboardTitle: "Виртуальная клавиатура",
     keyboardSeoTitle: "Виртуальная русская клавиатура онлайн",
     keyboardDescription:

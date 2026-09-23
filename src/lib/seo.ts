@@ -8,6 +8,7 @@ export const toolPaths = [
   "/decliner",
   "/motion",
   "/diminutive",
+  "/abbreviation",
   "/acknowledgements",
   "/case-game",
   "/transliterate",
