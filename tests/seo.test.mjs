@@ -1,6 +1,26 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { dictionarySeo, serializeJsonLd } from "../src/lib/seo.ts";
+import { readVerbQuery } from "../src/lib/conjugation-url.ts";
+import { readNounQuery } from "../src/lib/declension-url.ts";
+import { canonicalRedirect, dictionarySeo, languageUrl, serializeJsonLd } from "../src/lib/seo.ts";
+
+test("tracking parameters never become dictionary searches or hide a real query", () => {
+  for (const read of [readVerbQuery, readNounQuery]) {
+    for (const tracking of ["utm_source=newsletter", "utm_campaign=launch", "gclid=123", "fbclid=123", "_gl=123"]) {
+      assert.equal(read(new URL(`https://russian.tools/?${tracking}&lang=en`)), "");
+      assert.equal(read(new URL(`https://russian.tools/?${tracking}&читать&lang=ru`)), "читать");
+      assert.equal(read(new URL(`https://russian.tools/?${tracking}&q=книга`)), "книга");
+    }
+  }
+});
+
+test("canonical redirects converge and keep preview hosts local", () => {
+  const canonical = dictionarySeo("/decliner", "книга", "книга").canonical;
+  const path = `/decliner?${encodeURIComponent("книга")}&lang=ru`;
+  assert.equal(canonicalRedirect(new URL("http://localhost:5173/decliner?noun=книга&lang=ru"), canonical, "ru"), path);
+  assert.equal(canonicalRedirect(new URL(`http://localhost:5173${path}`), canonical, "ru"), null);
+  assert.equal(canonicalRedirect(new URL(languageUrl(canonical, "en")), canonical, "en"), null);
+});
 
 test("dictionary canonicals consolidate spelling, accents, and named query variants", () => {
   assert.deepEqual(dictionarySeo("/conjugator", " ЧИТА́ТЬ ", "читать"), {

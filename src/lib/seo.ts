@@ -1,5 +1,30 @@
 export const siteOrigin = "https://russian.tools";
 
+export const toolPaths = [
+  "/",
+  "/stress",
+  "/stress-practice",
+  "/conjugator",
+  "/decliner",
+  "/motion",
+  "/diminutive",
+  "/acknowledgements",
+  "/case-game",
+  "/transliterate",
+];
+
+/** Compare path/query only so development and preview servers stay on their own host. */
+export function canonicalRedirect(url: URL, canonical: string, locale: string): string | null {
+  const path = languagePath(canonical, locale);
+  return url.pathname + url.search === path ? null : path;
+}
+
+/** Keep internal navigation on the current host, including local previews. */
+export function languagePath(href: string, locale: string): string {
+  const url = new URL(languageUrl(href, locale));
+  return url.pathname + url.search + url.hash;
+}
+
 /** Match dictionary normalization without treating a fuzzy suggestion as an entry. */
 export function dictionarySeo(path: string, query: string, bare?: string) {
   const normalize = (value: string) =>

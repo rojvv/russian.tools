@@ -1,7 +1,8 @@
+import { readDictionaryQuery } from "./dictionary-url.ts";
+
 /** The first query entry accepts either ?книга or a named value such as ?noun=книга or ?adjective=новый. */
 export function readDeclensionQuery(url: URL): string {
-  const first = [...url.searchParams.entries()].find(([key]) => key !== "lang");
-  return first ? (first[1] || first[0]).slice(0, 40) : "";
+  return readDictionaryQuery(url);
 }
 
 /** Use the short, shareable ?книга format for text entered in the editor. */

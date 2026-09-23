@@ -32,8 +32,8 @@ const structuredData = $derived({
 <svelte:head>
   <title>{title}</title>
   <meta name="description" content={description} />
-  <link rel="canonical" href={localizedCanonical} />
   {#if !noindex}
+    <link rel="canonical" href={localizedCanonical} />
     <link rel="alternate" hreflang="en" href={languageUrl(canonical, "en")} />
     <link rel="alternate" hreflang="ru" href={languageUrl(canonical, "ru")} />
   {/if}

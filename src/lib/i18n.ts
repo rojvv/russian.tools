@@ -9,6 +9,8 @@ export const messages = {
     diminutiveTitle: "Name Diminutive Finder",
     transliterateTitle: "Cyrillic to Latin",
     transliterateSeoTitle: "Russian Cyrillic to Latin Transliteration",
+    transliterateDescription:
+      "Transliterate Russian Cyrillic text into Latin letters. Type or paste text to get a result you can copy instantly.",
     transliterateInput: "Cyrillic",
     transliterateOutput: "Latin",
     transliterateCopy: "Copy result",
@@ -152,6 +154,8 @@ export const messages = {
     diminutiveTitle: "Уменьшительные имена",
     transliterateTitle: "Кириллица → латиница",
     transliterateSeoTitle: "Транслитерация русского текста латиницей",
+    transliterateDescription:
+      "Переведите русский текст из кириллицы в латиницу. Введите или вставьте текст и сразу скопируйте результат транслитерации.",
     transliterateInput: "Кириллица",
     transliterateOutput: "Латиница",
     transliterateCopy: "Скопировать результат",

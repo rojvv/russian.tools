@@ -4,7 +4,7 @@ import { page } from "$app/state";
 import favicon from "$lib/assets/favicon.svg";
 import { languageCookieMaxAge, type Locale } from "$lib/i18n";
 import { createI18n } from "$lib/i18n-context";
-import { languageUrl } from "$lib/seo";
+import { languagePath, languageUrl } from "$lib/seo";
 import { untrack } from "svelte";
 
 let { children, data } = $props();
@@ -77,7 +77,8 @@ const toolTitle = $derived(
 <main class:editor-layout={page.route.id === "/stress" || page.route.id === "/transliterate"}>
   <header>
     <h1>
-      <a href="/">russian.tools</a> {#if toolTitle}<span>{toolTitle}</span>{/if}
+      <a href={languagePath("/", i18n.locale ?? "en")}>russian.tools</a>
+      {#if toolTitle}<span>{toolTitle}</span>{/if}
     </h1>
     <nav aria-label={i18n.t("language")} data-sveltekit-preload-data="off">
       <a

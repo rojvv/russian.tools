@@ -220,6 +220,18 @@ cookies. Word pages include server-rendered forms, word-specific titles and
 headings, localized canonical URLs, and reciprocal `hreflang` links. Inexact
 suggestions and invalid queries remain `noindex`.
 
+URLs without a supported language temporarily redirect to the visitor's preferred
+language URL (with private, non-cacheable responses). Navigation links point directly
+to the explicit language URLs. Exact dictionary spelling and named-query variants
+permanently redirect to the same canonical word URL used by the sitemap; tracking
+parameters are ignored when reading searches. Dictionary download failures return
+`503` with `Retry-After`, so temporary failures do not mark valid entries `noindex`.
+Excluded search results omit canonical links to unrelated tool pages.
+
+Run `node --test tests/seo.test.mjs tests/seo-http.test.mjs` to check redirects,
+server-rendered metadata, sitemap tool URLs, and temporary dictionary failures.
+The HTTP checks start a local Vite server.
+
 `/sitemap.xml` lists separate noun, adjective, and verb sitemaps for each language, keeping
 each file below Google's 50,000-URL limit. After deployment, submit
 `https://russian.tools/sitemap.xml` in Google Search Console and inspect sample
