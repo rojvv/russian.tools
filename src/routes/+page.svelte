@@ -27,6 +27,8 @@ const i18n = getI18n();
   <div>
     <a href="/transliterate">{i18n.t("transliterateTitle")}</a>
   </div>
+  <div><a href="/motion">{i18n.t("motionTitle")}</a></div>
+  <div><a href="/case-game">{i18n.t("caseGameTitle")}</a></div>
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 

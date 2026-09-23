@@ -1,11 +1,13 @@
-export {
-  findWords as findDeclinables,
-  findWords as findNouns,
-  normalizeWord,
-  normalizeWord as normalizeNoun,
-  suggestWords as suggestDeclinables,
-  suggestWords as suggestNouns,
-} from "./dictionary-lookup.ts";
+import { formLookup } from "./dictionary-lookup.ts";
+export { normalizeWord, normalizeWord as normalizeNoun } from "./dictionary-lookup.ts";
+const declensionLookup = formLookup<Declinable>(word => [
+  word.bare,
+  ...createTable(word).flatMap(section => section.rows.map(row => row.form)),
+]);
+export const findDeclinables = declensionLookup.find;
+export const suggestDeclinables = declensionLookup.suggest;
+export const findNouns = (words: Noun[], text: string) => declensionLookup.find(words, text) as Noun[];
+export const suggestNouns = (words: Noun[], text: string) => declensionLookup.suggest(words, text) as Noun[];
 
 export interface Noun {
   kind?: "noun";

@@ -9,6 +9,7 @@ import { afterNavigate, replaceState } from "$app/navigation";
 import { page } from "$app/state";
 import {
   createTable,
+  findVerbs,
   normalizeVerb,
   type Section,
   suggestVerbs,
@@ -58,11 +59,13 @@ onDestroy(() => {
   clearTimeout(timer);
   request++;
 });
-const suggested = $derived(
+const differentHeadword = $derived(
   verb
     && normalizeVerb(query).replaceAll("ё", "е")
       !== normalizeVerb(verb.bare).replaceAll("ё", "е"),
 );
+
+const suggested = $derived(verb && !findVerbs([verb], query).length);
 
 function syncUrl() {
   const current = new URL(window.location.href);
@@ -155,7 +158,7 @@ function resetResult() {
 
 async function lookup() {
   resetResult();
-  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeVerb(query))) {
+  if (!/^[а-яё]+(?:[-\s][а-яё]+)*$/u.test(normalizeVerb(query))) {
     message = "invalidVerb";
     return;
   }
@@ -205,8 +208,8 @@ const resultTitle = $derived(
     bind:value={query}
     oninput={handleInput}
     onchange={handleInput}
-    placeholder={i18n.t("infinitive")}
-    aria-label={i18n.t("infinitive")}
+    placeholder={i18n.t("verbInput")}
+    aria-label={i18n.t("verbInput")}
     spellcheck="false"
     autocapitalize="off"
     maxlength="40"
@@ -217,10 +220,10 @@ const resultTitle = $derived(
 </p>
 
 {#if verb}
-  {#if suggested}<p class="match">
-      {i18n.t("closestMatch")} {i18n.locale === "ru" ? "«" : "“"}{
-        query.trim()
-      }{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
+  {#if differentHeadword}<p class="match">
+      {i18n.t(suggested ? "closestMatch" : "dictionaryFormFor")} {
+        i18n.locale === "ru" ? "«" : "“"
+      }{query.trim()}{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
         verb.infinitive
       }</strong>
     </p>{/if}

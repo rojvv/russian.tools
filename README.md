@@ -77,7 +77,7 @@ For Cloudflare Workers Builds, use `pnpm build` as the build command and `pnpm e
 
 ## Verb Conjugator
 
-At `/conjugator`, type a Russian infinitive to automatically look up its forms in a locally hosted OpenRussian dictionary of 15,300 entries. Partial input uses a clearly labeled closest match (prefixes first, then edit distance). Select the intended entry for homonyms, or the intended aspect for a verb with both aspects. View present and future columns alongside compact imperative and past tables. Tense sections sit side by side on wide screens and stack on smaller screens. Perfective entries have no present tense; imperfective futures use быть plus the infinitive (with a special case for быть itself). Missing forms are left blank.
+At `/conjugator`, type a Russian infinitive or inflected form (for example `шёл` → `идти`) to automatically look up its forms in a locally hosted OpenRussian dictionary of 15,300 entries. Partial input uses a clearly labeled closest match (prefixes first, then edit distance). Exact dictionary forms take priority over spelling suggestions; compound futures such as `буду читать` are supported. Select the intended entry for ambiguous forms or homonyms, or the intended aspect for a verb with both aspects. View present and future columns alongside compact imperative and past tables. Tense sections sit side by side on wide screens and stack on smaller screens. Perfective entries have no present tense; imperfective futures use быть plus the infinitive (with a special case for быть itself). Missing forms are left blank.
 
 Share a verb with a bare query string, for example `/conjugator?читать`. The first query entry initializes the textbox (named values such as `?verb=читать` also work). Typing replaces the URL query without adding history entries; clearing the field clears the query. Server rendering includes the matching forms in the initial HTML, even without JavaScript. Browser autofill and form restoration trigger lookup on startup. The client dictionary loads only when a new lookup is needed; initial server results do not require downloading the entire dictionary. It uses the OpenRussian public database export retrieved on 2026-09-22 and can contain errors; review the dictionary forms before using them. Source, revision, transformations, and the CC BY-SA 4.0 data license are recorded in `static/data/verbs-SOURCE.md`. Rebuild the data with `python3 scripts/import-verbs.py scripts/data/openrussian-verbs-2026-09-22.tsv.gz`.
 
@@ -103,6 +103,24 @@ without forcing passport uppercase formatting or generating a machine-readable
 passport line.
 
 Run transliteration checks with `node --test tests/transliteration.test.mjs`.
+## Motion Verb Chooser
+
+At `/motion`, choose among 14 standard motion-verb families and common spatial
+prefixes, including выезжать / выехать and переезжать / переехать. Basic pairs
+distinguish directed movement, habitual trips, movement in different directions,
+and past round trips. Prefixed pairs distinguish imperfective and perfective;
+inceptive по- forms are presented separately, without inventing aspect partners.
+A searchable catalogue links to each selection and to conjugation tables.
+English and Russian explanations cover context-dependent meanings such as
+переехать (cross by transport or move house). Rare, figurative, and reflexive
+derivatives are not exhaustively listed. Choices stay local and survive language
+switching. The catalogue uses explicit lexical pairs, not automatic prefixing.
+The URL preserves selections and catalogue search using `family`, `meaning`,
+`aspect`, `situation`, and `q`, omitting default values. For example,
+`/motion?family=air&meaning=base&situation=habit` selects летать. Changes replace
+the current history entry; refreshes, shared links, and browser navigation restore
+the selection, including in server-rendered HTML. Invalid choices fall back to
+valid controls, and language parameters are preserved.
 
 ## Language and appearance
 
@@ -119,8 +137,14 @@ animate and inanimate accusative rows. Dictionary stress marks and alternative
 forms are preserved. Entries that share a spelling can be selected by part of
 speech and meaning. Missing forms display `—`.
 
-The interface includes automatic lookup, labeled closest matches, English and
-Russian labels, and shareable URLs such as `/decliner?книга` and
+Search accepts any form present in the dictionary tables, including alternative
+endings: `людьми` → `человек`, `книгами` → `книга`, and `новою` → `новый`.
+Stress marks and capitalization are optional; е is accepted for ё when there is
+no exact spelling match. Ambiguous forms offer all matching entries, with exact
+headwords listed first. Missing dictionary forms cannot be recognized.
+
+The interface includes automatic lookup, separate labels for recognized forms and
+closest suggestions, English and Russian labels, and shareable URLs such as `/decliner?книга` and
 `/decliner?новый`. Named queries such as `?noun=книга` and `?adjective=новый`
 also work. Initial results are server-rendered; subsequent lookups load the
 compressed local noun and adjective dictionaries. Noun-only number
@@ -162,3 +186,14 @@ each file below Google's 50,000-URL limit. After deployment, submit
 `https://russian.tools/sitemap.xml` in Google Search Console and inspect sample
 English and Russian word URLs. Indexing and rankings depend on Google's crawl
 and assessment; deploying these changes does not guarantee placement.
+
+## Case Game
+
+At `/case-game`, choose 1–100 questions with common nouns, adjectives, or a mixture. Each question
+shows an inflected word and asks for a different case while keeping number and
+adjective gender fixed. Starting and target cases are labeled, including adjective
+accusative animacy. Forms come from the existing OpenRussian dictionaries, loaded
+when a round starts. Missing forms, indeclinable nouns, and unchanged spellings
+are skipped. Answers accept dictionary alternatives, optional stress marks, and
+е for ё. Typing a correct answer automatically advances to the next word. Checking an incorrect answer or revealing locks the answer; only correct answers score. A live count tracks correct answers, and the final overview shows each prompt, your answer, and the expected forms.
+English and Russian interfaces, keyboard input, and system color schemes are supported.
