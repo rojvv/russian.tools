@@ -83,6 +83,27 @@ Share a verb with a bare query string, for example `/conjugator?читать`. T
 
 Run conjugation checks with `node --test tests/*.test.mjs` (Node 24 or later).
 
+## Cyrillic to Latin Transliteration
+
+At `/transliterate`, convert Russian text to Latin letters using the letter mappings
+used for Russian international passports, based on
+[ICAO Doc 9303, Part 3, section 6B](https://www.icao.int/sites/default/files/publications/DocSeries/9303_p3_cons_en.pdf#page=35).
+Russian consular guidance identifies ICAO as the passport transliteration standard:
+[Russian Consulate FAQ](https://dk.kdmid.ru/ru/consular-functions/chasto-zadavaemye-voprosy/).
+For example, `Юлия Щербакова` becomes `Iuliia Shcherbakova` and `Дмитрий` becomes
+`Dmitrii`. The mappings include ё → e, й → i, ю → iu, я → ia, ъ → ie; ь is omitted.
+
+Conversion runs immediately in the browser with no dependencies or network
+requests for text processing. Both interface languages, copy with manual-selection
+fallback, and clear are supported. Input is limited to 20,000 characters. The tool
+preserves text case (including all-capital words), punctuation, whitespace, and
+non-Russian characters; Russian combining acute stress marks are removed and
+decomposed ё/й are normalized. It applies the letter mappings to general text,
+without forcing passport uppercase formatting or generating a machine-readable
+passport line.
+
+Run transliteration checks with `node --test tests/transliteration.test.mjs`.
+
 ## Language and appearance
 
 The interface uses `sveltekit-i18n` v3 for English and Russian translations. Each layout tree gets its own library instance, keeping concurrent SSR requests isolated; the small catalogs are preloaded for immediate rendering and switching. On the first visit, the server follows the browser's preferred supported language; the header language switch saves a persistent `language` cookie for server rendering. Browsers cap its lifetime at up to 400 days, and it is renewed on visits. Without a valid cookie, the server uses the `Accept-Language` HTTP header, falling back to English when no supported language is preferred. Switching languages updates the interface without resetting the editor or verb query. Dictionary glosses remain in English and are labeled accordingly in the Russian interface.

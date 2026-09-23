@@ -4,6 +4,16 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    transliterateTitle: "Cyrillic to Latin",
+    transliterateSeoTitle: "Russian Cyrillic to Latin Transliteration",
+    transliterateInput: "Cyrillic",
+    transliterateOutput: "Latin",
+    transliterateCopy: "Copy result",
+    transliterateClear: "Clear",
+    transliterateCopied: "Copied!",
+    transliterateCopyError: "Could not copy automatically. The result is selected; copy it manually.",
+    transliterateStandard: "ICAO Doc 9303 standard (PDF)",
+    transliterateJavascript: "Enable JavaScript to transliterate text.",
     homeSeoTitle: "Russian Language Tools",
     stressSeoTitle: "Russian Stress Marker – Add Stress Marks Online",
     practiceTitle: "Stress Practice",
@@ -72,7 +82,7 @@ export const messages = {
     stressTitle: "Stress Marker",
     verbTitle: "Verb Conjugator",
     homeDescription:
-      "Free online Russian language tools: add stress marks, practice word stress, conjugate verbs, and decline nouns and adjectives in all six cases.",
+      "Free online Russian language tools: add stress marks, practice word stress, conjugate verbs, decline nouns and adjectives, and transliterate Cyrillic to Latin.",
     moreToolsComingSoon: "More tools coming soon.",
     stressDescription:
       "Type Russian text and automatically add vowel stress marks directly in the editor. All processing stays in your browser.",
@@ -111,6 +121,16 @@ export const messages = {
     openRussianAttribution: "Some tools use data from",
   },
   ru: {
+    transliterateTitle: "Кириллица → латиница",
+    transliterateSeoTitle: "Транслитерация русского текста латиницей",
+    transliterateInput: "Кириллица",
+    transliterateOutput: "Латиница",
+    transliterateCopy: "Скопировать результат",
+    transliterateClear: "Очистить",
+    transliterateCopied: "Скопировано!",
+    transliterateCopyError: "Не удалось скопировать автоматически. Результат выделен — скопируйте его вручную.",
+    transliterateStandard: "Стандарт ИКАО Doc 9303 (PDF)",
+    transliterateJavascript: "Включите JavaScript для транслитерации текста.",
     homeSeoTitle: "Инструменты для русского языка",
     stressSeoTitle: "Расстановка ударений в русском тексте онлайн",
     practiceTitle: "Тренировка ударений",
@@ -178,7 +198,7 @@ export const messages = {
     stressTitle: "Расстановка ударений",
     verbTitle: "Спряжение глаголов",
     homeDescription:
-      "Бесплатные инструменты для русского языка: расстановка и тренировка ударений, спряжение глаголов и склонение существительных и прилагательных по всем шести падежам.",
+      "Бесплатные инструменты для русского языка: расстановка и тренировка ударений, спряжение глаголов, склонение существительных и прилагательных, транслитерация кириллицы латиницей.",
     moreToolsComingSoon: "Скоро появятся новые инструменты.",
     stressDescription:
       "Автоматическая расстановка ударений в русском тексте прямо в редакторе. Вся обработка выполняется в браузере.",

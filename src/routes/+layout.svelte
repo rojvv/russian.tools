@@ -49,6 +49,8 @@ const toolTitle = $derived(
     ? i18n.t("verbTitle")
     : page.route.id === "/decliner"
     ? i18n.t("nounTitle")
+    : page.route.id === "/transliterate"
+    ? i18n.t("transliterateTitle")
     : "",
 );
 </script>
@@ -64,7 +66,7 @@ const toolTitle = $derived(
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<main class:stress-layout={page.route.id === "/stress"}>
+<main class:editor-layout={page.route.id === "/stress" || page.route.id === "/transliterate"}>
   <header>
     <h1>
       <a href="/">russian.tools</a> {#if toolTitle}<span>{toolTitle}</span>{/if}
@@ -99,9 +101,9 @@ const toolTitle = $derived(
 </main>
 
 <style>
-.stress-layout { display: flex; flex-direction: column; height: calc(100dvh - 80px); min-height: 260px; }
-.stress-layout header { flex-shrink: 0; }
-@media (max-width: 600px) { .stress-layout { height: calc(100dvh - 64px); } }
+.editor-layout { display: flex; flex-direction: column; height: calc(100dvh - 80px); min-height: 260px; }
+.editor-layout header { flex-shrink: 0; }
+@media (max-width: 600px) { .editor-layout { height: calc(100dvh - 64px); } }
 header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-bottom: 24px; }
 header h1 { margin: 0; }
 header h1 span { margin: 0; font-weight: 400; color: var(--subtle); }
