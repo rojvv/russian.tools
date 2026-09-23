@@ -4,6 +4,9 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    motionTitle: "Motion Verb Chooser",
+    motionDescription:
+      "Choose Russian motion verbs across 14 families, including выехать and переехать, with spatial prefixes, aspect pairs, and explanations.",
     homeSeoTitle: "Russian Language Tools",
     stressSeoTitle: "Russian Stress Marker – Add Stress Marks Online",
     practiceTitle: "Stress Practice",
@@ -111,6 +114,9 @@ export const messages = {
     openRussianAttribution: "Some tools use data from",
   },
   ru: {
+    motionTitle: "Выбор глагола движения",
+    motionDescription:
+      "14 пар глаголов движения, пространственные приставки и видовые пары, включая выехать и переехать, с объяснениями.",
     homeSeoTitle: "Инструменты для русского языка",
     stressSeoTitle: "Расстановка ударений в русском тексте онлайн",
     practiceTitle: "Тренировка ударений",

@@ -83,6 +83,19 @@ Share a verb with a bare query string, for example `/conjugator?читать`. T
 
 Run conjugation checks with `node --test tests/*.test.mjs` (Node 24 or later).
 
+## Motion Verb Chooser
+
+At `/motion`, choose among 14 standard motion-verb families and common spatial
+prefixes, including выезжать / выехать and переезжать / переехать. Basic pairs
+distinguish directed movement, habitual trips, movement in different directions,
+and past round trips. Prefixed pairs distinguish imperfective and perfective;
+inceptive по- forms are presented separately, without inventing aspect partners.
+A searchable catalogue links to each selection and to conjugation tables.
+English and Russian explanations cover context-dependent meanings such as
+переехать (cross by transport or move house). Rare, figurative, and reflexive
+derivatives are not exhaustively listed. Choices stay local and survive language
+switching. The catalogue uses explicit lexical pairs, not automatic prefixing.
+
 ## Language and appearance
 
 The interface uses `sveltekit-i18n` v3 for English and Russian translations. Each layout tree gets its own library instance, keeping concurrent SSR requests isolated; the small catalogs are preloaded for immediate rendering and switching. On the first visit, the server follows the browser's preferred supported language; the header language switch saves a persistent `language` cookie for server rendering. Browsers cap its lifetime at up to 400 days, and it is renewed on visits. Without a valid cookie, the server uses the `Accept-Language` HTTP header, falling back to English when no supported language is preferred. Switching languages updates the interface without resetting the editor or verb query. Dictionary glosses remain in English and are labeled accordingly in the Russian interface.

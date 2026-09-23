@@ -24,6 +24,7 @@ const i18n = getI18n();
   <div>
     <a href="/decliner">{i18n.t("nounTitle")}</a>
   </div>
+  <div><a href="/motion">{i18n.t("motionTitle")}</a></div>
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 
