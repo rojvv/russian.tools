@@ -163,11 +163,11 @@ and assessment; deploying these changes does not guarantee placement.
 
 ## Case Game
 
-At `/case-game`, practice 10 common nouns, adjectives, or a mixture. Each question
+At `/case-game`, choose 1–100 questions with common nouns, adjectives, or a mixture. Each question
 shows an inflected word and asks for a different case while keeping number and
 adjective gender fixed. Starting and target cases are labeled, including adjective
 accusative animacy. Forms come from the existing OpenRussian dictionaries, loaded
 when a round starts. Missing forms, indeclinable nouns, and unchanged spellings
 are skipped. Answers accept dictionary alternatives, optional stress marks, and
-е for ё. Checking or revealing locks the answer; only correct first answers score.
+е for ё. Typing a correct answer automatically advances to the next word. Checking an incorrect answer or revealing locks the answer; only correct answers score. A live count tracks correct answers, and the final overview shows each prompt, your answer, and the expected forms.
 English and Russian interfaces, keyboard input, and system color schemes are supported.

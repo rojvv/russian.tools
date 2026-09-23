@@ -16,6 +16,14 @@ const i18n = getI18n();
 let words: Declinable[] = [];
 let kind = $state<WordKind>("both");
 let questions = $state<CaseQuestion[]>([]);
+let count = $state<number | undefined>(10);
+const validCount = $derived(
+  count !== undefined && Number.isInteger(count) && count >= 1 && count <= 100,
+);
+type AnswerResult = "correct" | "incorrect" | "revealed";
+let responses = $state<
+  { question: CaseQuestion; answer: string; result: AnswerResult }[]
+>([]);
 let active = $state(false);
 let busy = $state(false);
 let error = $state<MessageKey | "">("");
@@ -29,7 +37,7 @@ let heading = $state<HTMLHeadingElement>();
 const current = $derived(questions[index]);
 
 async function start() {
-  if (busy) return;
+  if (busy || !validCount) return;
   busy = true;
   error = "";
   try {
@@ -40,13 +48,14 @@ async function start() {
       ]);
       words = dictionaries.flat();
     }
-    questions = createCaseRound(words, kind);
+    questions = createCaseRound(words, kind, Math.random, count);
     if (!questions.length) {
       error = "caseGameEmpty";
       return;
     }
     index = 0;
     score = 0;
+    responses = [];
     answer = "";
     result = null;
     active = true;
@@ -65,11 +74,22 @@ async function check(reveal = false) {
     : isCaseAnswer(current, answer)
     ? "correct"
     : "incorrect";
-  if (result === "correct") score++;
+  responses.push({ question: current, answer, result });
+  if (result === "correct") {
+    score++;
+    await next();
+    return;
+  }
   await tick();
   nextButton?.focus();
 }
+function typed(event: Event) {
+  answer = (event.currentTarget as HTMLInputElement).value;
+  if (event instanceof InputEvent && event.isComposing) return;
+  if (current && !result && isCaseAnswer(current, answer)) void check();
+}
 async function next() {
+  if (!result) return;
   index++;
   answer = "";
   result = null;
@@ -95,21 +115,67 @@ async function next() {
     {:else}
       <p>{i18n.t("caseGameIntro")}</p>
     {/if}
+    {#if active}
+      <h2>{i18n.t("caseGameOverview")}</h2>
+      <ol class="overview">
+        {#each responses as response}
+          <li>
+            <p>
+              <strong lang="ru">{response.question.source}</strong> → <strong
+                lang="ru"
+              >{response.question.answers.join(", ")}</strong>
+            </p>
+            <p class="context">
+              {i18n.t(response.question.sourceCase)} → {
+                i18n.t(response.question.targetCase)
+              } · {i18n.t(response.question.section)}
+            </p>
+            <p class:incorrect={response.result === "incorrect"}>
+              {
+                i18n.t(
+                  response.result === "correct"
+                    ? "practiceCorrect"
+                    : response.result === "revealed"
+                    ? "caseGameRevealed"
+                    : "caseGameIncorrect",
+                )
+              }
+              {#if response.answer}<span lang="ru">
+                  {response.answer}</span>{/if}
+            </p>
+          </li>
+        {/each}
+      </ol>
+    {/if}
     <label for="word-kind">{i18n.t("caseGameKind")}</label>
     <select id="word-kind" bind:value={kind} disabled={busy}>
       <option value="both">{i18n.t("caseGameBoth")}</option>
       <option value="noun">{i18n.t("noun")}</option>
       <option value="adjective">{i18n.t("adjective")}</option>
     </select>
+    <label for="question-count">{i18n.t("caseGameCount")}</label>
+    <input
+      id="question-count"
+      type="number"
+      min="1"
+      max="100"
+      step="1"
+      bind:value={count}
+      disabled={busy}
+    />
     <div class="actions">
-      <button class="primary" onclick={start} disabled={busy}>
+      <button class="primary" onclick={start} disabled={busy || !validCount}>
         {
           i18n.t(busy ? "practicePreparing" : active ? "practiceRetry" : "practiceStart")
         }
       </button>
     </div>
   {:else}
-    <p class="progress">{index + 1} / {questions.length}</p>
+    <div class="progress">
+      <span>{index + 1} / {questions.length}</span><span aria-live="polite">{
+          i18n.t("practiceScore")
+        } {score}</span>
+    </div>
     <section aria-label={i18n.t("caseGameTitle")}>
       <p class="word" lang="ru">{current.source}</p>
       <p class="context">
@@ -128,6 +194,8 @@ async function next() {
           id="answer"
           bind:this={input}
           bind:value={answer}
+          oninput={typed}
+          oncompositionend={typed}
           readonly={Boolean(result)}
           lang="ru"
           autocomplete="off"
@@ -185,11 +253,15 @@ button { cursor: pointer; }
 button.primary { border-color: var(--foreground); background: var(--foreground); color: var(--background); }
 button:disabled { opacity: .5; cursor: default; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-.progress { color: var(--subtle); font-size: 13px; }
+.progress { display: flex; justify-content: space-between; gap: 16px; color: var(--subtle); font-size: 13px; }
 section { margin-top: 24px; }
 .word { margin: 0 0 4px; font-size: clamp(28px, 6vw, 40px); color: var(--foreground); overflow-wrap: anywhere; }
 .feedback { margin: 20px 0; }
 .score { font-size: 24px; }
+#question-count { width: 110px; font-size: inherit; }
+.overview { padding-left: 24px; }
+.overview li { padding: 12px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.overview li p:first-child { color: var(--foreground); }
 .context { font-size: 13px; text-transform: lowercase; }
 button.reveal { border-color: transparent; color: var(--muted); }
 .error, .incorrect { color: var(--error); }

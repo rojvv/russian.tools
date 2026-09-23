@@ -61,3 +61,20 @@ test("unavailable paradigms and indeclinable words are excluded", () => {
   assert.deepEqual(caseQuestions({ ...book, singular: [], plural: [] }), []);
   assert.deepEqual(createCaseRound([]), []);
 });
+
+test("custom rounds honor the requested length and avoid duplicate questions", () => {
+  for (const kind of ["both", "noun", "adjective"]) {
+    for (const count of [1, 5, 25, 100]) {
+      const round = createCaseRound(words, kind, () => 0.42, count);
+      assert.equal(round.length, count);
+      assert.equal(new Set(round.map(q => JSON.stringify(q))).size, count);
+      assert.ok(round.every(q => kind === "both" || (q.word.kind ?? "noun") === kind));
+    }
+  }
+});
+
+test("invalid round lengths are bounded", () => {
+  for (const [count, expected] of [[0, 1], [-3, 1], [2.9, 2], [101, 100], [NaN, 10], [Infinity, 10]]) {
+    assert.equal(createCaseRound(words, "both", () => 0.42, count).length, expected);
+  }
+});

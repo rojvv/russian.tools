@@ -8,7 +8,11 @@ export const messages = {
     caseGameDescription:
       "Practice Russian noun and adjective cases. Change a word to the requested case and check your answer.",
     caseGameIntro:
-      "Change each word to the requested case. Keep the same number and gender. Each round has 10 questions.",
+      "Change each word to the requested case. Keep the same number and gender. Correct answers automatically move to the next word.",
+    caseGameCount: "Questions (1–100)",
+    caseGameOverview: "Your answers",
+    caseGameRevealed: "Revealed",
+    caseGameIncorrect: "Incorrect:",
     caseGameKind: "Words to practice",
     caseGameBoth: "Nouns and adjectives",
     caseGameFrom: "Starting case",
@@ -133,7 +137,12 @@ export const messages = {
     caseGameTitle: "Игра в падежи",
     caseGameDescription:
       "Тренируйте падежи русских существительных и прилагательных. Поставьте слово в указанный падеж и проверьте ответ.",
-    caseGameIntro: "Поставьте каждое слово в указанный падеж, сохраняя число и род. В каждом раунде 10 заданий.",
+    caseGameIntro:
+      "Поставьте каждое слово в указанный падеж, сохраняя число и род. При верном ответе следующее слово появится автоматически.",
+    caseGameCount: "Задания (1–100)",
+    caseGameOverview: "Ваши ответы",
+    caseGameRevealed: "Ответ показан",
+    caseGameIncorrect: "Неверно:",
     caseGameKind: "Слова для тренировки",
     caseGameBoth: "Существительные и прилагательные",
     caseGameFrom: "Исходный падеж",

@@ -51,7 +51,12 @@ export function caseQuestions(word: Declinable): CaseQuestion[] {
   return questions;
 }
 
-export function createCaseRound(words: Declinable[], kind: WordKind = "both", random = Math.random): CaseQuestion[] {
+export function createCaseRound(
+  words: Declinable[],
+  kind: WordKind = "both",
+  random = Math.random,
+  count = 10,
+): CaseQuestion[] {
   const candidates = words.filter(word =>
     commonWords.has(word.bare)
     && (kind === "both" || (word.kind ?? "noun") === kind)
@@ -62,5 +67,17 @@ export function createCaseRound(words: Declinable[], kind: WordKind = "both", ra
     const j = Math.floor(random() * (i + 1));
     [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
   }
-  return candidates.slice(0, 10).map(questions => questions[Math.floor(random() * questions.length)]);
+  const length = Number.isFinite(count) ? Math.min(100, Math.max(1, Math.floor(count))) : 10;
+  const round: CaseQuestion[] = [];
+  while (round.length < length && candidates.length) {
+    for (const questions of candidates) {
+      const choice = Math.floor(random() * questions.length);
+      round.push(questions.splice(choice, 1)[0]);
+      if (round.length === length) break;
+    }
+    for (let i = candidates.length - 1; i >= 0; i--) {
+      if (!candidates[i].length) candidates.splice(i, 1);
+    }
+  }
+  return round;
 }
