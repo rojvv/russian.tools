@@ -53,6 +53,11 @@ const i18n = getI18n();
       i18n.t("caseGameTitle")
     }</a>
   </div>
+  <div>
+    <a href={languagePath("/keyboard", i18n.locale ?? "en")}>{
+      i18n.t("keyboardTitle")
+    }</a>
+  </div>
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 

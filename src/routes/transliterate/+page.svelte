@@ -50,7 +50,7 @@ async function copy() {
       spellcheck="false"
       autocapitalize="off"
       maxlength={20000}
-      placeholder="Привет, мир!"
+      placeholder="Пишите здесь…"
     ></textarea>
   </div>
   <div>

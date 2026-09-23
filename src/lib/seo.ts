@@ -11,6 +11,7 @@ export const toolPaths = [
   "/acknowledgements",
   "/case-game",
   "/transliterate",
+  "/keyboard",
 ];
 
 /** Compare path/query only so development and preview servers stay on their own host. */

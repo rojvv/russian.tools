@@ -248,3 +248,21 @@ when a round starts. Missing forms, indeclinable nouns, and unchanged spellings
 are skipped. Answers accept dictionary alternatives, optional stress marks, and
 е for ё. Typing a correct answer automatically advances to the next word. Checking an incorrect answer or revealing locks the answer; only correct answers score. A live count tracks correct answers, and the final overview shows each prompt, your answer, and the expected forms.
 English and Russian interfaces, keyboard input, and system color schemes are supported.
+
+## Virtual Russian Keyboard
+
+At `/keyboard`, type using a clickable standard Russian ЙЦУКЕН layout, including
+ё, numbers, punctuation, one-shot Shift, Caps Lock, space, newline, and backspace.
+Optional physical-key mapping uses key positions while the text editor is focused;
+turn it off to use the installed keyboard layout. Paste, modifier shortcuts, and
+composition input are preserved. US key labels help locate Cyrillic letters.
+
+Screen keys insert at the caret or replace the selected text. Backspace removes a
+whole preceding grapheme, including emoji or a letter with a combining accent.
+Undo and redo cover both screen-key and direct edits, including clearing the text,
+with up to 100 previous edits retained. Copy has a manual-selection fallback.
+The editor accepts up to 20,000 characters; all text processing stays local.
+English and Russian interfaces, responsive keys, and system color schemes are
+supported. The page is linked from the home page and both language sitemaps.
+
+Run keyboard logic checks with `node --test tests/keyboard.test.mjs`.

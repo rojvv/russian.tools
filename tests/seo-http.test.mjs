@@ -119,7 +119,7 @@ test("every tool sitemap URL renders a matching canonical and allows indexing", 
   const response = await request("/sitemaps/tools.xml");
   assert.equal(response.status, 200);
   const locations = [...(await response.text()).matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-  assert.equal(locations.length, 20);
+  assert.equal(locations.length, 22);
   for (const location of locations) {
     const url = new URL(location);
     const page = await request(url.pathname + url.search);

@@ -4,6 +4,21 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    keyboardTitle: "Virtual Russian Keyboard",
+    keyboardSeoTitle: "Virtual Russian Keyboard – Type Cyrillic Online",
+    keyboardDescription:
+      "Type Russian with a virtual ЙЦУКЕН keyboard or map your physical keys to Cyrillic. Copy your text instantly.",
+    keyboardMapping: "Map physical keys to Russian in this text box",
+    keyboardSpace: "Space",
+    keyboardEnter: "Enter",
+    keyboardBackspace: "Backspace",
+    keyboardCopy: "Copy text",
+    keyboardClear: "Clear",
+    keyboardUndo: "Undo",
+    keyboardRedo: "Redo",
+    keyboardCopied: "Copied!",
+    keyboardCopyError: "Could not copy automatically. Your text is selected; copy it manually.",
+    keyboardJavascript: "Enable JavaScript to use the virtual keyboard.",
     acknowledgementsTitle: "Acknowledgements",
     acknowledgementsDescription: "Sources, references, and credits for the data and resources used by russian.tools.",
     diminutiveTitle: "Name Diminutive Finder",
@@ -148,6 +163,21 @@ export const messages = {
     dictionaryError: "Could not load the verb dictionary. Please try again.",
   },
   ru: {
+    keyboardTitle: "Виртуальная русская клавиатура",
+    keyboardSeoTitle: "Виртуальная русская клавиатура онлайн",
+    keyboardDescription:
+      "Печатайте по-русски на виртуальной клавиатуре ЙЦУКЕН или с помощью физических клавиш. Сразу копируйте готовый текст.",
+    keyboardMapping: "Вводить русские буквы физическими клавишами в этом поле",
+    keyboardSpace: "Пробел",
+    keyboardEnter: "Перенос строки",
+    keyboardBackspace: "Удалить предыдущий символ",
+    keyboardCopy: "Скопировать текст",
+    keyboardClear: "Очистить",
+    keyboardUndo: "Отменить",
+    keyboardRedo: "Повторить",
+    keyboardCopied: "Скопировано!",
+    keyboardCopyError: "Не удалось скопировать автоматически. Текст выделен — скопируйте его вручную.",
+    keyboardJavascript: "Включите JavaScript для работы виртуальной клавиатуры.",
     acknowledgementsTitle: "Благодарности",
     acknowledgementsDescription:
       "Источники, справочные материалы и авторы данных и ресурсов, используемых на russian.tools.",
