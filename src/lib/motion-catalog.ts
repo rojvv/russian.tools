@@ -214,7 +214,7 @@ export const catalogCopy = {
     startNote:
       "По- with a directed motion verb often marks setting off. This is not an ordinary aspect pair with the multidirectional verb: поездить means travel around for a while, not repeatedly set off.",
     search: "Find a motion verb",
-    placeholder: "выехать, переехать, нести…",
+    placeholder: "выехать / vyekhat, нести / nesti…",
     verbs: "Verbs",
     results: "matches",
     empty: "No matching verbs.",
@@ -244,7 +244,7 @@ export const catalogCopy = {
     startNote:
       "По- с глаголом однонаправленного движения часто обозначает начало движения. Это не обычная видовая пара с разнонаправленным глаголом: поездить означает ездить некоторое время, а не регулярно отправляться в путь.",
     search: "Найти глагол движения",
-    placeholder: "выехать, переехать, нести…",
+    placeholder: "выехать / vyekhat, нести / nesti…",
     verbs: "Глаголы",
     results: "совпадений",
     empty: "Глаголы не найдены.",

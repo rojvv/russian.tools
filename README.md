@@ -123,7 +123,45 @@ the current history entry; refreshes, shared links, and browser navigation resto
 the selection, including in server-rendered HTML. Invalid choices fall back to
 valid controls, and language parameters are preserved.
 
+## Name Diminutive Finder
+
+At `/diminutive`, search by a Russian full name or a short or affectionate form.
+Shared forms show every listed parent: `Саша` finds Александр and Александра,
+and `Женя` finds Евгений and Евгения. A separate alphabetical directory searches
+both full names and diminutives. Every displayed form links back to the finder.
+Exact results take priority; partial matches are labeled separately.
+
+The curated list contains 91 names, with selected familiar and affectionate forms
+and full-name spelling variants. It is not exhaustive. Capitalization, stress
+marks, and е/ё differences are ignored. The interface supports English, Russian,
+and system color schemes. Searches run locally after the page loads; shared URLs
+such as `/diminutive?q=Саша&directory=Женя&lang=ru` render their results on the
+server and work through GET forms without JavaScript. Search URLs are noindex;
+the English and Russian tool pages are included in the tools sitemap.
+
+Selection notes and reference links are in `src/lib/diminutives-SOURCE.md`.
+Run lookup, reverse mapping, normalization, directory, and URL checks with
+`node --test tests/diminutive.test.mjs`.
+
 ## Language and appearance
+
+The shared footer links to `/acknowledgements`, which collects the OpenRussian
+attribution and data license, name dictionary references, transliteration standard,
+stress engine credits, and font license in English and Russian. On short pages the
+footer rests at the bottom of the viewport; on long pages it follows the content.
+
+## Latin search
+
+Noun, adjective, verb, name, and motion-directory searches accept Latin
+transliteration as well as Cyrillic, including inflected forms and compound verb
+forms: `knigami`, `novogo`, `chitat`, `budu chitat`, and `Sasha`. Common spellings
+such as `Alyosha` / `Alesha`, `Dmitry` / `Dmitriy` / `Dmitrii`, and `Yuliya` /
+`Julia` are accepted. Apostrophes for soft and hard signs are optional. Results
+remain in Cyrillic and preserve ambiguous matches. Cyrillic searches retain their
+existing exact-spelling priority. Latin matching is transliteration, not English
+translation. Dictionary form keys are cached on first use.
+
+## Interface preferences
 
 The interface uses `sveltekit-i18n` v3 for English and Russian translations. Each layout tree gets its own library instance, keeping concurrent SSR requests isolated; the small catalogs are preloaded for immediate rendering and switching. On the first visit, the server follows the browser's preferred supported language; the header language switch saves a persistent `language` cookie for server rendering. Browsers cap its lifetime at up to 400 days, and it is renewed on visits. Without a valid cookie, the server uses the `Accept-Language` HTTP header, falling back to English when no supported language is preferred. Switching languages updates the interface without resetting the editor or verb query. Dictionary glosses remain in English and are labeled accordingly in the Russian interface.
 

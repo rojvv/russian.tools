@@ -4,6 +4,9 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    acknowledgementsTitle: "Acknowledgements",
+    acknowledgementsDescription: "Sources, references, and credits for the data and resources used by russian.tools.",
+    diminutiveTitle: "Name Diminutive Finder",
     transliterateTitle: "Cyrillic to Latin",
     transliterateSeoTitle: "Russian Cyrillic to Latin Transliteration",
     transliterateInput: "Cyrillic",
@@ -12,7 +15,6 @@ export const messages = {
     transliterateClear: "Clear",
     transliterateCopied: "Copied!",
     transliterateCopyError: "Could not copy automatically. The result is selected; copy it manually.",
-    transliterateStandard: "ICAO Doc 9303 standard (PDF)",
     transliterateJavascript: "Enable JavaScript to transliterate text.",
     caseGameTitle: "Case Game",
     caseGameDescription:
@@ -30,7 +32,6 @@ export const messages = {
     caseGameAnswer: "Your answer",
     caseGameCheck: "Check answer",
     caseGameNote: "Stress marks are optional; е is accepted for ё. Any listed alternative form counts.",
-    caseGameSource: "Forms from OpenRussian.",
     caseGameJavascript: "Enable JavaScript to play the case game.",
     caseGameEmpty: "No exercises are available. Try another word type.",
 
@@ -79,7 +80,7 @@ export const messages = {
     nounDescription:
       "Look up Russian noun and adjective declensions in all six cases, with singular, plural, and gender forms.",
     nominative: "Nominative",
-    declensionInput: "Any noun or adjective form, e.g. книгами or нового",
+    declensionInput: "Noun or adjective in Cyrillic or Latin, e.g. книгами or knigami",
     noun: "Noun",
     adjective: "Adjective",
     Masculine: "Masculine",
@@ -87,7 +88,7 @@ export const messages = {
     Neuter: "Neuter",
     AccusativeInanimate: "Accusative · inanimate",
     AccusativeAnimate: "Accusative · animate",
-    invalidNoun: "Enter one Russian noun or adjective, for example книга or новый.",
+    invalidNoun: "Enter one Russian noun or adjective in Cyrillic or Latin, for example книга or kniga.",
     nounNotFound: "This word is not in the dictionary. Try another noun or adjective.",
     nounDictionaryError: "Could not load the declension dictionary. Please try again.",
     Nominative: "Nominative",
@@ -119,7 +120,7 @@ export const messages = {
     stressLoadError: "The stress engine could not load. Reload to try again.",
     stressProcessError: "Could not process this text. Try a shorter passage or edit the text to try again.",
     infinitive: "Infinitive",
-    verbInput: "Any verb form, e.g. читать or шёл",
+    verbInput: "Verb in Cyrillic or Latin, e.g. читать or chitat",
     dictionaryFormFor: "Dictionary form for",
     closestMatch: "Closest match for",
     chooseEntry: "Choose an entry",
@@ -140,12 +141,15 @@ export const messages = {
     pluralFormal: "Plural / formal",
     missingForm: "— = no form available in the dictionary.",
     meaningEnglish: "Meaning (English)",
-    invalidVerb: "Enter a Russian verb form, for example читать, шёл, or буду читать.",
+    invalidVerb: "Enter a Russian verb in Cyrillic or Latin, for example читать, chitat, or budu chitat.",
     verbNotFound: "This verb is not in the dictionary. Check the spelling or try another verb.",
     dictionaryError: "Could not load the verb dictionary. Please try again.",
-    openRussianAttribution: "Some tools use data from",
   },
   ru: {
+    acknowledgementsTitle: "Благодарности",
+    acknowledgementsDescription:
+      "Источники, справочные материалы и авторы данных и ресурсов, используемых на russian.tools.",
+    diminutiveTitle: "Уменьшительные имена",
     transliterateTitle: "Кириллица → латиница",
     transliterateSeoTitle: "Транслитерация русского текста латиницей",
     transliterateInput: "Кириллица",
@@ -154,7 +158,6 @@ export const messages = {
     transliterateClear: "Очистить",
     transliterateCopied: "Скопировано!",
     transliterateCopyError: "Не удалось скопировать автоматически. Результат выделен — скопируйте его вручную.",
-    transliterateStandard: "Стандарт ИКАО Doc 9303 (PDF)",
     transliterateJavascript: "Включите JavaScript для транслитерации текста.",
     caseGameTitle: "Игра в падежи",
     caseGameDescription:
@@ -172,7 +175,6 @@ export const messages = {
     caseGameAnswer: "Ваш ответ",
     caseGameCheck: "Проверить ответ",
     caseGameNote: "Ударения необязательны; вместо ё можно писать е. Любой из указанных вариантов засчитывается.",
-    caseGameSource: "Формы из OpenRussian.",
     caseGameJavascript: "Включите JavaScript, чтобы играть в падежи.",
     caseGameEmpty: "Задания не найдены. Выберите другой тип слов.",
 
@@ -220,7 +222,7 @@ export const messages = {
     pluralGender: "множественное",
     nounDescription: "Склонение русских существительных и прилагательных по шести падежам, числам и родам.",
     nominative: "Именительный",
-    declensionInput: "Любая форма существительного или прилагательного, например книгами или нового",
+    declensionInput: "Существительное или прилагательное кириллицей или латиницей: книгами или knigami",
     noun: "Существительное",
     adjective: "Прилагательное",
     Masculine: "Мужской род",
@@ -228,7 +230,8 @@ export const messages = {
     Neuter: "Средний род",
     AccusativeInanimate: "Винительный · неодуш.",
     AccusativeAnimate: "Винительный · одуш.",
-    invalidNoun: "Введите одно русское существительное или прилагательное, например книга или новый.",
+    invalidNoun:
+      "Введите одно русское существительное или прилагательное кириллицей или латиницей, например книга или kniga.",
     nounNotFound: "Слово не найдено в словаре. Попробуйте другое существительное или прилагательное.",
     nounDictionaryError: "Не удалось загрузить словарь склонений. Попробуйте снова.",
     Nominative: "Именительный",
@@ -260,7 +263,7 @@ export const messages = {
     stressLoadError: "Не удалось загрузить модуль расстановки ударений. Перезагрузите страницу.",
     stressProcessError: "Не удалось обработать текст. Сократите или измените его и попробуйте снова.",
     infinitive: "Инфинитив",
-    verbInput: "Любая форма глагола, например читать или шёл",
+    verbInput: "Глагол кириллицей или латиницей: читать или chitat",
     dictionaryFormFor: "Начальная форма для",
     closestMatch: "Ближайшее совпадение для",
     chooseEntry: "Выберите значение",
@@ -281,10 +284,9 @@ export const messages = {
     pluralFormal: "Множественное число / на «Вы»",
     missingForm: "— = форма отсутствует в словаре.",
     meaningEnglish: "Значение (англ.)",
-    invalidVerb: "Введите форму русского глагола, например читать, шёл или буду читать.",
+    invalidVerb: "Введите русский глагол кириллицей или латиницей, например читать, chitat или budu chitat.",
     verbNotFound: "Глагол не найден в словаре. Проверьте написание или попробуйте другой глагол.",
     dictionaryError: "Не удалось загрузить словарь глаголов. Попробуйте снова.",
-    openRussianAttribution: "Некоторые инструменты используют данные",
   },
 } satisfies Record<Locale, Record<string, string>>;
 export type MessageKey = keyof typeof messages.en;

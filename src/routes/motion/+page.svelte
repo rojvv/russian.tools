@@ -18,6 +18,7 @@ import {
   transportPhrases,
 } from "$lib/motion-catalog";
 import { readMotionQuery, writeMotionQuery } from "$lib/motion-url";
+import { matchesSearch } from "$lib/search-text";
 import Seo from "$lib/Seo.svelte";
 import { onMount, untrack } from "svelte";
 
@@ -197,7 +198,7 @@ const matches = $derived(browse.filter((item) => {
     "",
   );
   return needle
-    ? item.verbs.some((word) => word.includes(needle))
+    ? item.verbs.some((word) => matchesSearch(word, needle, true))
     : item.family === familyId;
 }));
 function changeFamily() {
@@ -214,11 +215,11 @@ function select(item: typeof browse[number]) {
   meaning = item.meaning;
   const needle = query.trim().toLowerCase().replaceAll("\u0301", "");
   if (meaning === "base") {
-    situation = needle === item.verbs[1]
+    situation = matchesSearch(item.verbs[1], needle)
       ? "habit"
       : "direction";
   } else if (meaning !== "start") {
-    aspect = needle === item.verbs[0]
+    aspect = matchesSearch(item.verbs[0], needle)
       ? "imperfective"
       : "perfective";
   }

@@ -55,6 +55,10 @@ const toolTitle = $derived(
     ? i18n.t("caseGameTitle")
     : page.route.id === "/motion"
     ? i18n.t("motionTitle")
+    : page.route.id === "/diminutive"
+    ? i18n.t("diminutiveTitle")
+    : page.route.id === "/acknowledgements"
+    ? i18n.t("acknowledgementsTitle")
     : "",
 );
 </script>
@@ -102,10 +106,18 @@ const toolTitle = $derived(
     </nav>
   </header>
   {@render children()}
+  <footer class="site-footer">
+    <span>&copy; 2026 russian.tools</span>
+    <a href="https://t.me/RussianDotTools">Telegram</a>
+    <a href={`/acknowledgements?lang=${i18n.locale ?? "en"}`}>{
+      i18n.t("acknowledgementsTitle")
+    }</a>
+  </footer>
 </main>
 
 <style>
 .editor-layout { display: flex; flex-direction: column; height: calc(100dvh - 80px); min-height: 260px; }
+.site-footer { display: flex; flex-shrink: 0; flex-wrap: wrap; gap: 4px 12px; margin-top: auto; padding-top: 32px; font-size: 12px; color: var(--muted); }
 .editor-layout header { flex-shrink: 0; }
 @media (max-width: 600px) { .editor-layout { height: calc(100dvh - 64px); } }
 header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-bottom: 24px; }
@@ -124,11 +136,11 @@ nav a[aria-current="true"] { color: var(--foreground); }
 }
 :global(*) { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :global(body) { margin: 0; background: var(--background); color: var(--foreground); font-family: 'Golos Text', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-:global(main) { max-width: 940px; margin: 40px auto; padding: 0 24px; }
+:global(main) { display: flex; flex-direction: column; min-height: calc(100dvh - 80px); max-width: 940px; margin: 40px auto; padding: 0 24px; }
 :global(h1) { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -.6px; line-height: 1.3; }
 :global(p) { margin: 0; color: var(--muted); }
 :global(a) { color: inherit; text-underline-offset: 3px; }
 @media (hover: hover) { :global(a:hover) { color: var(--focus); } }
 :global(:focus-visible) { outline: 2px solid var(--focus); outline-offset: 3px; }
-@media (max-width: 600px) { :global(main) { margin: 32px auto; padding: 0 20px; } }
+@media (max-width: 600px) { :global(main) { min-height: calc(100dvh - 64px); margin: 32px auto; padding: 0 20px; } }
 </style>

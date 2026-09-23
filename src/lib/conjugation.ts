@@ -22,7 +22,7 @@ export const findVerbs = verbLookup.find;
 export const suggestVerbs = verbLookup.suggest;
 
 export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): Section[] {
-  const persons = ["я", "ты", "он / она / оно", "мы", "вы", "они"];
+  const persons = ["я", "ты", "он/она́/оно́", "мы", "вы", "они́"];
   const section = (title: string, labels: string[], forms: string[]): Section => ({
     title,
     rows: labels.map((label, i) => ({ label, form: forms[i] === "-" ? "" : (forms[i] ?? "") })),
@@ -37,7 +37,7 @@ export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): 
         ? verb.finite
         : future.map((form) => verb.bare === "быть" ? form : `${form} ${verb.infinitive}`),
     ),
-    section("Past", ["он (masculine)", "она (feminine)", "оно (neuter)", "они (plural)"], verb.past),
+    section("Past", ["он (masculine)", "она́ (feminine)", "оно́ (neuter)", "они́ (plural)"], verb.past),
     section("Imperative", ["ты", "вы"], verb.imperative),
   ];
 }

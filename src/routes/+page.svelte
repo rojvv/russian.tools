@@ -28,20 +28,12 @@ const i18n = getI18n();
     <a href="/transliterate">{i18n.t("transliterateTitle")}</a>
   </div>
   <div><a href="/motion">{i18n.t("motionTitle")}</a></div>
+  <div><a href="/diminutive">{i18n.t("diminutiveTitle")}</a></div>
   <div><a href="/case-game">{i18n.t("caseGameTitle")}</a></div>
   <div>{i18n.t("moreToolsComingSoon")}</div>
 </nav>
 
-<p class="source">
-  {i18n.t("openRussianAttribution")} <a href="https://en.openrussian.org/"
-  >OpenRussian</a>.
-  <br />
-  &copy; 2026 russian.tools &middot; <a href="https://t.me/RussianDotTools"
-  >Telegram</a>
-</p>
-
 <style>
 nav { margin-top: 32px; display: grid; gap: 24px; }
 nav a { font-weight: 500; }
-.source { margin-top: 32px; font-size: 12px; }
 </style>

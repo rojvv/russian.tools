@@ -2,6 +2,7 @@
 import { loadDictionary } from "$lib/dictionary-data";
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
+import { validSearchText } from "$lib/search-text";
 import { dictionarySeo } from "$lib/seo";
 import Seo from "$lib/Seo.svelte";
 const i18n = getI18n();
@@ -135,7 +136,7 @@ function resetResult() {
 
 async function lookup() {
   resetResult();
-  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeWord(query))) {
+  if (!validSearchText(query)) {
     message = "invalidNoun";
     return;
   }

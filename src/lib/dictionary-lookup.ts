@@ -1,7 +1,12 @@
-export const normalizeWord = (text: string) => text.normalize("NFC").toLowerCase().replaceAll("\u0301", "").trim();
+import { hasLatin, normalizeText, searchKey } from "./search-text.ts";
+export const normalizeWord = normalizeText;
 
 export function findWords<T extends { bare: string }>(words: T[], text: string): T[] {
   const query = normalizeWord(text);
+  if (hasLatin(query)) {
+    const key = searchKey(query);
+    return words.filter((entry) => searchKey(entry.bare) === key);
+  }
   const exact = words.filter((entry) => normalizeWord(entry.bare) === query);
   return exact.length
     ? exact
@@ -10,16 +15,17 @@ export function findWords<T extends { bare: string }>(words: T[], text: string):
 
 /** Prefer exact spellings, then common prefix matches, then the smallest edit distance. */
 export function suggestWords<T extends { bare: string }>(words: T[], text: string): T[] {
-  const query = normalizeWord(text).replaceAll("ё", "е");
+  const normalize = hasLatin(text) ? searchKey : (value: string) => normalizeWord(value).replaceAll("ё", "е");
+  const query = normalize(text);
   if (!query || query.length > 40) return [];
   const exact = findWords(words, text);
   if (exact.length) return exact;
-  const prefix = words.find((entry) => normalizeWord(entry.bare).replaceAll("ё", "е").startsWith(query));
+  const prefix = words.find((entry) => normalize(entry.bare).startsWith(query));
   if (prefix) return findWords(words, prefix.bare);
   let closest: T | undefined;
   let best = Infinity;
   for (const entry of words) {
-    const word = normalizeWord(entry.bare).replaceAll("ё", "е");
+    const word = normalize(entry.bare);
     if (Math.abs(word.length - query.length) > best) continue;
     let previous = Array.from({ length: word.length + 1 }, (_, i) => i);
     for (let i = 1; i <= query.length; i++) {
@@ -44,6 +50,7 @@ export function suggestWords<T extends { bare: string }>(words: T[], text: strin
 /** Cache compact form lists per entry, avoiding a large reverse index of every paradigm. */
 export function formLookup<T extends { bare: string }>(forms: (word: T) => string[]) {
   const cache = new WeakMap<T, string>();
+  const latinCache = new WeakMap<T, string>();
   const normalizedForms = (word: T) => {
     let value = cache.get(word);
     if (value === undefined) {
@@ -57,6 +64,18 @@ export function formLookup<T extends { bare: string }>(forms: (word: T) => strin
   const find = (words: T[], text: string): T[] => {
     const query = normalizeWord(text).replace(/\s+/gu, " ");
     if (!query || query.length > 40) return [];
+    if (hasLatin(query)) {
+      const key = searchKey(query);
+      const needle = `\n${key}\n`;
+      return words.filter((word) => {
+        let values = latinCache.get(word);
+        if (values === undefined) {
+          values = `\n${searchKey(normalizedForms(word))}\n`;
+          latinCache.set(word, values);
+        }
+        return values.includes(needle);
+      }).sort((a, b) => Number(searchKey(b.bare) === key) - Number(searchKey(a.bare) === key));
+    }
     const exact: T[] = [];
     const folded: T[] = [];
     const needle = `\n${query}\n`;

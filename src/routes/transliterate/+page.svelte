@@ -82,11 +82,6 @@ async function copy() {
   </button>
   <span role="status">{status ? i18n.t(status) : ""}</span>
 </div>
-<p class="note">
-  <a
-    href="https://www.icao.int/sites/default/files/publications/DocSeries/9303_p3_cons_en.pdf#page=35"
-  >{i18n.t("transliterateStandard")}</a>
-</p>
 <noscript><p class="note">{i18n.t("transliterateJavascript")}</p></noscript>
 
 <style>
