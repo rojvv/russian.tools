@@ -160,3 +160,14 @@ each file below Google's 50,000-URL limit. After deployment, submit
 `https://russian.tools/sitemap.xml` in Google Search Console and inspect sample
 English and Russian word URLs. Indexing and rankings depend on Google's crawl
 and assessment; deploying these changes does not guarantee placement.
+
+## Case Game
+
+At `/case-game`, practice 10 common nouns, adjectives, or a mixture. Each question
+shows an inflected word and asks for a different case while keeping number and
+adjective gender fixed. Starting and target cases are labeled, including adjective
+accusative animacy. Forms come from the existing OpenRussian dictionaries, loaded
+when a round starts. Missing forms, indeclinable nouns, and unchanged spellings
+are skipped. Answers accept dictionary alternatives, optional stress marks, and
+е for ё. Checking or revealing locks the answer; only correct first answers score.
+English and Russian interfaces, keyboard input, and system color schemes are supported.

@@ -4,6 +4,22 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    caseGameTitle: "Case Game",
+    caseGameDescription:
+      "Practice Russian noun and adjective cases. Change a word to the requested case and check your answer.",
+    caseGameIntro:
+      "Change each word to the requested case. Keep the same number and gender. Each round has 10 questions.",
+    caseGameKind: "Words to practice",
+    caseGameBoth: "Nouns and adjectives",
+    caseGameFrom: "Starting case",
+    caseGameTo: "Write in this case",
+    caseGameAnswer: "Your answer",
+    caseGameCheck: "Check answer",
+    caseGameNote: "Stress marks are optional; е is accepted for ё. Any listed alternative form counts.",
+    caseGameSource: "Forms from OpenRussian.",
+    caseGameJavascript: "Enable JavaScript to play the case game.",
+    caseGameEmpty: "No exercises are available. Try another word type.",
+
     motionTitle: "Motion Verb Chooser",
     motionDescription:
       "Choose Russian motion verbs across 14 families, including выехать and переехать, with spatial prefixes, aspect pairs, and explanations.",
@@ -114,6 +130,21 @@ export const messages = {
     openRussianAttribution: "Some tools use data from",
   },
   ru: {
+    caseGameTitle: "Игра в падежи",
+    caseGameDescription:
+      "Тренируйте падежи русских существительных и прилагательных. Поставьте слово в указанный падеж и проверьте ответ.",
+    caseGameIntro: "Поставьте каждое слово в указанный падеж, сохраняя число и род. В каждом раунде 10 заданий.",
+    caseGameKind: "Слова для тренировки",
+    caseGameBoth: "Существительные и прилагательные",
+    caseGameFrom: "Исходный падеж",
+    caseGameTo: "Поставьте в этот падеж",
+    caseGameAnswer: "Ваш ответ",
+    caseGameCheck: "Проверить ответ",
+    caseGameNote: "Ударения необязательны; вместо ё можно писать е. Любой из указанных вариантов засчитывается.",
+    caseGameSource: "Формы из OpenRussian.",
+    caseGameJavascript: "Включите JavaScript, чтобы играть в падежи.",
+    caseGameEmpty: "Задания не найдены. Выберите другой тип слов.",
+
     motionTitle: "Выбор глагола движения",
     motionDescription:
       "14 пар глаголов движения, пространственные приставки и видовые пары, включая выехать и переехать, с объяснениями.",

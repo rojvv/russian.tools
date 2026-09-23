@@ -49,6 +49,8 @@ const toolTitle = $derived(
     ? i18n.t("verbTitle")
     : page.route.id === "/decliner"
     ? i18n.t("nounTitle")
+    : page.route.id === "/case-game"
+    ? i18n.t("caseGameTitle")
     : page.route.id === "/motion"
     ? i18n.t("motionTitle")
     : "",

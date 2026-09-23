@@ -4,7 +4,7 @@ export const prerender = true;
 
 export function GET() {
   return sitemap(
-    ["/", "/stress", "/stress-practice", "/conjugator", "/decliner", "/motion"].flatMap((path) =>
+    ["/", "/stress", "/stress-practice", "/conjugator", "/decliner", "/motion", "/case-game"].flatMap((path) =>
       ["en", "ru"].map((locale) => `${path}?lang=${locale}`)
     ),
   );
