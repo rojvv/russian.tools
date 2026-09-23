@@ -77,7 +77,7 @@ For Cloudflare Workers Builds, use `pnpm build` as the build command and `pnpm e
 
 ## Verb Conjugator
 
-At `/conjugator`, type a Russian infinitive to automatically look up its forms in a locally hosted OpenRussian dictionary of 15,300 entries. Partial input uses a clearly labeled closest match (prefixes first, then edit distance). Select the intended entry for homonyms, or the intended aspect for a verb with both aspects. View present and future columns alongside compact imperative and past tables. Tense sections sit side by side on wide screens and stack on smaller screens. Perfective entries have no present tense; imperfective futures use быть plus the infinitive (with a special case for быть itself). Missing forms are left blank.
+At `/conjugator`, type a Russian infinitive or inflected form (for example `шёл` → `идти`) to automatically look up its forms in a locally hosted OpenRussian dictionary of 15,300 entries. Partial input uses a clearly labeled closest match (prefixes first, then edit distance). Exact dictionary forms take priority over spelling suggestions; compound futures such as `буду читать` are supported. Select the intended entry for ambiguous forms or homonyms, or the intended aspect for a verb with both aspects. View present and future columns alongside compact imperative and past tables. Tense sections sit side by side on wide screens and stack on smaller screens. Perfective entries have no present tense; imperfective futures use быть plus the infinitive (with a special case for быть itself). Missing forms are left blank.
 
 Share a verb with a bare query string, for example `/conjugator?читать`. The first query entry initializes the textbox (named values such as `?verb=читать` also work). Typing replaces the URL query without adding history entries; clearing the field clears the query. Server rendering includes the matching forms in the initial HTML, even without JavaScript. Browser autofill and form restoration trigger lookup on startup. The client dictionary loads only when a new lookup is needed; initial server results do not require downloading the entire dictionary. It uses the OpenRussian public database export retrieved on 2026-09-22 and can contain errors; review the dictionary forms before using them. Source, revision, transformations, and the CC BY-SA 4.0 data license are recorded in `static/data/verbs-SOURCE.md`. Rebuild the data with `python3 scripts/import-verbs.py scripts/data/openrussian-verbs-2026-09-22.tsv.gz`.
 
@@ -117,8 +117,14 @@ animate and inanimate accusative rows. Dictionary stress marks and alternative
 forms are preserved. Entries that share a spelling can be selected by part of
 speech and meaning. Missing forms display `—`.
 
-The interface includes automatic lookup, labeled closest matches, English and
-Russian labels, and shareable URLs such as `/decliner?книга` and
+Search accepts any form present in the dictionary tables, including alternative
+endings: `людьми` → `человек`, `книгами` → `книга`, and `новою` → `новый`.
+Stress marks and capitalization are optional; е is accepted for ё when there is
+no exact spelling match. Ambiguous forms offer all matching entries, with exact
+headwords listed first. Missing dictionary forms cannot be recognized.
+
+The interface includes automatic lookup, separate labels for recognized forms and
+closest suggestions, English and Russian labels, and shareable URLs such as `/decliner?книга` and
 `/decliner?новый`. Named queries such as `?noun=книга` and `?adjective=новый`
 also work. Initial results are server-rendered; subsequent lookups load the
 compressed local noun and adjective dictionaries. Noun-only number

@@ -10,6 +10,7 @@ import { page } from "$app/state";
 import {
   createTable,
   type Declinable,
+  findDeclinables,
   normalizeWord,
   suggestDeclinables,
 } from "$lib/declension";
@@ -36,11 +37,13 @@ onDestroy(() => {
   clearTimeout(timer);
   request++;
 });
-const suggested = $derived(
+const differentHeadword = $derived(
   word
     && normalizeWord(query).replaceAll("ё", "е")
       !== normalizeWord(word.bare).replaceAll("ё", "е"),
 );
+
+const suggested = $derived(word && !findDeclinables([word], query).length);
 
 function syncUrl() {
   const current = new URL(window.location.href);
@@ -183,7 +186,7 @@ const resultTitle = $derived(
     bind:value={query}
     oninput={handleInput}
     onchange={readInput}
-    placeholder={i18n.t("nominative")}
+    placeholder={i18n.t("declensionInput")}
     aria-label={i18n.t("declensionInput")}
     spellcheck="false"
     autocapitalize="off"
@@ -195,10 +198,10 @@ const resultTitle = $derived(
 </p>
 
 {#if word}
-  {#if suggested}<p class="match">
-      {i18n.t("closestMatch")} {i18n.locale === "ru" ? "«" : "“"}{
-        query.trim()
-      }{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
+  {#if differentHeadword}<p class="match">
+      {i18n.t(suggested ? "closestMatch" : "dictionaryFormFor")} {
+        i18n.locale === "ru" ? "«" : "“"
+      }{query.trim()}{i18n.locale === "ru" ? "»" : "”"}: <strong lang="ru">{
         word.nominative
       }</strong>
     </p>{/if}

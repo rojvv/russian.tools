@@ -6,7 +6,7 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ url, fetch }) => {
   const query = readVerbQuery(url);
   if (!query.trim()) return { query, matches: [], message: "" as const };
-  if (!/^[а-яё]+(?:-[а-яё]+)*$/u.test(normalizeVerb(query))) {
+  if (!/^[а-яё]+(?:[-\s][а-яё]+)*$/u.test(normalizeVerb(query))) {
     return { query, matches: [], message: "invalidVerb" as const };
   }
   let matches;

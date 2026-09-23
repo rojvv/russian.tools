@@ -11,11 +11,15 @@ export interface Section {
   title: string;
   rows: { label: string; form: string }[];
 }
-export {
-  findWords as findVerbs,
-  normalizeWord as normalizeVerb,
-  suggestWords as suggestVerbs,
-} from "./dictionary-lookup.ts";
+import { formLookup } from "./dictionary-lookup.ts";
+export { normalizeWord as normalizeVerb } from "./dictionary-lookup.ts";
+const verbLookup = formLookup<Verb>(verb => [
+  verb.bare,
+  ...createTable(verb, verb.aspect === "perfective" ? "perfective" : "imperfective")
+    .flatMap(section => section.rows.map(row => row.form)),
+]);
+export const findVerbs = verbLookup.find;
+export const suggestVerbs = verbLookup.suggest;
 
 export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): Section[] {
   const persons = ["я", "ты", "он / она / оно", "мы", "вы", "они"];
