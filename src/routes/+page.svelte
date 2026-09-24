@@ -44,6 +44,11 @@ const i18n = getI18n();
     }</a>
   </div>
   <div>
+    <a href={languagePath("/verb-prefixes", i18n.locale ?? "en")}>{
+      i18n.t("prefixTitle")
+    }</a>
+  </div>
+  <div>
     <a href={languagePath("/diminutive", i18n.locale ?? "en")}>{
       i18n.t("diminutiveTitle")
     }</a>

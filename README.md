@@ -123,6 +123,33 @@ the current history entry; refreshes, shared links, and browser navigation resto
 the selection, including in server-rendered HTML. Invalid choices fall back to
 valid controls, and language parameters are preserved.
 
+## Verb Prefix Explorer
+
+At `/verb-prefixes`, compare 43 selected meanings across eight everyday verb
+families: говорить, читать, писать, делать, учить, смотреть, думать, and работать.
+Each card gives a meaning, explicit aspect forms, a usage distinction, and an
+original Russian example with an English translation. Infinitives link to the
+conjugator. The catalogue includes useful reflexive contrasts such as договорить
+versus договориться; movement verbs remain in the Motion Verb Chooser.
+
+Search infinitives in Cyrillic or Latin transliteration, or meanings in English
+or Russian. Search finds whole families and marks matching cards so neighboring
+meanings remain visible. A separate family selector clears the search and browses
+one family or all eight. The initial view shows говорить. Both controls work as
+GET forms without JavaScript; live searches run locally after loading.
+
+Selections are shareable through `family` and `q`, for example
+`/verb-prefixes?q=dogovorit&lang=en` or
+`/verb-prefixes?family=read&lang=ru`. Server rendering, browser history, language
+switching, responsive layouts, and system color schemes are supported. The base
+tool pages appear in both language sitemaps; searches and other family selections
+are noindex. No dictionary download is needed for exploration.
+
+The catalogue lists actual lexical forms rather than generating prefixed words.
+It covers selected meanings, not every derivative or sense. Editorial notes and
+reference checks are in `src/lib/verb-prefixes-SOURCE.md`. Run
+`node --test tests/verb-prefix.test.mjs tests/seo-http.test.mjs`.
+
 ## Name Diminutive Finder
 
 At `/diminutive`, search by a Russian full name or a short or affectionate form.

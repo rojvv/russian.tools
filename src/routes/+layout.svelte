@@ -60,6 +60,8 @@ const toolTitle = $derived(
     ? i18n.t("caseGameTitle")
     : page.route.id === "/motion"
     ? i18n.t("motionTitle")
+    : page.route.id === "/verb-prefixes"
+    ? i18n.t("prefixTitle")
     : page.route.id === "/diminutive"
     ? i18n.t("diminutiveTitle")
     : page.route.id === "/abbreviation"

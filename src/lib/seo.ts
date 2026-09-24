@@ -7,6 +7,7 @@ export const toolPaths = [
   "/conjugator",
   "/decliner",
   "/motion",
+  "/verb-prefixes",
   "/diminutive",
   "/abbreviation",
   "/acknowledgements",

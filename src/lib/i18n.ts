@@ -53,6 +53,7 @@ export const messages = {
     caseGameJavascript: "Enable JavaScript to play the case game.",
     caseGameEmpty: "No exercises are available. Try another word type.",
 
+    prefixTitle: "Verb Prefix Explorer",
     motionTitle: "Motion Verb Chooser",
     motionDescription:
       "Choose Russian motion verbs across 14 families, including выехать and переехать, with spatial prefixes, aspect pairs, and explanations.",
@@ -214,6 +215,7 @@ export const messages = {
     caseGameJavascript: "Включите JavaScript, чтобы играть в падежи.",
     caseGameEmpty: "Задания не найдены. Выберите другой тип слов.",
 
+    prefixTitle: "Глаголы с приставками",
     motionTitle: "Выбор глагола движения",
     motionDescription:
       "14 пар глаголов движения, пространственные приставки и видовые пары, включая выехать и переехать, с объяснениями.",

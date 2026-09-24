@@ -46,6 +46,24 @@ const ru = $derived(i18n.locale === "ru");
   </p>
 </section>
 <section>
+  <h2>{ru ? "Глаголы с приставками" : "Verb prefixes"}</h2>
+  <p>
+    {
+      ru
+      ? "Для проверки отдельных значений и видовых пар использованы словари на"
+      : "Selected meanings and aspect pairs were checked against the dictionaries hosted by"
+    }
+    <a href="https://gramota.ru/poisk?mode=slovari&query=договорить">{
+      ru ? "Грамоте.ру" : "Gramota.ru"
+    }</a>.
+    {
+      ru
+      ? "Значения, пояснения и примеры написаны для этого инструмента. Подборка не охватывает все производные и значения."
+      : "Meanings, explanations, and examples were written for this tool. The selection does not cover every derivative or sense."
+    }
+  </p>
+</section>
+<section>
   <h2>{ru ? "Русские имена" : "Russian names"}</h2>
   <p>
     {

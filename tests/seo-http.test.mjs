@@ -119,7 +119,7 @@ test("every tool sitemap URL renders a matching canonical and allows indexing", 
   const response = await request("/sitemaps/tools.xml");
   assert.equal(response.status, 200);
   const locations = [...(await response.text()).matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-  assert.equal(locations.length, 24);
+  assert.equal(locations.length, 26);
   for (const location of locations) {
     const url = new URL(location);
     const page = await request(url.pathname + url.search);
@@ -149,4 +149,33 @@ test("abbreviation lookup and filtered directory render without JavaScript in bo
   }
   const empty = await request("/abbreviation?q=%3Cscript%3E&directory=not-a-real-word&lang=en");
   assert.match(await empty.text(), /No matching entry/);
+});
+
+test("verb prefix searches render comparisons, forms, and localized links without JavaScript", async () => {
+  for (const locale of ["en", "ru"]) {
+    const response = await request(`/verb-prefixes?q=dogovorit&lang=${locale}`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    for (const word of ["говорить", "договорить", "договаривать", "договориться", "договариваться"]) {
+      assert.ok(html.includes(word), word);
+    }
+    assert.ok(html.includes(locale === "ru" ? "Глаголы с приставками" : "Verb Prefix Explorer"));
+    assert.match(html, /name="robots" content="noindex, follow"/);
+    assert.doesNotMatch(html, /rel="canonical"/);
+    assert.match(html, /method="GET"/);
+    assert.ok(html.includes(`/conjugator?${encodeURIComponent("договорить")}&amp;lang=${locale}`));
+    assert.ok(html.includes(`href="/motion?lang=${locale}"`));
+    const home = await request(`/?lang=${locale}`);
+    assert.ok((await home.text()).includes(`/verb-prefixes?lang=${locale}`));
+  }
+  const read = await request("/verb-prefixes?family=read&lang=en");
+  const readHtml = await read.text();
+  assert.match(readHtml, /дочитать/);
+  assert.match(readHtml, /перечитать/);
+  assert.doesNotMatch(readHtml, /Дай мне договорить мысль/);
+  const empty = await request("/verb-prefixes?q=not-a-real-verb&lang=en");
+  assert.match(await empty.text(), /No matching family/);
+  const redirect = await request("/verb-prefixes?q=читать", { headers: { "Accept-Language": "ru" } });
+  assert.equal(redirect.status, 307);
+  assert.ok(redirect.headers.get("location").endsWith("&lang=ru"));
 });
