@@ -57,11 +57,20 @@ test("Latin noun and adjective inflections resolve through the full dictionaries
     const [query, bare] of [["kniga", "книга"], ["knigami", "книга"], ["lyudmi", "человек"], ["novogo", "новый"], [
       "novoyu",
       "новый",
-    ], ["sinyuyu", "синий"]]
+    ], ["sinyuyu", "синий"], ["obyektami", "объект"], ["obiektami", "объект"],
+      ["obieektami", "объект"], ["syezd", "съезд"]]
   ) {
     assert.ok(findDeclinables(words, query).some(entry => entry.bare === bare), `${query} → ${bare}`);
   }
   assert.ok(suggestDeclinables(words, "knig").some(entry => entry.bare.startsWith("книг")));
+});
+
+test("hard-sign aliases do not collapse genuine ие sequences", () => {
+  assert.equal(matchesSearch("объект", "obyekt"), true);
+  assert.equal(matchesSearch("объект", "obiekt"), true);
+  assert.equal(matchesSearch("объект", "obekt"), true);
+  assert.equal(matchesSearch("диета", "deta"), false);
+  assert.equal(matchesSearch("диета", "dieta"), true);
 });
 
 test("Latin ambiguity never changes exact Cyrillic spelling priority", () => {

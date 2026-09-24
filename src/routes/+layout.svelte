@@ -43,6 +43,11 @@ function setLanguage(locale: Locale) {
   i18n.locale = locale;
   replaceState(languageUrl(window.location.href, locale), page.state);
 }
+function refreshLanguageLink(event: Event, locale: Locale) {
+  // Shallow searches update the address bar without changing page.url.
+  // Refresh before native link actions (new tab, context menu, or copy link).
+  (event.currentTarget as HTMLAnchorElement).href = languageUrl(window.location.href, locale);
+}
 const toolTitle = $derived(
   page.route.id === "/stress"
     ? i18n.t("stressTitle")
@@ -94,7 +99,12 @@ const toolTitle = $derived(
         href={languageUrl(page.url.href, "en")}
         lang="en"
         aria-current={i18n.locale === "en"}
+        onpointerdown={(event) => refreshLanguageLink(event, "en")}
+        onfocus={(event) => refreshLanguageLink(event, "en")}
+        oncontextmenu={(event) => refreshLanguageLink(event, "en")}
         onclick={(event) => {
+          refreshLanguageLink(event, "en");
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
           setLanguage("en");
         }}
@@ -106,7 +116,12 @@ const toolTitle = $derived(
         href={languageUrl(page.url.href, "ru")}
         lang="ru"
         aria-current={i18n.locale === "ru"}
+        onpointerdown={(event) => refreshLanguageLink(event, "ru")}
+        onfocus={(event) => refreshLanguageLink(event, "ru")}
+        oncontextmenu={(event) => refreshLanguageLink(event, "ru")}
         onclick={(event) => {
+          refreshLanguageLink(event, "ru");
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
           setLanguage("ru");
         }}

@@ -1,11 +1,11 @@
-import { hasLatin, normalizeText, searchKey } from "./search-text.ts";
+import { hasLatin, normalizeText, searchKey, searchKeys } from "./search-text.ts";
 export const normalizeWord = normalizeText;
 
 export function findWords<T extends { bare: string }>(words: T[], text: string): T[] {
   const query = normalizeWord(text);
   if (hasLatin(query)) {
     const key = searchKey(query);
-    return words.filter((entry) => searchKey(entry.bare) === key);
+    return words.filter((entry) => searchKeys(entry.bare).includes(key));
   }
   const exact = words.filter((entry) => normalizeWord(entry.bare) === query);
   return exact.length
@@ -70,11 +70,11 @@ export function formLookup<T extends { bare: string }>(forms: (word: T) => strin
       return words.filter((word) => {
         let values = latinCache.get(word);
         if (values === undefined) {
-          values = `\n${searchKey(normalizedForms(word))}\n`;
+          values = `\n${searchKeys(normalizedForms(word)).join("\n")}\n`;
           latinCache.set(word, values);
         }
         return values.includes(needle);
-      }).sort((a, b) => Number(searchKey(b.bare) === key) - Number(searchKey(a.bare) === key));
+      }).sort((a, b) => Number(searchKeys(b.bare).includes(key)) - Number(searchKeys(a.bare).includes(key)));
     }
     const exact: T[] = [];
     const folded: T[] = [];

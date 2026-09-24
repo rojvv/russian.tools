@@ -53,11 +53,24 @@ export function searchKey(text: string): string {
     .replace(/i+/gu, "i");
 }
 
+/** Hard signs before е also appear as ye/ie in Latin spellings. Keep these
+ * aliases on the Cyrillic side so genuine ие sequences remain distinct. */
+export function searchKeys(text: string): string[] {
+  const normalized = normalizeText(text);
+  const primary = searchKey(normalized);
+  if (!normalized.includes("ъе")) return [primary];
+  return [...new Set([
+    primary,
+    searchKey(normalized.replaceAll("ъе", "йе")),
+    searchKey(normalized.replaceAll("ъе", "иее")),
+  ])];
+}
+
 export function matchesSearch(value: string, query: string, partial = false): boolean {
   const normalize = hasLatin(query) ? searchKey : (text: string) => normalizeText(text).replaceAll("ё", "е");
-  const word = normalize(value);
   const needle = normalize(query);
-  return partial ? word.includes(needle) : word === needle;
+  const words = hasLatin(query) ? searchKeys(value) : [normalize(value)];
+  return words.some(word => partial ? word.includes(needle) : word === needle);
 }
 
 export function validSearchText(text: string, phrases = false): boolean {
