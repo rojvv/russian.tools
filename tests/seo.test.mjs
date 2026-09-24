@@ -14,6 +14,18 @@ test("tracking parameters never become dictionary searches or hide a real query"
   }
 });
 
+test("empty named dictionary searches stay empty while serialized bare words survive", () => {
+  for (const read of [readVerbQuery, readNounQuery]) {
+    for (const key of ["verb", "noun", "adjective", "q"]) {
+      assert.equal(read(new URL(`https://russian.tools/?${key}=&lang=en`)), "");
+      assert.equal(read(new URL(`https://russian.tools/?lang=ru&${key}`)), "");
+      assert.equal(read(new URL(`https://russian.tools/?${key}=читать&lang=en`)), "читать");
+    }
+    assert.equal(read(new URL("https://russian.tools/?читать=&lang=en")), "читать");
+    assert.equal(read(new URL("https://russian.tools/?chitat&lang=en")), "chitat");
+  }
+});
+
 test("canonical redirects converge and keep preview hosts local", () => {
   const canonical = dictionarySeo("/decliner", "книга", "книга").canonical;
   const path = `/decliner?${encodeURIComponent("книга")}&lang=ru`;

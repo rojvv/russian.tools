@@ -33,9 +33,11 @@ export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): 
     section(
       "Future",
       persons,
-      aspect === "perfective"
+      verb.bare === "быть"
+        ? future
+        : aspect === "perfective"
         ? verb.finite
-        : future.map((form) => verb.bare === "быть" ? form : `${form} ${verb.infinitive}`),
+        : future.map((form) => `${form} ${verb.infinitive}`),
     ),
     section("Past", ["он (masculine)", "она́ (feminine)", "оно́ (neuter)", "они́ (plural)"], verb.past),
     section("Imperative", ["ты", "вы"], verb.imperative),

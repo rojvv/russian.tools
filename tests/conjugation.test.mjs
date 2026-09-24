@@ -37,6 +37,13 @@ test("imperfective, perfective and irregular forms have the correct tense", () =
   assert.equal(createTable(get("учиться"), "imperfective")[0].rows[0].form, "учу́сь");
 });
 
+test("быть uses its irregular future in both aspect interpretations", () => {
+  for (const aspect of ["imperfective", "perfective"]) {
+    const future = createTable(get("быть"), aspect).find(section => section.title === "Future");
+    assert.deepEqual(future.rows.map(row => row.form), ["бу́ду", "бу́дешь", "бу́дет", "бу́дем", "бу́дете", "бу́дут"]);
+  }
+});
+
 test("both-aspect entries support either interpretation", () => {
   const verb = verbs.find(v => v.aspect === "both");
   assert.equal(createTable(verb, "imperfective").length, 4);
