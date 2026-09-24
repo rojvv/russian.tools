@@ -65,6 +65,31 @@ test("completion, agreement, and bounded activity have distinct lexical entries"
   assert.equal(entry("осмотреть").prefix, "о-");
 });
 
+test("motion and taking families support transliteration and preserve aspect distinctions", () => {
+  for (
+    const [query, family] of [
+      ["bezhat", "run"],
+      ["прибежать", "run"],
+      ["ubegat", "run"],
+      ["idti", "walk"],
+      ["прийти", "walk"],
+      ["letet", "fly"],
+      ["долететь", "fly"],
+      ["brat", "take"],
+      ["выбрать", "take"],
+    ]
+  ) {
+    assert.equal(searchVerbFamilies(query)[0]?.id, family, query);
+  }
+  assert.equal(entry("прибежать").imperfective, "прибегать");
+  assert.equal(entry("прийти").imperfective, "приходить");
+  assert.equal(entry("прилететь").imperfective, "прилетать");
+  assert.equal(entry("выбрать").imperfective, "выбирать");
+  for (const id of ["побежать", "полететь"]) {
+    assert.equal(entry(id).imperfective, "", id);
+  }
+});
+
 test("curated forms link to existing conjugator entries with the correct aspect", () => {
   const dictionary = readDictionary("verbs");
   assert.equal(new Set(verbFamilies.map((family) => family.id)).size, verbFamilies.length);

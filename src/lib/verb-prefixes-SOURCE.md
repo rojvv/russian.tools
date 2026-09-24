@@ -1,8 +1,8 @@
 # Verb Prefix Explorer
 
-`verb-prefix-data.ts` is an editorial selection of 67 entries in twelve non-motion
+`verb-prefix-data.ts` is an editorial selection of 95 entries in sixteen
 verb families: говорить, читать, писать, делать, учить, смотреть, думать, работать,
-есть, пить, петь, играть.
+есть, пить, петь, играть, бежать, идти, лететь, брать.
 Meanings, usage notes, and example sentences were written for this tool. The
 catalogue is not an imported dictionary or an exhaustive list of derivatives.
 
@@ -18,6 +18,9 @@ catalogue is not an imported dictionary or an exhaustive list of derivatives.
   independently; their empty perfective field does not assert that no partner exists.
 - Leave imperfective fields empty for bounded activities such as поговорить,
   почитать, поделать, and поработать. Do not invent exact partners.
+- Motion families distinguish directed base verbs from prefixed aspect pairs,
+  such as бежать versus прибегать / прибежать. Start-of-motion forms побежать
+  and полететь have no exact imperfective partner listed here.
 - Include selected reflexive derivatives when the contrast is useful:
   договориться versus договорить, научиться versus научить.
 - Prefix labels describe the selected derivative. They are not automatic
@@ -29,7 +32,7 @@ catalogue is not an imported dictionary or an exhaustive list of derivatives.
 ## Reference checks
 
 The dictionaries hosted by Gramota.ru were consulted for selected lexical and
-aspect distinctions in the original eight families. The four additional families
+aspect distinctions in the original eight families. The additional families
 are editorial additions checked against the local dictionary for form and aspect
 coverage. The page links to the conjugator for each entry; unprefixed base forms
 are hidden within prefixed rows but retained in the data for aspect relationships.

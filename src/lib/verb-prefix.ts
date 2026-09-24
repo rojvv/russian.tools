@@ -58,7 +58,7 @@ export function writePrefixQuery(url: URL, state: PrefixQuery): URL {
 export const prefixCopy = {
   en: {
     description:
-      "Compare Russian verbs and their prefixes, with meanings, aspect pairs, and examples across twelve everyday verb families.",
+      "Compare Russian verbs and their prefixes, with meanings, aspect pairs, and examples across sixteen everyday verb families.",
     intro:
       "Explore how prefixes change a verb’s meaning. Compare related verbs, their aspects, and the situations they describe.",
     search: "Find a verb or meaning",
@@ -84,14 +84,14 @@ export const prefixCopy = {
       "Each card covers a selected meaning. Paired forms share that meaning; a single form does not imply that the other aspect is impossible. Click any verb for its conjugation.",
     scope:
       "A curated selection of common meanings, not every derivative or sense. Prefix meanings depend on the verb; -ся and changes to the stem can also matter.",
-    motion: "For movement verbs, use the Motion Verb Chooser.",
+    motion: "Motion Verb Chooser",
     reference: "View conjugation",
     details: "Example & usage",
     familyLink: "Show this family",
   },
   ru: {
     description:
-      "Сравнивайте русские глаголы с приставками: значения, видовые пары и примеры в двенадцати распространённых семействах.",
+      "Сравнивайте русские глаголы с приставками: значения, видовые пары и примеры в шестнадцати распространённых семействах.",
     intro:
       "Узнайте, как приставки меняют значение глагола. Сравните родственные глаголы, их вид и ситуации употребления.",
     search: "Найти глагол или значение",
@@ -118,7 +118,7 @@ export const prefixCopy = {
       "Каждая карточка описывает отдельное значение. Указанные пары сохраняют это значение; одна форма не означает, что другой вид невозможен. Нажмите на глагол, чтобы открыть спряжение.",
     scope:
       "Подборка распространённых значений, а не всех производных и употреблений. Значение приставки зависит от глагола; -ся и изменения основы тоже могут быть важны.",
-    motion: "Для глаголов движения используйте отдельный инструмент.",
+    motion: "Подбор глагола движения",
     reference: "Посмотреть спряжение",
     details: "Пример и употребление",
     familyLink: "Показать это семейство",
