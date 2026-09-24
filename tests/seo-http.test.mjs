@@ -107,6 +107,21 @@ test("dictionary aliases redirect once to indexable, self-canonical word pages",
   }
 });
 
+test("dictionary client navigation returns data without a canonical redirect loop", async () => {
+  for (const [route, word] of [["conjugator", "договорить"], ["decliner", "книга"]]) {
+    for (const locale of ["en", "ru"]) {
+      const response = await request(
+        `/${route}/__data.json?${encodeURIComponent(word)}&lang=${locale}&x-sveltekit-invalidated=11`,
+      );
+      assert.equal(response.status, 200);
+      const data = await response.json();
+      assert.equal(data.type, "data", `${route}: ${JSON.stringify(data)}`);
+      assert.ok(data.nodes.some(node => node?.type === "data" && JSON.stringify(node.data).includes(word)));
+      assert.ok(data.nodes.every(node => node?.type !== "error"));
+    }
+  }
+});
+
 test("invalid searches stay noindex without an unrelated tool canonical", async () => {
   const response = await request("/conjugator?%3Cinvalid%3E&lang=en");
   assert.equal(response.status, 200);

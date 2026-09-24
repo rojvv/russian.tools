@@ -19,6 +19,9 @@ test("canonical redirects converge and keep preview hosts local", () => {
   const path = `/decliner?${encodeURIComponent("книга")}&lang=ru`;
   assert.equal(canonicalRedirect(new URL("http://localhost:5173/decliner?noun=книга&lang=ru"), canonical, "ru"), path);
   assert.equal(canonicalRedirect(new URL(`http://localhost:5173${path}`), canonical, "ru"), null);
+  const navigationUrl = new URL(`http://localhost:5173${path}&x-sveltekit-invalidated=11`);
+  navigationUrl.searchParams.delete("x-sveltekit-invalidated");
+  assert.equal(canonicalRedirect(navigationUrl, canonical, "ru"), null);
   assert.equal(canonicalRedirect(new URL(languageUrl(canonical, "en")), canonical, "en"), null);
 });
 

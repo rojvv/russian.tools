@@ -19,7 +19,14 @@ export const toolPaths = [
 /** Compare path/query only so development and preview servers stay on their own host. */
 export function canonicalRedirect(url: URL, canonical: string, locale: string): string | null {
   const path = languagePath(canonical, locale);
-  return url.pathname + url.search === path ? null : path;
+  const target = new URL(path, url);
+  // SvelteKit removes its navigation parameters via URLSearchParams, which
+  // serializes bare ?читать as ?читать=. Compare the parsed queries so data
+  // requests do not keep redirecting to the page they are already loading.
+  return url.pathname === target.pathname
+      && url.searchParams.toString() === target.searchParams.toString()
+    ? null
+    : path;
 }
 
 /** Keep internal navigation on the current host, including local previews. */
