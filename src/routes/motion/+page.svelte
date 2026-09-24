@@ -341,7 +341,7 @@ const link = (word: string) =>
         <option value="imperfective">{simple.process}</option>
       </select>
     {/if}
-    <noscript><button type="submit">
+    <noscript><button class="native-submit" type="submit">
         {locale === "ru" ? "Показать" : "Show"}
       </button></noscript>
   </form>
@@ -437,7 +437,7 @@ const link = (word: string) =>
         }}
         placeholder={labels.placeholder}
       />
-      <noscript><button type="submit">
+      <noscript><button class="native-submit" type="submit">
           {locale === "ru" ? "Найти" : "Search"}
         </button></noscript>
     </form>

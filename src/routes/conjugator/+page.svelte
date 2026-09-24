@@ -222,7 +222,7 @@ const resultTitle = $derived(
     maxlength="40"
   />
   <input type="hidden" name="lang" value={i18n.locale ?? "en"} />
-  <noscript><button type="submit">
+  <noscript><button class="native-submit" type="submit">
       {i18n.locale === "ru" ? "Найти" : "Search"}
     </button></noscript>
 </form>

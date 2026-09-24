@@ -106,7 +106,7 @@ function lookupLink(name: string): string {
       autocapitalize="off"
     />
     <p id="name-hint" class="hint">{copy.hint}</p>
-    <noscript><button type="submit">
+    <noscript><button class="native-submit" type="submit">
         {locale === "ru" ? "Найти" : "Search"}
       </button></noscript>
   </form>
@@ -179,7 +179,7 @@ function lookupLink(name: string): string {
       spellcheck="false"
       autocapitalize="off"
     />
-    <noscript><button type="submit">
+    <noscript><button class="native-submit" type="submit">
         {locale === "ru" ? "Найти" : "Search"}
       </button></noscript>
   </form>

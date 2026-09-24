@@ -169,6 +169,8 @@ nav a[aria-current="true"] { color: var(--foreground); }
 :global(p) { margin: 0; color: var(--muted); }
 :global(a) { color: inherit; text-underline-offset: 3px; }
 @media (hover: hover) { :global(a:hover) { color: var(--focus); } }
+:global(.native-submit) { min-height: 44px; margin-top: 12px; padding: 9px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--background); color: var(--foreground); font: inherit; cursor: pointer; }
+@media (hover: hover) { :global(.native-submit:hover) { border-color: var(--focus); background: var(--hover); } }
 :global(:focus-visible) { outline: 2px solid var(--focus); outline-offset: 3px; }
 @media (max-width: 600px) { :global(main) { min-height: calc(100dvh - 64px); margin: 32px auto; padding: 0 20px; } }
 </style>

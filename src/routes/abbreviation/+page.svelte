@@ -114,7 +114,7 @@ function lookupLink(short: string): string {
     />
 
     <p id="abbreviation-hint" class="hint">{copy.hint}</p>
-    <noscript><button type="submit">
+    <noscript><button class="native-submit" type="submit">
         {locale === "ru" ? "Найти" : "Search"}
       </button></noscript>
   </form>
@@ -200,7 +200,7 @@ function lookupLink(short: string): string {
         {/each}
       </select>
     </div>
-    <noscript><button type="submit">
+    <noscript><button class="native-submit" type="submit">
         {locale === "ru" ? "Найти" : "Search"}
       </button></noscript>
   </form>
