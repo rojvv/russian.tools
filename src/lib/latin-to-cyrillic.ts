@@ -69,7 +69,7 @@ export interface CyrillicSegment {
 export function cyrillicSegments(text: string): CyrillicSegment[] {
   const segments: CyrillicSegment[] = [];
   // Process words separately so punctuation and unrelated scripts stay intact.
-  const words = /[a-zčšžëʹʺ]+(?:['’][a-zčšžëʹʺ]*)*/gi;
+  const words = /[a-zčšžëʹʺ\u030c\u0308]+(?:['’][a-zčšžëʹʺ\u030c\u0308]*)*/gi;
   let end = 0;
   for (const match of text.matchAll(words)) {
     const start = match.index;
@@ -82,7 +82,9 @@ export function cyrillicSegments(text: string): CyrillicSegment[] {
       let options: string[] = [source];
       for (let length = Math.min(4, word.length - offset); length > 0; length--) {
         const candidate = word.slice(offset, offset + length);
-        const mapped = mappings[candidate.toLowerCase()];
+        // Normalize only for matching: source slices and choice offsets must
+        // still refer to the original (possibly decomposed) input.
+        const mapped = mappings[candidate.normalize("NFC").toLowerCase()];
         if (!mapped) continue;
         source = candidate;
         options = mapped.map((value) => {

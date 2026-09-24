@@ -4,6 +4,19 @@ import { cyrillicSegments, renderCyrillic } from "../src/lib/latin-to-cyrillic.t
 
 const convert = (text, choices) => renderCyrillic(cyrillicSegments(text), choices);
 
+test("decomposed letters match composed letters while preserving source offsets", () => {
+  for (const text of ["č š ž ë", "Čaj Šël ŽUK", "Ë ËLKA", "🙂 č e š y"]) {
+    const decomposed = text.normalize("NFD");
+    const segments = cyrillicSegments(decomposed);
+    assert.equal(renderCyrillic(segments), convert(text));
+    assert.equal(segments.map(segment => segment.source).join(""), decomposed);
+    for (const segment of segments) {
+      assert.equal(decomposed.slice(segment.start, segment.start + segment.source.length), segment.source);
+    }
+  }
+  assert.equal(convert("c\u030c e", { 3: "э" }), "ч э");
+});
+
 test("common spellings, longest matches, passport variants and explicit signs", () => {
   assert.equal(convert("Privet, mir! Shchuka zhuk khleb yo yu ya iu ia"), "Привет, мир! Щука жук хлеб ё ю я ю я");
   assert.equal(convert("č š ž ë obʺekt chitatʹ"), "ч ш ж ё объект читать");
