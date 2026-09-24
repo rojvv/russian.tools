@@ -106,6 +106,9 @@ function lookupLink(name: string): string {
       autocapitalize="off"
     />
     <p id="name-hint" class="hint">{copy.hint}</p>
+    <noscript><button type="submit">
+        {locale === "ru" ? "Найти" : "Search"}
+      </button></noscript>
   </form>
 
   {#if normalizeName(query)}
@@ -176,6 +179,9 @@ function lookupLink(name: string): string {
       spellcheck="false"
       autocapitalize="off"
     />
+    <noscript><button type="submit">
+        {locale === "ru" ? "Найти" : "Search"}
+      </button></noscript>
   </form>
   <p class="count" role="status">
     {copy.count} {entries.length} {copy.of} {russianNames.length}

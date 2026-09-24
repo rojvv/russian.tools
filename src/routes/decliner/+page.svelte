@@ -2,6 +2,7 @@
 import { loadDictionary } from "$lib/dictionary-data";
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
+import NativeForms from "$lib/NativeForms.svelte";
 import { validSearchText } from "$lib/search-text";
 import { dictionarySeo } from "$lib/seo";
 import Seo from "$lib/Seo.svelte";
@@ -178,10 +179,15 @@ const resultTitle = $derived(
   {...dictionarySeo("/decliner", query, word?.bare)}
 />
 
-<div class="lookup">
+<form
+  class="lookup"
+  action="/decliner"
+  method="GET"
+  onsubmit={(event) => event.preventDefault()}
+>
   <input
     id="word"
-    name="word"
+    name="q"
     lang="ru"
     bind:this={input}
     bind:value={query}
@@ -193,7 +199,11 @@ const resultTitle = $derived(
     autocapitalize="off"
     maxlength="40"
   />
-</div>
+  <input type="hidden" name="lang" value={i18n.locale ?? "en"} />
+  <noscript><button type="submit">
+      {i18n.locale === "ru" ? "Найти" : "Search"}
+    </button></noscript>
+</form>
 <p class="status" role="status">
   {loading ? i18n.t("lookingUp") : message ? i18n.t(message) : ""}
 </p>
@@ -263,6 +273,15 @@ const resultTitle = $derived(
     <p class="hint">{i18n.t("missingForm")}</p>
   {/if}
 {/if}
+
+<noscript>
+  {#each matches.slice(1) as entry}
+    <details>
+      <summary>{entry.nominative} — {entry.meaning}</summary>
+      <NativeForms sections={createTable(entry)} />
+    </details>
+  {/each}
+</noscript>
 
 <style>
 h2 { margin: 16px 0 0; font-size: 20px; font-weight: 500; }

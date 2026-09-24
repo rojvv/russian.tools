@@ -114,6 +114,9 @@ function lookupLink(short: string): string {
     />
 
     <p id="abbreviation-hint" class="hint">{copy.hint}</p>
+    <noscript><button type="submit">
+        {locale === "ru" ? "Найти" : "Search"}
+      </button></noscript>
   </form>
 
   {#if query.trim()}
@@ -197,6 +200,9 @@ function lookupLink(short: string): string {
         {/each}
       </select>
     </div>
+    <noscript><button type="submit">
+        {locale === "ru" ? "Найти" : "Search"}
+      </button></noscript>
   </form>
   <p class="count" role="status">
     {copy.count} {entries.length} {copy.of} {abbreviations.length}

@@ -210,6 +210,22 @@ function changeFamily() {
   ) meaning = "base";
   persist();
 }
+function selectionLink(item: typeof browse[number]) {
+  const needle = query.trim().toLowerCase().replaceAll("\u0301", "");
+  const url = writeMotionQuery(new URL(page.url), {
+    family: item.family,
+    meaning: item.meaning,
+    query,
+    situation: item.meaning === "base"
+      ? (matchesSearch(item.verbs[1], needle) ? "habit" : "direction")
+      : situation,
+    aspect: item.meaning !== "base" && item.meaning !== "start"
+      ? (matchesSearch(item.verbs[0], needle) ? "imperfective" : "perfective")
+      : aspect,
+  });
+  url.searchParams.set("lang", locale);
+  return url.pathname + url.search;
+}
 function select(item: typeof browse[number]) {
   familyId = item.family;
   meaning = item.meaning;
@@ -236,10 +252,17 @@ const link = (word: string) =>
 />
 
 <div class="chooser">
-  <form onsubmit={(event) => event.preventDefault()}>
+  <form
+    action="/motion"
+    method="GET"
+    onsubmit={(event) => event.preventDefault()}
+  >
+    <input type="hidden" name="lang" value={locale} />
+    <input type="hidden" name="q" value={query} />
     <label class="field" for="family">{simple.how}</label>
     <select
       id="family"
+      name="family"
       value={familyId}
       onchange={(event) => {
         familyId = event.currentTarget.value;
@@ -260,6 +283,7 @@ const link = (word: string) =>
     <label class="field" for="meaning">{simple.where}</label>
     <select
       id="meaning"
+      name="meaning"
       value={meaning}
       onchange={(event) => {
         meaning = event.currentTarget.value as MotionMeaning;
@@ -291,6 +315,7 @@ const link = (word: string) =>
       <label class="field" for="situation">{simple.action}</label>
       <select
         id="situation"
+        name="situation"
         value={situation}
         onchange={(event) => {
           situation = event.currentTarget.value as MotionSituation;
@@ -305,6 +330,7 @@ const link = (word: string) =>
       <label class="field" for="aspect">{simple.action}</label>
       <select
         id="aspect"
+        name="aspect"
         value={aspect}
         onchange={(event) => {
           aspect = event.currentTarget.value as typeof aspect;
@@ -315,6 +341,9 @@ const link = (word: string) =>
         <option value="imperfective">{simple.process}</option>
       </select>
     {/if}
+    <noscript><button type="submit">
+        {locale === "ru" ? "Показать" : "Show"}
+      </button></noscript>
   </form>
 
   <section class="result" aria-live="polite" aria-atomic="true">
@@ -385,18 +414,33 @@ const link = (word: string) =>
 <details class="catalog" open={query.length > 0}>
   <summary>{simple.browse}</summary>
   <div class="catalog-content">
-    <label class="field" for="search">{labels.search}</label>
-    <input
-      id="search"
-      type="search"
-      value={query}
-      maxlength="200"
-      oninput={(event) => {
-        query = event.currentTarget.value;
-        persist();
-      }}
-      placeholder={labels.placeholder}
-    />
+    <form
+      action="/motion"
+      method="GET"
+      onsubmit={(event) => event.preventDefault()}
+    >
+      <input type="hidden" name="lang" value={locale} />
+      <input type="hidden" name="family" value={familyId} />
+      <input type="hidden" name="meaning" value={meaning} />
+      <input type="hidden" name="aspect" value={aspect} />
+      <input type="hidden" name="situation" value={situation} />
+      <label class="field" for="search">{labels.search}</label>
+      <input
+        id="search"
+        name="q"
+        type="search"
+        value={query}
+        maxlength="200"
+        oninput={(event) => {
+          query = event.currentTarget.value;
+          persist();
+        }}
+        placeholder={labels.placeholder}
+      />
+      <noscript><button type="submit">
+          {locale === "ru" ? "Найти" : "Search"}
+        </button></noscript>
+    </form>
     <p class="count" role="status">{matches.length} {labels.results}</p>
     <table>
       <thead>
@@ -409,14 +453,18 @@ const link = (word: string) =>
         {#each matches.slice(0, 50) as item}
           <tr class:selected={item.family === familyId && item.meaning === meaning}>
             <td>
-              <button
-                type="button"
-                onclick={() => select(item)}
-                aria-pressed={item.family === familyId && item.meaning === meaning}
+              <a
+                href={selectionLink(item)}
+                onclick={(event) => {
+                  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  select(item);
+                }}
+                aria-current={item.family === familyId && item.meaning === meaning ? "true" : undefined}
                 lang="ru"
               >
                 {item.verbs.join(" / ")}
-              </button>
+              </a>
             </td>
             <td>{motionMeanings[item.meaning][locale]}</td>
           </tr>
@@ -428,7 +476,6 @@ const link = (word: string) =>
     <p class="note">{labels.scope}</p>
   </div>
 </details>
-<noscript><p>{copy.javascript}</p></noscript>
 
 <style>
 .chooser { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; margin-top: 40px; align-items: start; }

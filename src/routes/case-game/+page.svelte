@@ -10,7 +10,14 @@ import { loadDictionary } from "$lib/dictionary-data";
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
 import Seo from "$lib/Seo.svelte";
-import { tick } from "svelte";
+import { onMount, tick } from "svelte";
+import type { ActionData, PageData } from "./$types";
+let { data, form }: { data: PageData; form: ActionData } = $props();
+let enhanced = $state(false);
+onMount(() => {
+  enhanced = true;
+});
+const exercise = $derived(form?.round ?? data.round);
 
 const i18n = getI18n();
 let words: Declinable[] = [];
@@ -105,143 +112,220 @@ async function next() {
   title={`${i18n.t("caseGameTitle")} | russian.tools`}
   description={i18n.t("caseGameDescription")}
   canonical="https://russian.tools/case-game"
+  noindex={Boolean(exercise)}
 />
 
 <div class="game">
-  {#if !active || !current}
-    {#if active}
-      <h2 bind:this={heading} tabindex="-1">{i18n.t("practiceComplete")}</h2>
-      <p class="score">
-        {i18n.t("practiceScore")} {score} / {questions.length}
-      </p>
-    {:else}
-      <p>{i18n.t("caseGameIntro")}</p>
-    {/if}
-    {#if active}
-      <h2>{i18n.t("caseGameOverview")}</h2>
-      <ol class="overview">
-        {#each responses as response}
-          <li>
-            <p>
-              <strong lang="ru">{response.question.source}</strong> → <strong
-                lang="ru"
-              >{response.question.answers.join(", ")}</strong>
-            </p>
-            <p class="context">
-              {i18n.t(response.question.sourceCase)} → {
-                i18n.t(response.question.targetCase)
-              } · {i18n.t(response.question.section)}
-            </p>
-            <p class:incorrect={response.result === "incorrect"}>
-              {
-                i18n.t(
-                  response.result === "correct"
-                    ? "practiceCorrect"
-                    : response.result === "revealed"
-                    ? "caseGameRevealed"
-                    : "caseGameIncorrect",
-                )
-              }
-              {#if response.answer}<span lang="ru">
-                  {response.answer}</span>{/if}
-            </p>
-          </li>
-        {/each}
-      </ol>
-    {/if}
-    <label for="word-kind">{i18n.t("caseGameKind")}</label>
-    <select id="word-kind" bind:value={kind} disabled={busy}>
-      <option value="both">{i18n.t("caseGameBoth")}</option>
-      <option value="noun">{i18n.t("noun")}</option>
-      <option value="adjective">{i18n.t("adjective")}</option>
-    </select>
-    <label for="question-count">{i18n.t("caseGameCount")}</label>
-    <input
-      id="question-count"
-      type="number"
-      min="1"
-      max="100"
-      step="1"
-      bind:value={count}
-      disabled={busy}
-    />
-    <div class="actions">
-      <button class="primary" onclick={start} disabled={busy || !validCount}>
-        {
-          i18n.t(busy ? "practicePreparing" : active ? "practiceRetry" : "practiceStart")
-        }
-      </button>
-    </div>
-  {:else}
-    <div class="progress">
-      <span>{index + 1} / {questions.length}</span><span aria-live="polite">{
-          i18n.t("practiceScore")
-        } {score}</span>
-    </div>
-    <section aria-label={i18n.t("caseGameTitle")}>
-      <p class="word" lang="ru">{current.source}</p>
-      <p class="context">
-        {i18n.t(current.sourceCase)} · {i18n.t(current.section)}
-      </p>
-      <form
-        onsubmit={(event) => {
-          event.preventDefault();
-          void check();
-        }}
-      >
-        <label for="answer">{i18n.t("caseGameTo")}: <strong>{
-            i18n.t(current.targetCase)
-          }</strong></label>
-        <input
-          id="answer"
-          bind:this={input}
-          value={answer}
-          oninput={typed}
-          oncompositionend={typed}
-          readonly={Boolean(result)}
-          lang="ru"
-          autocomplete="off"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder={i18n.t("caseGameAnswer")}
-          maxlength={100}
-        />
-        {#if !result}
-          <div class="actions">
-            <button class="primary" type="submit" disabled={!answer.trim()}>
-              {i18n.t("caseGameCheck")}
-            </button>
-            <button class="reveal" type="button" onclick={() => check(true)}>
-              {i18n.t("practiceReveal")}
-            </button>
-          </div>
-        {/if}
-      </form>
-      <p
-        class="feedback"
-        class:incorrect={result === "incorrect"}
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {#if result}{
-            i18n.t(
-              result === "correct"
-                ? "practiceCorrect"
-                : result === "incorrect"
-                ? "practiceIncorrect"
-                : "practiceAnswer",
-            )
-          } <strong lang="ru">{current.answers.join(", ")}</strong>{/if}
-      </p>
-      {#if result}<button class="primary" bind:this={nextButton} onclick={next}>
-          {
-            i18n.t(index + 1 === questions.length ? "practiceFinish" : "practiceNext")
+  {#if !enhanced}
+    <p>{i18n.t("caseGameIntro")}</p>
+    <form action="/case-game" method="GET">
+      <input type="hidden" name="lang" value={i18n.locale ?? "en"} />
+      <label for="native-kind">{i18n.t("caseGameKind")}</label>
+      <select id="native-kind" name="kind" value={exercise?.kind ?? "both"}>
+        <option value="both">{i18n.t("caseGameBoth")}</option>
+        <option value="noun">{i18n.t("noun")}</option>
+        <option value="adjective">{i18n.t("adjective")}</option>
+      </select>
+      <label for="native-count">{i18n.t("caseGameCount")}</label>
+      <input
+        id="native-count"
+        name="count"
+        type="number"
+        min="1"
+        max="100"
+        value={exercise?.count ?? 10}
+        required
+      />
+      <button type="submit">{i18n.t("practiceStart")}</button>
+    </form>
+    {#if exercise}
+      {#if form}<p class="score">
+          {i18n.t("practiceScore")} {form.correct.filter(Boolean).length} / {
+            exercise.questions.length
           }
-        </button>{/if}
-    </section>
+        </p>{/if}
+      <form method="POST" action={`/case-game?lang=${i18n.locale ?? "en"}`}>
+        <input type="hidden" name="seed" value={exercise.seed} />
+        <input type="hidden" name="count" value={exercise.count} />
+        <input type="hidden" name="kind" value={exercise.kind} />
+        <ol class="overview">
+          {#each exercise.questions as question, index}
+            <li>
+              <p lang="ru"><strong>{question.source}</strong></p>
+              <p class="context">
+                {i18n.t(question.sourceCase)} → {i18n.t(question.targetCase)}
+                · {i18n.t(question.section)}
+              </p>
+              <label for={`answer-${index}`}>{i18n.t("caseGameTo")}: {
+                  i18n.t(question.targetCase)
+                }</label>
+              <input
+                id={`answer-${index}`}
+                name={`answer-${index}`}
+                value={form?.answers[index] ?? ""}
+                maxlength="100"
+                lang="ru"
+                spellcheck="false"
+                autocomplete="off"
+              />
+              {#if form}
+                <p class:incorrect={!form.correct[index]}>
+                  {
+                    i18n.t(form.correct[index] ? "practiceCorrect" : "practiceIncorrect")
+                  } <strong lang="ru">{question.answers.join(", ")}</strong>
+                </p>
+              {:else}
+                <details>
+                  <summary>{i18n.t("practiceReveal")}</summary>
+                  <p lang="ru">{question.answers.join(", ")}</p>
+                </details>
+              {/if}
+            </li>
+          {/each}
+        </ol>
+        <button type="submit">{i18n.t("caseGameCheck")}</button>
+      </form>
+    {/if}
+  {:else}
+    {#if !active || !current}
+      {#if active}
+        <h2 bind:this={heading} tabindex="-1">{i18n.t("practiceComplete")}</h2>
+        <p class="score">
+          {i18n.t("practiceScore")} {score} / {questions.length}
+        </p>
+      {:else}
+        <p>{i18n.t("caseGameIntro")}</p>
+      {/if}
+      {#if active}
+        <h2>{i18n.t("caseGameOverview")}</h2>
+        <ol class="overview">
+          {#each responses as response}
+            <li>
+              <p>
+                <strong lang="ru">{response.question.source}</strong> →
+                <strong lang="ru">{
+                  response.question.answers.join(", ")
+                }</strong>
+              </p>
+              <p class="context">
+                {i18n.t(response.question.sourceCase)} → {
+                  i18n.t(response.question.targetCase)
+                } · {i18n.t(response.question.section)}
+              </p>
+              <p class:incorrect={response.result === "incorrect"}>
+                {
+                  i18n.t(
+                    response.result === "correct"
+                      ? "practiceCorrect"
+                      : response.result === "revealed"
+                      ? "caseGameRevealed"
+                      : "caseGameIncorrect",
+                  )
+                }
+                {#if response.answer}<span lang="ru">
+                    {response.answer}</span>{/if}
+              </p>
+            </li>
+          {/each}
+        </ol>
+      {/if}
+      <label for="word-kind">{i18n.t("caseGameKind")}</label>
+      <select id="word-kind" bind:value={kind} disabled={busy}>
+        <option value="both">{i18n.t("caseGameBoth")}</option>
+        <option value="noun">{i18n.t("noun")}</option>
+        <option value="adjective">{i18n.t("adjective")}</option>
+      </select>
+      <label for="question-count">{i18n.t("caseGameCount")}</label>
+      <input
+        id="question-count"
+        type="number"
+        min="1"
+        max="100"
+        step="1"
+        bind:value={count}
+        disabled={busy}
+      />
+      <div class="actions">
+        <button class="primary" onclick={start} disabled={busy || !validCount}>
+          {
+            i18n.t(busy ? "practicePreparing" : active ? "practiceRetry" : "practiceStart")
+          }
+        </button>
+      </div>
+    {:else}
+      <div class="progress">
+        <span>{index + 1} / {questions.length}</span><span aria-live="polite">{
+            i18n.t("practiceScore")
+          } {score}</span>
+      </div>
+      <section aria-label={i18n.t("caseGameTitle")}>
+        <p class="word" lang="ru">{current.source}</p>
+        <p class="context">
+          {i18n.t(current.sourceCase)} · {i18n.t(current.section)}
+        </p>
+        <form
+          onsubmit={(event) => {
+            event.preventDefault();
+            void check();
+          }}
+        >
+          <label for="answer">{i18n.t("caseGameTo")}: <strong>{
+              i18n.t(current.targetCase)
+            }</strong></label>
+          <input
+            id="answer"
+            bind:this={input}
+            value={answer}
+            oninput={typed}
+            oncompositionend={typed}
+            readonly={Boolean(result)}
+            lang="ru"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder={i18n.t("caseGameAnswer")}
+            maxlength={100}
+          />
+          {#if !result}
+            <div class="actions">
+              <button class="primary" type="submit" disabled={!answer.trim()}>
+                {i18n.t("caseGameCheck")}
+              </button>
+              <button class="reveal" type="button" onclick={() => check(true)}>
+                {i18n.t("practiceReveal")}
+              </button>
+            </div>
+          {/if}
+        </form>
+        <p
+          class="feedback"
+          class:incorrect={result === "incorrect"}
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {#if result}{
+              i18n.t(
+                result === "correct"
+                  ? "practiceCorrect"
+                  : result === "incorrect"
+                  ? "practiceIncorrect"
+                  : "practiceAnswer",
+              )
+            } <strong lang="ru">{current.answers.join(", ")}</strong>{/if}
+        </p>
+        {#if result}<button
+            class="primary"
+            bind:this={nextButton}
+            onclick={next}
+          >
+            {
+              i18n.t(index + 1 === questions.length ? "practiceFinish" : "practiceNext")
+            }
+          </button>{/if}
+      </section>
+    {/if}
+    <p role="status" class="error">{error ? i18n.t(error) : ""}</p>
   {/if}
-  <p role="status" class="error">{error ? i18n.t(error) : ""}</p>
-  <noscript><p>{i18n.t("caseGameJavascript")}</p></noscript>
 </div>
 
 <style>

@@ -206,8 +206,78 @@ test("transliteration supports both direction URLs on one route", async () => {
     assert.match(
       html,
       direction === "l2c"
-        ? /<button[^>]*aria-pressed="true"[^>]*>\s*Latin to Cyrillic/
-        : /<button[^>]*aria-pressed="true"[^>]*>\s*Cyrillic to Latin/,
+        ? /<option[^>]*value="l2c"[^>]*selected[^>]*>\s*Latin to Cyrillic/
+        : /<option[^>]*value="c2l"[^>]*selected[^>]*>\s*Cyrillic to Latin/,
     );
   }
+});
+
+test("native lookup and directory forms expose submit controls and server-rendered results", async () => {
+  for (const route of ["decliner", "conjugator", "abbreviation", "diminutive", "verb-prefixes", "motion"]) {
+    const response = await request(`/${route}?lang=en`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, new RegExp(`<form[^>]*action="/${route}"[^>]*method="GET"`));
+    assert.match(html, /<button[^>]*type="submit"/);
+  }
+  for (
+    const [path, expected] of [
+      ["/decliner?q=книга&lang=en", "кни́ги"],
+      ["/conjugator?verb=читать&lang=en", "чита́ю"],
+      ["/abbreviation?q=КПП&lang=ru", "коробка переключения передач"],
+      ["/diminutive?q=Саша&lang=en", "Александр"],
+      ["/motion?family=foot&meaning=base&situation=habit&lang=en", "ходи"],
+    ]
+  ) {
+    const response = await fetch(new URL(path, origin));
+    assert.equal(response.status, 200);
+    assert.ok((await response.text()).includes(expected), path);
+  }
+  const motion = await (await request("/motion?q=войти&lang=ru")).text();
+  assert.match(motion, /href="\/motion\?[^"]*family=foot[^"]*meaning=enter/);
+});
+
+test("transliteration posts render conversion and validated ambiguity choices without scripts", async () => {
+  const post = async fields => {
+    const response = await request("/transliterate?lang=en", {
+      method: "POST",
+      headers: { Origin: new URL(origin).origin, Accept: "text/html" },
+      body: new URLSearchParams(fields),
+    });
+    assert.equal(response.status, 200);
+    return response.text();
+  };
+  assert.match(await post({ text: "Привет", direction: "c2l" }), /Privet/);
+  assert.match(await post({ text: "privet", direction: "l2c" }), /привет/);
+  const { cyrillicSegments } = await server.ssrLoadModule("/src/lib/latin-to-cyrillic.ts");
+  const segment = cyrillicSegments("yo").find(value => value.options.length > 1);
+  assert.ok(segment);
+  const html = await post({ text: "yo", direction: "l2c", [`choice-${segment.start}`]: segment.options[1] });
+  assert.ok(html.includes(segment.options[1]));
+  assert.match(html, /name="choice-0"/);
+});
+
+test("case exercises regenerate the same questions and grade native form answers", async () => {
+  const url = "/case-game?count=2&kind=noun&seed=42&lang=en";
+  const html = await (await request(url)).text();
+  assert.match(html, /name="answer-0"/);
+  assert.match(html, /name="answer-1"/);
+  const { load } = await server.ssrLoadModule("/src/routes/case-game/+page.server.ts");
+  const data = await load({
+    url: new URL(url, origin),
+    fetch: (path, options) => fetch(new URL(path, origin), options),
+  });
+  const response = await request("/case-game?lang=en", {
+    method: "POST",
+    headers: { Origin: new URL(origin).origin, Accept: "text/html" },
+    body: new URLSearchParams({
+      count: "2",
+      kind: "noun",
+      seed: "42",
+      "answer-0": data.round.questions[0].answers[0],
+      "answer-1": "incorrect",
+    }),
+  });
+  assert.equal(response.status, 200);
+  assert.match(await response.text(), /1 \/ 2/);
 });
