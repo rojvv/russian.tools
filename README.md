@@ -30,7 +30,7 @@ pnpm preview
 
 ## Stress Marker
 
-The first tool adds Russian vowel stress marks with [`@roj/rustress`](https://jsr.io/@roj/rustress) 0.0.9. The home page lists available tools. At `/stress`, type or paste into a single editor and accents appear directly in the text. Stress is recomputed after edits, preserving the cursor, selection, whitespace, and scroll position. Composition input is allowed to finish before marking. Input is limited to 20,000 characters (including accents).
+The first tool adds Russian vowel stress marks with [`@roj/rustress`](https://jsr.io/@roj/rustress) 0.0.10. The home page lists available tools. At `/stress`, type or paste into a single editor and accents appear directly in the text. Stress is recomputed after edits, preserving the cursor, selection, whitespace, and scroll position. Composition input is allowed to finish before marking. Input is limited to 20,000 characters (including accents).
 
 Inference runs in a module Web Worker, with debounced requests, bounded inference batches, and stale-result suppression. The dictionary, model, ONNX WebAssembly runtime, and Golos Text fonts are served locally; text is never submitted to a server. After the engine loads, processing works without a network connection. Reloading offline requires the site's assets to be available in the browser cache; this is not an offline-installable app.
 

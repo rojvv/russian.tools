@@ -1,6 +1,5 @@
 import wasmUrl from "onnxruntime-web/ort-wasm-simd-threaded.wasm?url";
 import { env } from "onnxruntime-web/wasm";
-import { markSupportedText } from "../stress-input.ts";
 
 env.wasm.numThreads = 1;
 env.wasm.wasmPaths = { wasm: wasmUrl };
@@ -31,10 +30,9 @@ async function processLatest() {
         let result = "";
         for (let i = 0; i < parts.length; i += 80) {
           if (pending) break;
-          result += await markSupportedText(
-            parts.slice(i, i + 80).join(""),
-            (text) => markStresses(text, { markSingleVowels: request.single }),
-          );
+          result += await markStresses(parts.slice(i, i + 80).join(""), {
+            markSingleVowels: request.single,
+          });
         }
         if (!pending) self.postMessage({ type: "result", id: request.id, text: result });
       } catch {
