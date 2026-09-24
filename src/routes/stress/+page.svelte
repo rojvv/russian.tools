@@ -14,6 +14,7 @@ let composing = false;
 let revision = 0;
 let worker: Worker;
 let timer: ReturnType<typeof setTimeout>;
+const textLimit = 20000;
 
 const unmark = (value: string) => value.replaceAll("\u0301", "");
 
@@ -63,6 +64,12 @@ onMount(() => {
     const before = editor.value;
     const after: string = data.text;
     if (before === after || unmark(before) !== unmark(after)) return;
+    // Programmatic assignments bypass maxlength. Keep the original text intact
+    // if the added accents would exceed the editor's limit.
+    if (after.length > textLimit) {
+      error = "stressLimitError";
+      return;
+    }
     const start = mapPosition(before, after, editor.selectionStart);
     const end = mapPosition(before, after, editor.selectionEnd);
     const direction = editor.selectionDirection;
@@ -96,7 +103,7 @@ onMount(() => {
     lang="ru"
     spellcheck="false"
     autocapitalize="off"
-    maxlength={20000}
+    maxlength={textLimit}
     placeholder="Пишите здесь…"
     oninput={schedule}
     oncompositionstart={() => {

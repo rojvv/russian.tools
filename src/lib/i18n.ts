@@ -148,6 +148,7 @@ export const messages = {
     lookingUp: "Looking up…",
     stressLoadError: "The stress engine could not load. Reload to try again.",
     stressProcessError: "Could not process this text. Try a shorter passage or edit the text to try again.",
+    stressLimitError: "Adding stress marks would exceed the 20,000-character limit. Shorten the text to try again.",
     infinitive: "Infinitive",
     verbInput: "Verb in Cyrillic or Latin, e.g. читать or chitat",
     dictionaryFormFor: "Dictionary form for",
@@ -320,6 +321,8 @@ export const messages = {
     lookingUp: "Поиск…",
     stressLoadError: "Не удалось загрузить модуль расстановки ударений. Перезагрузите страницу.",
     stressProcessError: "Не удалось обработать текст. Сократите или измените его и попробуйте снова.",
+    stressLimitError:
+      "После добавления ударений текст превысит лимит в 20 000 символов. Сократите текст и попробуйте снова.",
     infinitive: "Инфинитив",
     verbInput: "Глагол кириллицей или латиницей: читать или chitat",
     dictionaryFormFor: "Начальная форма для",
