@@ -18,6 +18,85 @@ const textLimit = 20000;
 
 const unmark = (value: string) => value.replaceAll("\u0301", "");
 
+type Snapshot = {
+  value: string;
+  start: number;
+  end: number;
+  direction: "forward" | "backward" | "none";
+};
+let undo: Snapshot[] = [];
+let redo: Snapshot[] = [];
+let beforeEdit: Snapshot | undefined;
+let compositionStart: Snapshot | undefined;
+let lastValue = "";
+
+function snapshot(): Snapshot {
+  return {
+    value: editor.value,
+    start: editor.selectionStart,
+    end: editor.selectionEnd,
+    direction: editor.selectionDirection,
+  };
+}
+
+function remember(previous: Snapshot) {
+  undo = [...undo.slice(-99), previous];
+  redo = [];
+}
+
+// Automatic marking replaces the textarea value and clears native history.
+// Track user edits separately so accents never become extra undo steps.
+function travel(back: boolean) {
+  if (composing) return;
+  const source = back ? undo : redo;
+  const next = source.pop();
+  if (!next) return;
+  (back ? redo : undo).push(snapshot());
+  const { scrollTop, scrollLeft } = editor;
+  editor.value = lastValue = next.value;
+  editor.setSelectionRange(next.start, next.end, next.direction);
+  editor.scrollTop = scrollTop;
+  editor.scrollLeft = scrollLeft;
+  beforeEdit = undefined;
+  schedule();
+}
+
+function beforeInput(event: InputEvent) {
+  if (event.inputType === "historyUndo" || event.inputType === "historyRedo") {
+    event.preventDefault();
+    travel(event.inputType === "historyUndo");
+    return;
+  }
+  beforeEdit = snapshot();
+}
+
+function input() {
+  if (!composing && editor.value !== lastValue) {
+    remember(
+      beforeEdit ?? {
+        value: lastValue,
+        start: lastValue.length,
+        end: lastValue.length,
+        direction: "none",
+      },
+    );
+  }
+  lastValue = editor.value;
+  beforeEdit = undefined;
+  schedule();
+}
+
+function keydown(event: KeyboardEvent) {
+  if (
+    composing || event.isComposing || event.altKey
+    || !(event.ctrlKey || event.metaKey)
+  ) return;
+  if (event.code === "KeyZ" || event.code === "KeyY") {
+    event.preventDefault();
+    travel(event.code === "KeyZ" && !event.shiftKey);
+  }
+}
+
 // Map selection boundaries through added/removed accents without moving the cursor
 // relative to the letters the user is editing.
 function mapPosition(before: string, after: string, position: number) {
@@ -46,6 +125,7 @@ function schedule() {
 }
 
 onMount(() => {
+  lastValue = editor.value;
   worker = new StressWorker();
   worker.onmessage = ({ data }) => {
     if (data.type === "ready") {
@@ -74,7 +154,7 @@ onMount(() => {
     const end = mapPosition(before, after, editor.selectionEnd);
     const direction = editor.selectionDirection;
     const { scrollTop, scrollLeft } = editor;
-    editor.value = after;
+    editor.value = lastValue = after;
     editor.setSelectionRange(start, end, direction);
     editor.scrollTop = scrollTop;
     editor.scrollLeft = scrollLeft;
@@ -105,13 +185,22 @@ onMount(() => {
     autocapitalize="off"
     maxlength={textLimit}
     placeholder="Пишите здесь…"
-    oninput={schedule}
+    onkeydown={keydown}
+    onbeforeinput={beforeInput}
+    oninput={input}
     oncompositionstart={() => {
+      compositionStart = snapshot();
       composing = true;
       clearTimeout(timer);
       revision++;
     }}
     oncompositionend={() => {
+      if (compositionStart && compositionStart.value !== editor.value) {
+        remember(compositionStart);
+      }
+      compositionStart = undefined;
+      beforeEdit = undefined;
+      lastValue = editor.value;
       composing = false;
       schedule();
     }}
