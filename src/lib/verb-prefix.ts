@@ -58,7 +58,7 @@ export function writePrefixQuery(url: URL, state: PrefixQuery): URL {
 export const prefixCopy = {
   en: {
     description:
-      "Compare Russian verbs and their prefixes, with meanings, aspect pairs, and examples across eight everyday verb families.",
+      "Compare Russian verbs and their prefixes, with meanings, aspect pairs, and examples across twelve everyday verb families.",
     intro:
       "Explore how prefixes change a verb’s meaning. Compare related verbs, their aspects, and the situations they describe.",
     search: "Find a verb or meaning",
@@ -67,6 +67,7 @@ export const prefixCopy = {
       "Search infinitives in Cyrillic or Latin, or meanings in English or Russian. Matching families stay together for comparison.",
     family: "Verb family",
     all: "All families",
+    noFamilies: "No matching families",
     apply: "Explore",
     reset: "Reset",
     count: "Families shown:",
@@ -84,12 +85,13 @@ export const prefixCopy = {
     scope:
       "A curated selection of common meanings, not every derivative or sense. Prefix meanings depend on the verb; -ся and changes to the stem can also matter.",
     motion: "For movement verbs, use the Motion Verb Chooser.",
-    reference: "Dictionary reference",
+    reference: "View conjugation",
+    details: "Example & usage",
     familyLink: "Show this family",
   },
   ru: {
     description:
-      "Сравнивайте русские глаголы с приставками: значения, видовые пары и примеры в восьми распространённых семействах.",
+      "Сравнивайте русские глаголы с приставками: значения, видовые пары и примеры в двенадцати распространённых семействах.",
     intro:
       "Узнайте, как приставки меняют значение глагола. Сравните родственные глаголы, их вид и ситуации употребления.",
     search: "Найти глагол или значение",
@@ -98,6 +100,7 @@ export const prefixCopy = {
       "Ищите инфинитивы кириллицей или латиницей либо значения по-русски или по-английски. Родственные глаголы показаны вместе для сравнения.",
     family: "Семейство глаголов",
     all: "Все семейства",
+    noFamilies: "Семейства не найдены",
     apply: "Показать",
     reset: "Сбросить",
     count: "Показано семейств:",
@@ -116,7 +119,8 @@ export const prefixCopy = {
     scope:
       "Подборка распространённых значений, а не всех производных и употреблений. Значение приставки зависит от глагола; -ся и изменения основы тоже могут быть важны.",
     motion: "Для глаголов движения используйте отдельный инструмент.",
-    reference: "Словарная справка",
+    reference: "Посмотреть спряжение",
+    details: "Пример и употребление",
     familyLink: "Показать это семейство",
   },
 };

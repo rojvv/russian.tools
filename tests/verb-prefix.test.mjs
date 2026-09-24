@@ -35,7 +35,23 @@ test("family selection, partial searches, and unknown input never invent verbs",
   for (const query of ["<script>", "...", "небывалоглагол", "dogovoritxyz"]) {
     assert.deepEqual(searchVerbFamilies(query), [], query);
   }
-  assert.equal(searchVerbFamilies("  ").length, 8);
+  assert.equal(searchVerbFamilies("  ").length, verbFamilies.length);
+});
+
+test("additional everyday families support verb and meaning searches", () => {
+  for (
+    const [query, family] of [
+      ["съесть", "eat"],
+      ["wash down", "drink"],
+      ["podpet", "sing"],
+      ["выиграть", "play"],
+    ]
+  ) {
+    assert.equal(searchVerbFamilies(query)[0]?.id, family, query);
+  }
+  for (const id of ["поесть", "попить", "попеть", "поиграть"]) {
+    assert.equal(entry(id).imperfective, "", id);
+  }
 });
 
 test("completion, agreement, and bounded activity have distinct lexical entries", () => {

@@ -1,7 +1,8 @@
 # Verb Prefix Explorer
 
-`verb-prefix-data.ts` is an editorial selection of 43 cards in eight non-motion
-verb families: говорить, читать, писать, делать, учить, смотреть, думать, работать.
+`verb-prefix-data.ts` is an editorial selection of 67 entries in twelve non-motion
+verb families: говорить, читать, писать, делать, учить, смотреть, думать, работать,
+есть, пить, петь, играть.
 Meanings, usage notes, and example sentences were written for this tool. The
 catalogue is not an imported dictionary or an exhaustive list of derivatives.
 
@@ -28,7 +29,10 @@ catalogue is not an imported dictionary or an exhaustive list of derivatives.
 ## Reference checks
 
 The dictionaries hosted by Gramota.ru were consulted for selected lexical and
-aspect distinctions. The page links to a dictionary lookup for each card.
+aspect distinctions in the original eight families. The four additional families
+are editorial additions checked against the local dictionary for form and aspect
+coverage. The page links to the conjugator for each entry; unprefixed base forms
+are hidden within prefixed rows but retained in the data for aspect relationships.
 
 - [Договорить, Большой толковый словарь русского языка](https://gramota.ru/poisk?dicts%5B%5D=42&mode=slovari&query=договорить):
   finishing an utterance; imperfective договаривать.
