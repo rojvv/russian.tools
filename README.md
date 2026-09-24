@@ -322,3 +322,23 @@ English and Russian interfaces, responsive keys, and system color schemes are
 supported. The page is linked from the home page and both language sitemaps.
 
 Run keyboard logic checks with `node --test tests/keyboard.test.mjs`.
+
+## Latin to Cyrillic
+
+At `/transliterate`, select Latin to Cyrillic to convert common Latin spellings and passport variants
+into Russian letters. Ambiguous occurrences show alternatives with source
+context (for example, `e` → е/ё/э, `y` → ы/й/и, `ts` → ц/тс).
+Each choice updates the copyable result independently. Editing the source resets
+choices; long inputs reveal ambiguity controls in batches of 20.
+
+Defaults are mechanical transliteration, not dictionary predictions. Missing
+soft signs cannot be restored automatically. Explicit `ʹ` and `ʺ` produce ь
+and ъ; doubled apostrophes also produce ъ (`s''est'` → съесть). Apostrophes
+following Latin letters offer signs or preserved punctuation.
+Case, whitespace, and existing Cyrillic are preserved. Text stays in the browser,
+with a 20,000-character input limit and English and Russian interfaces.
+
+Run conversion checks with `node --test tests/latin-to-cyrillic.test.mjs`.
+
+Both conversion directions share `/transliterate`, using `direction=l2c` for Latin
+to Cyrillic and `direction=c2l` for Cyrillic to Latin.

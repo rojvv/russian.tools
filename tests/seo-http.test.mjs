@@ -179,3 +179,20 @@ test("verb prefix searches render comparisons, forms, and localized links withou
   assert.equal(redirect.status, 307);
   assert.ok(redirect.headers.get("location").endsWith("&lang=ru"));
 });
+
+test("transliteration supports both direction URLs on one route", async () => {
+  for (const direction of ["c2l", "l2c"]) {
+    const response = await request(`/transliterate?lang=en&direction=${direction}`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /Cyrillic to Latin/);
+    assert.match(html, /Latin to Cyrillic/);
+    assert.match(html, /rel="canonical" href="https:\/\/russian.tools\/transliterate\?lang=en"/);
+    assert.match(
+      html,
+      direction === "l2c"
+        ? /<button[^>]*aria-pressed="true"[^>]*>\s*Latin to Cyrillic/
+        : /<button[^>]*aria-pressed="true"[^>]*>\s*Cyrillic to Latin/,
+    );
+  }
+});

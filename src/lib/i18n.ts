@@ -4,6 +4,14 @@ export const languageCookieMaxAge = 400 * 24 * 60 * 60;
 
 export const messages = {
   en: {
+    latinTitle: "Latin to Cyrillic",
+    latinSeoTitle: "Latin to Russian Cyrillic Converter",
+    latinDescription: "Convert Latin spellings into Russian Cyrillic and choose alternatives for ambiguous letters.",
+     latinAmbiguities: "Ambiguous conversions",
+    latinChoicesNote: "Choose each occurrence separately. Editing the input resets your choices.",
+    latinMore: "Show more",
+    latinPosition: "Character",
+
     abbreviationTitle: "Abbreviation Decoder",
     keyboardTitle: "Virtual Keyboard",
     keyboardSeoTitle: "Virtual Russian Keyboard – Type Cyrillic Online",
@@ -23,10 +31,12 @@ export const messages = {
     acknowledgementsTitle: "Acknowledgements",
     acknowledgementsDescription: "Sources, references, and credits for the data and resources used by russian.tools.",
     diminutiveTitle: "Name Diminutive Finder",
-    transliterateTitle: "Cyrillic to Latin",
-    transliterateSeoTitle: "Russian Cyrillic to Latin Transliteration",
+    transliterateTitle: "Transliteration",
+    transliterateToLatin: "Cyrillic to Latin",
+    transliterateDirection: "Conversion direction",
+    transliterateSeoTitle: "Russian Transliteration – Cyrillic to Latin and Latin to Cyrillic",
     transliterateDescription:
-      "Transliterate Russian Cyrillic text into Latin letters. Type or paste text to get a result you can copy instantly.",
+      "Convert Russian text between Cyrillic and Latin letters, with choices for ambiguous Latin spellings.",
     transliterateInput: "Cyrillic",
     transliterateOutput: "Latin",
     transliterateCopy: "Copy result",
@@ -165,6 +175,14 @@ export const messages = {
     dictionaryError: "Could not load the verb dictionary. Please try again.",
   },
   ru: {
+    latinTitle: "Латиница в кириллицу",
+    latinSeoTitle: "Перевод латиницы в русскую кириллицу",
+    latinDescription: "Преобразуйте латиницу в русскую кириллицу и выберите варианты для неоднозначных сочетаний.",
+     latinAmbiguities: "Неоднозначные преобразования",
+    latinChoicesNote: "Выберите вариант для каждого вхождения. Изменение исходного текста сбрасывает выбор.",
+    latinMore: "Показать ещё",
+    latinPosition: "Символ",
+
     abbreviationTitle: "Расшифровка сокращений",
     keyboardTitle: "Виртуальная клавиатура",
     keyboardSeoTitle: "Виртуальная русская клавиатура онлайн",
@@ -185,10 +203,12 @@ export const messages = {
     acknowledgementsDescription:
       "Источники, справочные материалы и авторы данных и ресурсов, используемых на russian.tools.",
     diminutiveTitle: "Уменьшительные имена",
-    transliterateTitle: "Кириллица → латиница",
-    transliterateSeoTitle: "Транслитерация русского текста латиницей",
+    transliterateTitle: "Транслитерация",
+    transliterateToLatin: "Кириллица → латиница",
+    transliterateDirection: "Направление преобразования",
+    transliterateSeoTitle: "Транслитерация: кириллица и латиница",
     transliterateDescription:
-      "Переведите русский текст из кириллицы в латиницу. Введите или вставьте текст и сразу скопируйте результат транслитерации.",
+      "Переводите русский текст из кириллицы в латиницу и обратно, выбирая варианты для неоднозначных сочетаний.",
     transliterateInput: "Кириллица",
     transliterateOutput: "Латиница",
     transliterateCopy: "Скопировать результат",
