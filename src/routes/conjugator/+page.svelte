@@ -251,8 +251,11 @@ const resultTitle = $derived(
     <label for="aspect">{i18n.t("bothAspectPrompt")}</label>
     <select
       id="aspect"
-      bind:value={aspect}
-      onchange={() => {
+      value={aspect}
+      onchange={(event) => {
+        aspect = event.currentTarget.value === "perfective"
+          ? "perfective"
+          : "imperfective";
         sections = createTable(verb!, aspect);
         message = "";
       }}

@@ -92,6 +92,8 @@ async function next() {
   if (!result) return;
   index++;
   answer = "";
+  // A pasted correct answer can advance before the value renders even once.
+  if (input) input.value = "";
   result = null;
   await tick();
   if (current) input?.focus();
@@ -193,7 +195,7 @@ async function next() {
         <input
           id="answer"
           bind:this={input}
-          bind:value={answer}
+          value={answer}
           oninput={typed}
           oncompositionend={typed}
           readonly={Boolean(result)}
