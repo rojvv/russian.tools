@@ -59,11 +59,13 @@ export function searchKeys(text: string): string[] {
   const normalized = normalizeText(text);
   const primary = searchKey(normalized);
   if (!normalized.includes("ъе")) return [primary];
-  return [...new Set([
-    primary,
-    searchKey(normalized.replaceAll("ъе", "йе")),
-    searchKey(normalized.replaceAll("ъе", "иее")),
-  ])];
+  return [
+    ...new Set([
+      primary,
+      searchKey(normalized.replaceAll("ъе", "йе")),
+      searchKey(normalized.replaceAll("ъе", "иее")),
+    ]),
+  ];
 }
 
 export function matchesSearch(value: string, query: string, partial = false): boolean {

@@ -46,7 +46,10 @@ function setLanguage(locale: Locale) {
 function refreshLanguageLink(event: Event, locale: Locale) {
   // Shallow searches update the address bar without changing page.url.
   // Refresh before native link actions (new tab, context menu, or copy link).
-  (event.currentTarget as HTMLAnchorElement).href = languageUrl(window.location.href, locale);
+  (event.currentTarget as HTMLAnchorElement).href = languageUrl(
+    window.location.href,
+    locale,
+  );
 }
 const toolTitle = $derived(
   page.route.id === "/stress"

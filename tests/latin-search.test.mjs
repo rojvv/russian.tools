@@ -54,11 +54,21 @@ test("Latin verbs include infinitives, inflections, and compound futures", () =>
 test("Latin noun and adjective inflections resolve through the full dictionaries", () => {
   const words = [...readDictionary("nouns"), ...readDictionary("adjectives")];
   for (
-    const [query, bare] of [["kniga", "книга"], ["knigami", "книга"], ["lyudmi", "человек"], ["novogo", "новый"], [
-      "novoyu",
-      "новый",
-    ], ["sinyuyu", "синий"], ["obyektami", "объект"], ["obiektami", "объект"],
-      ["obieektami", "объект"], ["syezd", "съезд"]]
+    const [query, bare] of [
+      ["kniga", "книга"],
+      ["knigami", "книга"],
+      ["lyudmi", "человек"],
+      ["novogo", "новый"],
+      [
+        "novoyu",
+        "новый",
+      ],
+      ["sinyuyu", "синий"],
+      ["obyektami", "объект"],
+      ["obiektami", "объект"],
+      ["obieektami", "объект"],
+      ["syezd", "съезд"],
+    ]
   ) {
     assert.ok(findDeclinables(words, query).some(entry => entry.bare === bare), `${query} → ${bare}`);
   }
