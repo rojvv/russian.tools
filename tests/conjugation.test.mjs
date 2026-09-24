@@ -44,6 +44,28 @@ test("быть uses its irregular future in both aspect interpretations", () => 
   }
 });
 
+test("impersonal verbs retain person restrictions in future tables, lookup, and exports", () => {
+  for (const bare of ["смеркаться", "тошнить"]) {
+    const verb = get(bare);
+    const sections = createTable(verb, "imperfective");
+    const expected = ["", "", `бу́дет ${verb.infinitive}`, "", "", ""];
+    assert.deepEqual(sections.find(section => section.title === "Future").rows.map(row => row.form), expected);
+    assert.deepEqual(findVerbs([verb], `буду ${bare}`), []);
+    assert.deepEqual(findVerbs([verb], `будет ${bare}`), [verb]);
+    assert.deepEqual(
+      exportRows(verb.infinitive, "imperfective", sections)
+        .filter(row => row[0] === "Future").map(row => row[2]),
+      expected,
+    );
+  }
+});
+
+test("unknown finite forms do not produce invented compound futures", () => {
+  const verb = { ...get("читать"), finite: ["", "-", "чита́ет"] };
+  const future = createTable(verb, "imperfective").find(section => section.title === "Future");
+  assert.deepEqual(future.rows.map(row => row.form), ["", "", "бу́дет чита́ть", "", "", ""]);
+});
+
 test("both-aspect entries support either interpretation", () => {
   const verb = verbs.find(v => v.aspect === "both");
   assert.equal(createTable(verb, "imperfective").length, 4);

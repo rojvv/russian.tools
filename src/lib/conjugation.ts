@@ -37,7 +37,11 @@ export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): 
         ? future
         : aspect === "perfective"
         ? verb.finite
-        : future.map((form) => `${form} ${verb.infinitive}`),
+        // Preserve the dictionary's person restrictions (e.g. смеркается).
+        // Missing forms must not become invented personal futures.
+        : future.map((form, index) =>
+          verb.finite[index] && verb.finite[index] !== "-" ? `${form} ${verb.infinitive}` : ""
+        ),
     ),
     section("Past", ["он (masculine)", "она́ (feminine)", "оно́ (neuter)", "они́ (plural)"], verb.past),
     section("Imperative", ["ты", "вы"], verb.imperative),
