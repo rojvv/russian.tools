@@ -12,7 +12,8 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
   if (
     assets
     && url.origin === event.url.origin
-    && /^\/data\/(verbs|nouns|adjectives)\.json\.gz$/.test(url.pathname)
+    && (/^\/data\/(verbs|nouns|adjectives)\.json\.gz$/.test(url.pathname)
+      || /^\/data\/search\/(decliner|conjugator)\/(index-[0-9a-f]{3}|entries-\d+)\.json$/.test(url.pathname))
     && (request.method === "GET" || request.method === "HEAD")
   ) {
     return assets.fetch(request);

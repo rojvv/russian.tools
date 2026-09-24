@@ -4,15 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
+    "dev": "pnpm build:index && vite dev",
+    "build": "pnpm build:index && vite build",
     "preview": "vite preview",
     "preview:worker": "pnpm build && wrangler dev",
     "deploy": "dprint fmt && pnpm build && wrangler deploy",
     "deploy:check": "pnpm build && wrangler deploy --dry-run",
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "build:index": "node scripts/build-dictionary-index.mjs"
   },
   "dependencies": {
     "@roj/rustress": "jsr:0.0.10",

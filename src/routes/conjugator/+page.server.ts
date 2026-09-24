@@ -1,9 +1,9 @@
-import { suggestVerbs } from "$lib/conjugation";
+import type { Verb } from "$lib/conjugation";
 import { readVerbQuery } from "$lib/conjugation-url";
 import { messages } from "$lib/i18n";
 import { validSearchText } from "$lib/search-text";
 import { canonicalRedirect, dictionarySeo } from "$lib/seo";
-import { getVerbs } from "$lib/server/conjugation";
+import { searchDictionary } from "$lib/server/dictionary-search";
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
@@ -18,8 +18,9 @@ export const load: PageServerLoad = async ({ url, fetch, locals, setHeaders }) =
     return { query, matches: [], message: "invalidVerb" as const };
   }
   let matches;
+  let deferred = false;
   try {
-    matches = suggestVerbs(await getVerbs(fetch), query);
+    ({ matches, deferred } = await searchDictionary<Verb>(fetch, "conjugator", query));
   } catch {
     // Transient asset failures must not turn valid word URLs into noindex pages.
     setHeaders({ "Retry-After": "60", "Cache-Control": "no-store" });
@@ -33,6 +34,6 @@ export const load: PageServerLoad = async ({ url, fetch, locals, setHeaders }) =
   return {
     query,
     matches,
-    message: matches.length ? "" as const : "verbNotFound" as const,
+    message: matches.length || deferred ? "" as const : "verbNotFound" as const,
   };
 };

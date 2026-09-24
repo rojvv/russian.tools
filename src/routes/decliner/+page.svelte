@@ -72,6 +72,7 @@ function restoreUrl(url: URL) {
     matches = data.matches;
     message = data.message;
     if (matches.length) choose(0);
+    else if (query.trim() && !message) scheduleLookup(false);
   } else if (query.trim()) {
     timer = setTimeout(() => void lookup(), 250);
   }

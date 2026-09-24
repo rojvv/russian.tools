@@ -26,3 +26,6 @@ vite.config.ts.timestamp-*
 
 # Python import caches
 __pycache__/
+
+# Generated server dictionary search partitions
+/static/data/search/

@@ -281,3 +281,12 @@ test("case exercises regenerate the same questions and grade native form answers
   assert.equal(response.status, 200);
   assert.match(await response.text(), /1 \/ 2/);
 });
+
+test("reported Latin decliner URL renders the matched paradigm", async () => {
+  const response = await request("/decliner?q=knigami&lang=ru");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /книга/);
+  assert.match(html, /кни́гами/);
+  assert.doesNotMatch(html, /data\/search\//);
+});

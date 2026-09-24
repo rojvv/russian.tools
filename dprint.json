@@ -16,6 +16,7 @@
   "excludes": [
     "**/node_modules",
     "static/data/*.json",
+    "static/data/search/**",
     "static/data/*.json.gz",
     "**/*-lock.json",
     "**/*-lock.yaml"
