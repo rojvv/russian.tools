@@ -1,4 +1,5 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { createTable as conjugate } from "../src/lib/conjugation.ts";
 import { createTable as decline } from "../src/lib/declension.ts";
@@ -8,10 +9,41 @@ import { normalizeText, searchKey, searchKeys } from "../src/lib/search-text.ts"
 const root = new URL("../static/data/search/", import.meta.url);
 const read = async name =>
   JSON.parse(gunzipSync(await readFile(new URL(`../static/data/${name}.json.gz`, import.meta.url))));
-await rm(root, { recursive: true, force: true });
 for (const name of ["decliner", "conjugator"]) {
-  const words = name === "decliner" ? [...await read("nouns"), ...await read("adjectives")] : await read("verbs");
   const directory = new URL(`${name}/`, root);
+  const manifest = new URL(".build.json", directory);
+  const sources = [
+    "scripts/build-dictionary-index.mjs",
+    "src/lib/dictionary-index.ts",
+    "src/lib/dictionary-lookup.ts",
+    "src/lib/search-text.ts",
+    `src/lib/${name === "decliner" ? "declension" : "conjugation"}.ts`,
+    ...(name === "decliner" ? ["nouns", "adjectives"] : ["verbs"])
+      .map(data => `static/data/${data}.json.gz`),
+  ];
+  const hash = createHash("sha256");
+  for (const source of sources) {
+    hash.update(source).update("\0");
+    hash.update(await readFile(new URL(`../${source}`, import.meta.url))).update("\0");
+  }
+  const fingerprint = hash.digest("hex");
+  try {
+    const previous = JSON.parse(await readFile(manifest, "utf8"));
+    const files = new Set(await readdir(directory));
+    if (
+      previous.fingerprint === fingerprint
+      && Array.isArray(previous.files)
+      && previous.files.length > 0
+      && previous.files.every(file => files.has(file))
+    ) {
+      console.log(`Skipping ${name} search index (unchanged)`);
+      continue;
+    }
+  } catch (error) {
+    if (error.code !== "ENOENT" && !(error instanceof SyntaxError)) throw error;
+  }
+  const words = name === "decliner" ? [...await read("nouns"), ...await read("adjectives")] : await read("verbs");
+  await rm(directory, { recursive: true, force: true });
   await mkdir(directory, { recursive: true });
   const partitions = Array.from({ length: indexPartitions }, () => Object.create(null));
   const add = (key, id, first = false) => {
@@ -52,5 +84,7 @@ for (const name of ["decliner", "conjugator"]) {
       JSON.stringify(words.slice(offset, offset + entryPartitionSize)),
     );
   }
+  // Write last: an interrupted build must never be treated as complete.
+  await writeFile(manifest, JSON.stringify({ fingerprint, files: await readdir(directory) }));
   console.log(`Built ${name} search index (${words.length} entries)`);
 }
