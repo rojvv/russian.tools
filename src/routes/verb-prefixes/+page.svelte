@@ -23,6 +23,7 @@ let query = $state(initial.query);
 let family = $state(initial.family);
 const families = $derived(searchVerbFamilies(query, family));
 let familyOpen = $state(false);
+let enhanced = $state(false);
 let familySearch = $state("");
 let activeOption = $state(0);
 const familyOptions = $derived([
@@ -99,6 +100,7 @@ afterNavigate(({ type }) => {
 });
 
 onMount(() => {
+  enhanced = true;
   const startup = setTimeout(persist, 0);
   const restoreHistory = () => restore(new URL(window.location.href));
   const restorePage = (event: PageTransitionEvent) => {
@@ -158,56 +160,75 @@ function conjugationLink(verb: string) {
     </div>
     <noscript><button type="submit">{copy.apply}</button></noscript>
   </form>
-  <div class="family-picker">
-    <label for="prefix-family">{copy.family}</label>
-    <input
-      id="prefix-family"
-      type="text"
-      role="combobox"
-      aria-expanded={familyOpen}
-      aria-controls="family-options"
-      aria-autocomplete="list"
-      aria-activedescendant={familyOpen && filteredOptions[activeOption]
-      ? `family-option-${activeOption}`
-      : undefined}
-      value={familyOpen ? familySearch : selectedFamily}
-      placeholder={selectedFamily}
-      autocomplete="off"
-      spellcheck="false"
-      onfocus={openFamilies}
-      onclick={openFamilies}
-      onblur={() => {
-        familyOpen = false;
-      }}
-      oninput={(event) => {
-        familySearch = event.currentTarget.value;
-        activeOption = 0;
-        familyOpen = true;
-      }}
-      onkeydown={familyKeydown}
-    />
-    {#if familyOpen}
-      <div class="family-menu">
-        <div id="family-options" role="listbox" aria-label={copy.family}>
-          {#each filteredOptions as option, index (option.id)}
-            <button
-              id={`family-option-${index}`}
-              type="button"
-              role="option"
-              aria-selected={family === option.id}
-              class:active={activeOption === index}
-              tabindex="-1"
-              onpointerdown={(event) => event.preventDefault()}
-              onclick={() => chooseFamily(option.id)}
-            >
-              {option.label}
-            </button>
-          {/each}
+  {#if enhanced}
+    <div class="family-picker">
+      <label for="prefix-family">{copy.family}</label>
+      <input
+        id="prefix-family"
+        type="text"
+        role="combobox"
+        aria-expanded={familyOpen}
+        aria-controls="family-options"
+        aria-autocomplete="list"
+        aria-activedescendant={familyOpen && filteredOptions[activeOption]
+        ? `family-option-${activeOption}`
+        : undefined}
+        value={familyOpen ? familySearch : selectedFamily}
+        placeholder={selectedFamily}
+        autocomplete="off"
+        spellcheck="false"
+        onfocus={openFamilies}
+        onclick={openFamilies}
+        onblur={() => {
+          familyOpen = false;
+        }}
+        oninput={(event) => {
+          familySearch = event.currentTarget.value;
+          activeOption = 0;
+          familyOpen = true;
+        }}
+        onkeydown={familyKeydown}
+      />
+      {#if familyOpen}
+        <div class="family-menu">
+          <div id="family-options" role="listbox" aria-label={copy.family}>
+            {#each filteredOptions as option, index (option.id)}
+              <button
+                id={`family-option-${index}`}
+                type="button"
+                role="option"
+                aria-selected={family === option.id}
+                class:active={activeOption === index}
+                tabindex="-1"
+                onpointerdown={(event) => event.preventDefault()}
+                onclick={() => chooseFamily(option.id)}
+              >
+                {option.label}
+              </button>
+            {/each}
+          </div>
+          {#if !filteredOptions.length}<p role="status">
+              {copy.noFamilies}
+            </p>{/if}
         </div>
-        {#if !filteredOptions.length}<p role="status">{copy.noFamilies}</p>{/if}
+      {/if}
+    </div>
+  {:else}
+    <form class="family-picker" action="/verb-prefixes" method="GET">
+      <input type="hidden" name="lang" value={locale} />
+      <div class="search-field">
+        <label for="prefix-family-native">{copy.family}</label>
+        <select id="prefix-family-native" name="family">
+          {#each familyOptions as option}
+            <option value={option.id} selected={family === option.id}>
+              {option.label}
+            </option>
+          {/each}
+        </select>
       </div>
-    {/if}
-  </div>
+      <button type="submit">{copy.apply}</button>
+    </form>
+  {/if}
 </div>
 <div class="results-bar">
   <p class="count" role="status">{copy.count} {families.length}</p>
@@ -300,8 +321,8 @@ function conjugationLink(verb: string) {
 form { display: flex; align-items: end; gap: 8px; min-width: 0; }
 .search-field { flex: 1; min-width: 0; }
 label { display: block; font-weight: 500; margin-bottom: 8px; }
-input[type="search"], button { min-height: 48px; padding: 10px 12px; font: inherit; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 4px; }
-input[type="search"] { width: 100%; min-width: 0; }
+input[type="search"], select, button { min-height: 48px; padding: 10px 12px; font: inherit; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 4px; }
+input[type="search"], select { width: 100%; min-width: 0; }
 .family-picker { position: relative; flex: 1 1 240px; min-width: 0; }
 .family-picker > input { width: 100%; min-height: 48px; padding: 10px 12px; font: inherit; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 4px; }
 .family-menu { position: absolute; z-index: 10; top: 100%; left: 0; right: 0; max-height: 280px; overflow-y: auto; margin-top: 4px; padding: 4px; background: var(--background); border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 4px 12px #0002; }
