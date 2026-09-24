@@ -14,6 +14,7 @@ import { onMount, tick } from "svelte";
 const i18n = getI18n();
 let text = $state("");
 let ready = $state(false);
+let javascriptEnabled = $state(false);
 let busy = $state(false);
 let error = $state<MessageKey | "">("");
 let questions = $state<StressQuestion[]>([]);
@@ -30,6 +31,7 @@ const current = $derived(questions[index]);
 const answered = $derived(choice !== null || revealed);
 
 onMount(() => {
+  javascriptEnabled = true;
   try {
     worker = new StressWorker();
     worker.onmessage = ({ data }) => {
@@ -120,6 +122,7 @@ async function editText() {
 />
 
 <div class="practice-tool">
+  <noscript><p>{i18n.t("practiceJavascript")}</p></noscript>
   {#if !active}
     <p id="practice-instructions">{i18n.t("practiceIntro")}</p>
     <textarea
@@ -249,14 +252,13 @@ async function editText() {
     {
       error
       ? i18n.t(error)
-      : !ready
+      : javascriptEnabled && !ready
       ? i18n.t("loading")
       : busy
       ? i18n.t("practicePreparing")
       : ""
     }
   </p>
-  <noscript><p>{i18n.t("practiceJavascript")}</p></noscript>
 </div>
 
 <style>

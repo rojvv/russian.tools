@@ -8,6 +8,7 @@ import { onMount } from "svelte";
 
 let editor: HTMLTextAreaElement;
 let ready = $state(false);
+let javascriptEnabled = $state(false);
 let busy = $state(false);
 let error = $state<MessageKey | "">("");
 let composing = false;
@@ -125,6 +126,7 @@ function schedule() {
 }
 
 onMount(() => {
+  javascriptEnabled = true;
   lastValue = editor.value;
   worker = new StressWorker();
   worker.onmessage = ({ data }) => {
@@ -177,6 +179,7 @@ onMount(() => {
 />
 
 <div class="stress-tool">
+  <noscript><p>{i18n.t("stressJavascript")}</p></noscript>
   <textarea
     bind:this={editor}
     aria-describedby="privacy"
@@ -221,7 +224,7 @@ onMount(() => {
       {
         error
         ? i18n.t(error)
-        : !ready
+        : javascriptEnabled && !ready
         ? i18n.t("loading")
         : busy
         ? i18n.t("marking")

@@ -503,7 +503,8 @@ table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
 th { font-size: 13px; font-weight: 500; }
 td { font-size: 14px; }
-button { font: inherit; text-align: left; color: inherit; background: none; border: 0; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; overflow-wrap: anywhere; }
+button { min-height: 44px; padding: 9px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--background); color: inherit; font: inherit; cursor: pointer; }
+@media (hover: hover) { button:hover { border-color: var(--focus); background: var(--hover); } }
 tr.selected { background: var(--hover); }
 .note { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 20px; font-size: 13px; }
 @media (max-width: 700px) { .chooser { grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 32px; } .result { border-left: 0; border-top: 1px solid var(--border); padding: 28px 0 0; } }

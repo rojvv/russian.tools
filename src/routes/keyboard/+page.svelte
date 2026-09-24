@@ -139,6 +139,8 @@ function preserveCaret(event: PointerEvent) {
   canonical="https://russian.tools/keyboard"
 />
 
+<noscript><p class="note">{i18n.t("keyboardJavascript")}</p></noscript>
+
 <textarea
   id="keyboard-text"
   aria-label={i18n.t("keyboardTitle")}
@@ -248,7 +250,6 @@ function preserveCaret(event: PointerEvent) {
   </button>
   <span role="status">{status ? i18n.t(status) : ""}</span>
 </div>
-<noscript><p class="note">{i18n.t("keyboardJavascript")}</p></noscript>
 
 <style>
 textarea { display: block; width: 100%; min-height: 180px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 20px; line-height: 1.7; resize: vertical; }
@@ -268,6 +269,6 @@ button[aria-pressed="true"] { border-color: var(--foreground); background: var(-
 button:not(:disabled):active { transform: translateY(1px); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 20px; }
 [role="status"], .note { font-size: 12px; color: var(--muted); }
-.note { margin-top: 12px; }
+.note { margin-bottom: 12px; }
 @media (max-width: 600px) { .key-row { gap: 3px; } .key { font-size: 17px; min-height: 48px; border-radius: 5px; } .controls button { padding: 8px; font-size: 12px; } .controls { gap: 4px; } }
 </style>
