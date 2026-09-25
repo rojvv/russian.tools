@@ -74,7 +74,7 @@ const toolTitle = $derived(
     ? i18n.t("diminutiveTitle")
     : page.route.id === "/abbreviation"
     ? i18n.t("abbreviationTitle")
-    : page.route.id === "/curse"
+    : page.route.id === "/curse" || page.route.id === "/curse/[slug]"
     ? i18n.t("curseTitle")
     : page.route.id === "/acknowledgements"
     ? i18n.t("acknowledgementsTitle")

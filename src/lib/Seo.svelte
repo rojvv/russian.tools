@@ -1,32 +1,35 @@
 <script lang="ts">
 import { getI18n } from "$lib/i18n-context";
 import { languageUrl, serializeJsonLd } from "$lib/seo";
-let { title, description, canonical, noindex = false, home = false }: {
+let { title, description, canonical, noindex = false, home = false, schema }: {
   title: string;
   description: string;
   canonical: string;
   noindex?: boolean;
   home?: boolean;
+  schema?: Record<string, unknown>;
 } = $props();
 const i18n = getI18n();
 const localizedCanonical = $derived(
   languageUrl(canonical, i18n.locale ?? "en"),
 );
-const structuredData = $derived({
-  "@context": "https://schema.org",
-  "@type": home ? "WebSite" : "WebApplication",
-  name: title,
-  url: localizedCanonical,
-  description,
-  inLanguage: i18n.locale,
-  ...(home
-    ? {}
-    : {
-      applicationCategory: "EducationalApplication",
-      operatingSystem: "Any",
-      browserRequirements: "Requires a modern web browser",
-    }),
-});
+const structuredData = $derived(
+  schema ?? {
+    "@context": "https://schema.org",
+    "@type": home ? "WebSite" : "WebApplication",
+    name: title,
+    url: localizedCanonical,
+    description,
+    inLanguage: i18n.locale,
+    ...(home
+      ? {}
+      : {
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Any",
+        browserRequirements: "Requires a modern web browser",
+      }),
+  },
+);
 </script>
 
 <svelte:head>

@@ -39,7 +39,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   // A preference-dependent URL must resolve to a stable language URL before
   // rendering. Keep this redirect temporary and private because preferences vary.
   if (
-    !building && toolPaths.includes(event.url.pathname)
+    !building && (toolPaths.includes(event.url.pathname) || /^\/curse\/[^/]+$/.test(event.url.pathname))
     && (event.request.method === "GET" || event.request.method === "HEAD")
     && requestedLanguage !== "en" && requestedLanguage !== "ru"
   ) {

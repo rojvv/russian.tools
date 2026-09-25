@@ -154,6 +154,7 @@ test("curse browser renders filtered results and localized navigation without Ja
     assert.match(catalogHtml, /1000/);
     assert.doesNotMatch(catalogHtml, /rel="(?:next|prev)"/);
     assert.match(catalogHtml, /CC BY-SA 4.0/);
+    assert.equal([...catalogHtml.matchAll(/href="\/curse\/[^"?]+\?lang=/g)].length, 1000);
     const last = await request(`/curse?p=25&lang=${locale}`);
     const lastHtml = await last.text();
     assert.equal(last.status, 200);
@@ -207,6 +208,57 @@ test("curse browser renders filtered results and localized navigation without Ja
   const redirect = await request("/curse?q=чёрт", { headers: { "Accept-Language": "ru" } });
   assert.equal(redirect.status, 307);
   assert.ok(redirect.headers.get("location").endsWith("&lang=ru"));
+});
+
+test("all curse sitemap URLs render indexable entry pages with matching canonicals", async () => {
+  const index = await (await request("/sitemap.xml")).text();
+  assert.match(index, /<loc>https:\/\/russian.tools\/sitemaps\/curse.xml<\/loc>/);
+  const response = await request("/sitemaps/curse.xml");
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type"), /application\/xml/);
+  const locations = [...(await response.text()).matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
+  assert.equal(locations.length, 2000);
+  assert.equal(new Set(locations).size, 2000);
+  for (const location of locations) {
+    const url = new URL(location);
+    const response = await request(url.pathname + url.search);
+    assert.equal(response.status, 200, location);
+    const html = await response.text();
+    assert.ok(html.includes(`rel="canonical" href="${location}"`), location);
+    assert.doesNotMatch(html, /name="robots" content="noindex/, location);
+    assert.match(html, /hreflang="en"/);
+    assert.match(html, /hreflang="ru"/);
+    assert.equal([...html.matchAll(/<article\b/g)].length, 1);
+    const scripts = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)];
+    assert.equal(scripts.length, 1);
+    const data = JSON.parse(scripts[0][1]);
+    assert.equal(data["@type"], "WebPage");
+    assert.equal(data.url, location);
+    assert.equal(data.mainEntity["@type"], "DefinedTerm");
+    assert.ok(html.includes(data.mainEntity.name));
+  }
+});
+
+test("curse entry URLs negotiate language, consolidate variants, and reject unknown words", async () => {
+  const path = `/curse/${encodeURIComponent("иди_на_хуй")}`;
+  const negotiated = await request(path, { headers: { "Accept-Language": "ru" } });
+  assert.equal(negotiated.status, 307);
+  assert.equal(negotiated.headers.get("location"), `${path}?lang=ru`);
+  assert.match(negotiated.headers.get("cache-control"), /private.*no-store/);
+  for (const locale of ["en", "ru"]) {
+    const variant = await request(`/curse/${encodeURIComponent("ИДИ́_НА́_ХУЙ")}?utm_source=test&lang=${locale}`);
+    assert.equal(variant.status, 308);
+    assert.equal(variant.headers.get("location"), `${path}?lang=${locale}`);
+    const data = await request(`${path}/__data.json?lang=${locale}&x-sveltekit-invalidated=11`);
+    assert.equal(data.status, 200);
+    const payload = await data.json();
+    assert.equal(payload.type, "data");
+    assert.ok(payload.nodes.some(node => node?.type === "data" && JSON.stringify(node.data).includes("idinakhuy")));
+    assert.equal((await request(`/curse/not-a-word?lang=${locale}`)).status, 404);
+    const imported = await (await request(`/curse/${encodeURIComponent("ебаться")}?lang=${locale}`)).text();
+    assert.match(imported, /CC BY-SA 4.0/);
+    if (locale === "ru") assert.match(imported, /Значение на английском/);
+  }
 });
 
 test("abbreviation lookup and filtered directory render without JavaScript in both languages", async () => {

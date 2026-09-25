@@ -77,6 +77,13 @@ and `lang`; native GET forms also work without JavaScript. The obsolete `p`
 parameter is ignored and removed when URL state is saved. Filtered URLs are
 noindex; the unfiltered catalog is canonical.
 
+Each entry also has an indexable `/curse/[slug]?lang=en|ru` page, linked from
+its catalog heading. Slugs use stress-free Cyrillic with underscores for spaces.
+The dedicated sitemap includes both interface languages for all 1,000 entries.
+Metadata and `DefinedTerm` structured data use the same visible definitions,
+including English-language attribution for imported definitions. Russian UI
+pages do not claim that English definitions have been translated.
+
 ## Earlier expansion references
 
 | Entry        | Reference                                                         |

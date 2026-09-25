@@ -14,6 +14,7 @@ import {
   curseTypes,
   curseWords,
 } from "$lib/curse-data";
+import CurseEntryCard from "$lib/CurseEntryCard.svelte";
 import { getI18n } from "$lib/i18n-context";
 import { languagePath } from "$lib/seo";
 import Seo from "$lib/Seo.svelte";
@@ -143,42 +144,7 @@ onMount(() => {
 </div>
 <div class="entries">
   {#each entries as entry (entry.id)}
-    <article aria-labelledby={`word-${entry.id}`}>
-      <div class="labels">
-        <span class="level">{curseLevels[entry.level][locale]}</span>
-        <span>{curseTypes[entry.type][locale]}</span>
-      </div>
-      <h2 id={`word-${entry.id}`} lang="ru">{entry.word}</h2>
-      <p class="latin" lang="ru-Latn">{entry.latin}</p>
-      {#if locale === "ru" && !entry.meaning.ru}
-        <p class="hint">{copy.englishDefinition}</p>
-      {/if}
-      <p class="meaning" lang={entry.meaning[locale] ? locale : "en"}>
-        {entry.meaning[locale] ?? entry.meaning.en}
-      </p>
-      <h3>{copy.usage}</h3>
-      <p>{entry.usage[locale]}</p>
-      {#if entry.aliases.length}
-        <p class="hint">
-          {copy.variants} <span lang="ru">{entry.aliases.join(", ")}</span>
-        </p>
-      {/if}
-      {#if entry.example}
-        <h3>{copy.example}</h3>
-        <p class="example" lang="ru">{entry.example.ru}</p>
-        <p lang="en">{entry.example.en}</p>
-      {/if}
-      {#if entry.source}
-        <p class="hint">
-          <a href={entry.source}>{
-            entry.imported ? "Wiktionary" : copy.source
-          }</a>
-          {#if entry.imported}
-            · <a href="https://creativecommons.org/licenses/by-sa/4.0/"
-            >CC BY-SA 4.0</a>{/if}
-        </p>
-      {/if}
-    </article>
+    <CurseEntryCard {entry} {locale} linked />
   {:else}
     <p class="empty">{copy.empty}</p>
   {/each}
@@ -201,15 +167,6 @@ input::placeholder { color: var(--placeholder); }
 .filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
 .results-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin: 24px 0 12px; font-size: 13px; }
 .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-article { border: 1px solid var(--border); border-radius: 4px; padding: 20px; overflow-wrap: anywhere; }
-.labels { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; color: var(--muted); font-size: 12px; }
-.level { border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; }
-h2 { margin: 12px 0 0; font-size: 24px; font-weight: 500; }
-.latin { font-size: 13px; }
-.meaning { margin-top: 12px; color: var(--foreground); }
-h3 { margin: 16px 0 4px; font-size: 13px; font-weight: 500; }
-article p { font-size: 14px; }
-.example { color: var(--foreground); }
 .scope { margin-top: 24px; font-size: 13px; }
 .empty { grid-column: 1 / -1; padding: 24px 0; }
 @media (max-width: 600px) { .entries, .filters { grid-template-columns: minmax(0, 1fr); } }

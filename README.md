@@ -221,7 +221,19 @@ for example `/curse?level=obscene&type=verb&lang=en`.
 The GET form works without JavaScript; filtering runs locally when JavaScript
 is enabled. Language switching and history restoration preserve the query and
 filters. Both language URLs are in the sitemap; filtered URLs are noindex.
-Run `node --test tests/curse.test.mjs tests/seo-http.test.mjs`.
+
+Each headword links to a server-rendered, indexable page at `/curse/[slug]`,
+for example `/curse/иди_на_хуй?lang=en`. Slugs omit stress marks and replace
+spaces with underscores. Each page has a unique title and description,
+localized canonical and hreflang links, social metadata, and `DefinedTerm`
+JSON-LD inside a `WebPage`. Imported definitions retain their English language
+label and attribution. Unknown words return 404; spelling-case/stress and
+tracking variants redirect to the canonical entry URL.
+`/sitemaps/curse.xml` lists all 2,000 English/Russian URLs and is included in
+the main sitemap index. Normal page requests serve entries from the local
+catalog without an external dictionary request.
+
+Run `node --test tests/curse.test.mjs tests/curse-seo.test.mjs tests/seo.test.mjs tests/seo-http.test.mjs`.
 
 ## Language and appearance
 
