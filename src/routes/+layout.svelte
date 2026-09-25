@@ -97,7 +97,13 @@ const toolTitle = $derived(
   <header>
     <h1>
       <a class="site-name" href={languagePath("/", i18n.locale ?? "en")}>
-        <svg width="24" height="16" viewBox="0 0 36 24" aria-hidden="true" focusable="false">
+        <svg
+          width="24"
+          height="16"
+          viewBox="0 0 36 24"
+          aria-hidden="true"
+          focusable="false"
+        >
           <path fill="#fff" d="M0 0h36v8H0z" />
           <path fill="#0039a6" d="M0 8h36v8H0z" />
           <path fill="#d52b1e" d="M0 16h36v8H0z" />
