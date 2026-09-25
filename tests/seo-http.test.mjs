@@ -122,6 +122,47 @@ test("dictionary client navigation returns data without a canonical redirect loo
   }
 });
 
+test("word URLs reported as noindex in Search Console remain indexable and listed in sitemaps", async () => {
+  for (
+    const [route, dictionary, words] of [
+      ["decliner", "nouns", ["минутка", "антитело"]],
+      ["conjugator", "verbs", [
+        "виниться",
+        "покряхтывать",
+        "предрешать",
+        "сосватать",
+        "закодировать",
+        "усложнить",
+        "взмолиться",
+        "гарпунить",
+      ]],
+    ]
+  ) {
+    for (const locale of ["en", "ru"]) {
+      const sitemap = await request(`/sitemaps/${dictionary}${locale === "ru" ? "-ru" : ""}.xml`);
+      assert.equal(sitemap.status, 200);
+      const xml = await sitemap.text();
+      for (const word of words) {
+        const path = `/${route}?${encodeURIComponent(word)}&lang=${locale}`;
+        const canonical = `https://russian.tools${path.replaceAll("&", "&amp;")}`;
+        assert.ok(xml.includes(`<loc>${canonical}</loc>`), path);
+        const response = await request(path);
+        assert.equal(response.status, 200, path);
+        assert.doesNotMatch(response.headers.get("x-robots-tag") ?? "", /noindex|\bnone\b/i, path);
+        const html = await response.text();
+        assert.doesNotMatch(
+          html,
+          /<meta\b[^>]*name="(?:robots|googlebot)"[^>]*content="[^"]*(?:noindex|\bnone\b)/i,
+          path,
+        );
+        assert.ok(html.includes(`rel="canonical" href="${canonical}"`), path);
+        assert.match(html, /<table\b/, path);
+        assert.ok(html.includes(word), path);
+      }
+    }
+  }
+});
+
 test("invalid searches stay noindex without an unrelated tool canonical", async () => {
   const response = await request("/conjugator?%3Cinvalid%3E&lang=en");
   assert.equal(response.status, 200);
