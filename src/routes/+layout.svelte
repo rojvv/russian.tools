@@ -96,7 +96,14 @@ const toolTitle = $derived(
 <main class:editor-layout={page.route.id === "/stress" || page.route.id === "/transliterate"}>
   <header>
     <h1>
-      <a href={languagePath("/", i18n.locale ?? "en")}>russian.tools</a>
+      <a class="site-name" href={languagePath("/", i18n.locale ?? "en")}>
+        <svg width="24" height="16" viewBox="0 0 36 24" aria-hidden="true" focusable="false">
+          <path fill="#fff" d="M0 0h36v8H0z" />
+          <path fill="#0039a6" d="M0 8h36v8H0z" />
+          <path fill="#d52b1e" d="M0 16h36v8H0z" />
+        </svg>
+        russian.tools
+      </a>
       {#if toolTitle}<span>{toolTitle}</span>{/if}
     </h1>
     <nav aria-label={i18n.t("language")} data-sveltekit-preload-data="off">
@@ -154,6 +161,8 @@ header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; mar
 header h1 { margin: 0; }
 header h1 span { margin: 0; font-weight: 400; color: var(--subtle); }
 header a { text-decoration: none; }
+.site-name { display: inline-flex; align-items: center; gap: 8px; }
+.site-name svg { flex-shrink: 0; }
 nav { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 12px; color: var(--subtle); }
 nav a { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
 nav a[aria-current="true"] { color: var(--foreground); }
