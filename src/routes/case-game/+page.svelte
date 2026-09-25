@@ -15,6 +15,22 @@ import type { ActionData, PageData } from "./$types";
 let { data, form }: { data: PageData; form: ActionData } = $props();
 let enhanced = $state(false);
 onMount(() => {
+  // Preserve server-rendered rounds and submitted results before changing views.
+  if (exercise) {
+    kind = exercise.kind;
+    count = exercise.count;
+    questions = exercise.questions;
+    active = questions.length > 0;
+    if (form) {
+      responses = questions.map((question, index) => ({
+        question,
+        answer: form.answers[index],
+        result: form.correct[index] ? "correct" : "incorrect",
+      }));
+      score = form.correct.filter(Boolean).length;
+      index = questions.length;
+    }
+  }
   enhanced = true;
 });
 const exercise = $derived(form?.round ?? data.round);
