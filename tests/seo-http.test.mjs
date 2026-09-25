@@ -134,7 +134,7 @@ test("every tool sitemap URL renders a matching canonical and allows indexing", 
   const response = await request("/sitemaps/tools.xml");
   assert.equal(response.status, 200);
   const locations = [...(await response.text()).matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-  assert.equal(locations.length, 26);
+  assert.equal(locations.length, 28);
   for (const location of locations) {
     const url = new URL(location);
     const page = await request(url.pathname + url.search);
@@ -143,6 +143,70 @@ test("every tool sitemap URL renders a matching canonical and allows indexing", 
     assert.ok(html.includes(`rel="canonical" href="${location}"`), location);
     assert.doesNotMatch(html, /name="robots" content="noindex/, location);
   }
+});
+
+test("curse browser renders filtered results and localized navigation without JavaScript", async () => {
+  for (const locale of ["en", "ru"]) {
+    const catalog = await request(`/curse?lang=${locale}`);
+    const catalogHtml = await catalog.text();
+    assert.equal(catalog.status, 200);
+    assert.equal([...catalogHtml.matchAll(/<article\b/g)].length, 1000);
+    assert.match(catalogHtml, /1000/);
+    assert.doesNotMatch(catalogHtml, /rel="(?:next|prev)"/);
+    assert.match(catalogHtml, /CC BY-SA 4.0/);
+    const last = await request(`/curse?p=25&lang=${locale}`);
+    const lastHtml = await last.text();
+    assert.equal(last.status, 200);
+    assert.equal([...lastHtml.matchAll(/<article\b/g)].length, 1000);
+    assert.doesNotMatch(lastHtml, /rel="(?:next|prev)"/);
+    assert.match(lastHtml, /rel="canonical"/);
+    const idi = await request(`/curse?q=idi%20na%20khuy&lang=${locale}`);
+    const idiHtml = await idi.text();
+    assert.match(idiHtml, /id="word-idinakhuy"/);
+    assert.match(idiHtml, /иди́ на́ хуй/);
+    assert.match(idiHtml, /lang="ru-Latn">idi na khuy</);
+    const imported = await request(`/curse?q=ебаться&lang=${locale}`);
+    const importedHtml = await imported.text();
+    assert.match(importedHtml, /id="word-dict-ебаться"/);
+    assert.match(importedHtml, /class="meaning[^"]*" lang="en"/);
+    if (locale === "ru") assert.match(importedHtml, /Значение на английском/);
+    const matches = await (await request(`/curse?q=to&level=obscene&type=verb&lang=${locale}`)).text();
+    assert.equal([...matches.matchAll(/<article\b/g)].length, 72);
+    assert.doesNotMatch(matches, /rel="(?:next|prev)"/);
+    const phrase = await request(`/curse?q=нифига%20себе&level=mild&type=exclamation&lang=${locale}`);
+    const phraseHtml = await phrase.text();
+    assert.equal(phrase.status, 200);
+    assert.match(phraseHtml, /id="word-nifigasebe"/);
+    assert.doesNotMatch(phraseHtml, /id="word-nifiga"|id="word-nikhuyasebe"/);
+    const response = await request(`/curse?q=blyat&level=obscene&type=exclamation&lang=${locale}`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /id="word-blyad"/);
+    assert.doesNotMatch(html, /id="word-blin"/);
+    assert.match(html, /name="robots" content="noindex, follow"/);
+    assert.doesNotMatch(html, /rel="canonical"/);
+    assert.ok(html.includes(locale === "ru" ? "Словарь ругательств" : "Curse Word Browser"));
+    assert.ok(html.includes(locale === "ru" ? "Употребление" : "Usage"));
+    const expanded = await request(`/curse?q=pizdit&level=obscene&type=verb&lang=${locale}`);
+    const expandedHtml = await expanded.text();
+    assert.equal(expanded.status, 200);
+    assert.match(expandedHtml, /id="word-pizdit"/);
+    assert.ok(expandedHtml.includes("пи́здить"));
+    assert.ok(expandedHtml.includes("href=\"https://ru.wiktionary.org/wiki/пиздить\""));
+    assert.ok(expandedHtml.includes(locale === "ru" ? "Словарная статья" : "Dictionary reference"));
+    assert.ok((await (await request(`/?lang=${locale}`)).text()).includes(`/curse?lang=${locale}`));
+  }
+  const empty = await request("/curse?q=%3Cscript%3E&lang=en");
+  const html = await empty.text();
+  assert.match(html, /No matching entries/);
+  assert.match(html, /value="&lt;script(?:>|&gt;)"/);
+  const filtered = await request("/curse?level=mild&type=exclamation&lang=en");
+  const filteredHtml = await filtered.text();
+  assert.match(filteredHtml, /id="word-blin"/);
+  assert.doesNotMatch(filteredHtml, /id="word-blyad"|id="word-fignya"/);
+  const redirect = await request("/curse?q=чёрт", { headers: { "Accept-Language": "ru" } });
+  assert.equal(redirect.status, 307);
+  assert.ok(redirect.headers.get("location").endsWith("&lang=ru"));
 });
 
 test("abbreviation lookup and filtered directory render without JavaScript in both languages", async () => {
@@ -213,7 +277,7 @@ test("transliteration supports both direction URLs on one route", async () => {
 });
 
 test("native lookup and directory forms expose submit controls and server-rendered results", async () => {
-  for (const route of ["decliner", "conjugator", "abbreviation", "diminutive", "verb-prefixes", "motion"]) {
+  for (const route of ["decliner", "conjugator", "abbreviation", "diminutive", "verb-prefixes", "motion", "curse"]) {
     const response = await request(`/${route}?lang=en`);
     assert.equal(response.status, 200);
     const html = await response.text();

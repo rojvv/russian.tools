@@ -200,6 +200,29 @@ This is a curated selection, not a complete dictionary or a contextual predictio
 engine. See `src/lib/abbreviations-SOURCE.md` for editorial decisions and reference
 checks. Run `node --test tests/abbreviation.test.mjs tests/seo-http.test.mjs`.
 
+## Curse Word Browser
+
+At `/curse`, browse **1,000 distinct Russian swear words, insults, and derogatory
+expressions**. The 101 curated entries have bilingual meanings, usage notes,
+and original translated examples, including `иди́ на́ хуй` / `idi na khuy`.
+Another 899 entries use English Wiktionary definitions extracted by Kaikki,
+attributed per card under CC BY-SA 4.0. These definitions stay in English and
+are labeled as such in the Russian interface. Stress is shown where supplied.
+
+Search accepts Cyrillic, Latin reading aids, English meanings, and selected
+spelling variants. It ignores capitalization, stress, and е/ё differences,
+ranks exact headwords ahead of aliases and substring matches, and combines
+intensity and expression-type filters. Intensity is approximate. This selected
+catalog is not a complete dictionary or a profanity detector.
+See `src/lib/curse-SOURCE.md` for scope, attribution, and import instructions.
+
+All 1,000 entries render directly in one list. Queries and filters are shareable,
+for example `/curse?level=obscene&type=verb&lang=en`.
+The GET form works without JavaScript; filtering runs locally when JavaScript
+is enabled. Language switching and history restoration preserve the query and
+filters. Both language URLs are in the sitemap; filtered URLs are noindex.
+Run `node --test tests/curse.test.mjs tests/seo-http.test.mjs`.
+
 ## Language and appearance
 
 The shared footer links to `/acknowledgements`, which collects the OpenRussian

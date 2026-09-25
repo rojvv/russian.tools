@@ -10,6 +10,7 @@ export const toolPaths = [
   "/verb-prefixes",
   "/diminutive",
   "/abbreviation",
+  "/curse",
   "/acknowledgements",
   "/case-game",
   "/transliterate",

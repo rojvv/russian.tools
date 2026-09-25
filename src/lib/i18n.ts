@@ -13,6 +13,7 @@ export const messages = {
     latinPosition: "Character",
 
     abbreviationTitle: "Abbreviation Decoder",
+    curseTitle: "Curse Word Browser",
     keyboardTitle: "Keyboard & Layout Fixer",
     keyboardSeoTitle: "Russian Keyboard & Layout Fixer – Type Cyrillic Online",
     keyboardDescription:
@@ -191,6 +192,7 @@ export const messages = {
     latinPosition: "Символ",
 
     abbreviationTitle: "Расшифровка сокращений",
+    curseTitle: "Словарь ругательств",
     keyboardTitle: "Клавиатура и исправление раскладки",
     keyboardSeoTitle: "Русская клавиатура и исправление раскладки онлайн",
     keyboardDescription:

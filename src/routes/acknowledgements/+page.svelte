@@ -119,6 +119,33 @@ const ru = $derived(i18n.locale === "ru");
   </p>
 </section>
 <section>
+  <h2>{ru ? "Словарь ругательств" : "Curse words"}</h2>
+  <p>
+    {
+      ru
+      ? "В каталоге 1 000 статей: 101 статья с авторскими двуязычными пояснениями и примерами и 899 статей с английскими определениями участников"
+      : "The 1,000-entry catalog includes 101 entries with original bilingual notes and examples, and 899 entries with English definitions by contributors to"
+    }
+    <a href="https://en.wiktionary.org/">{
+      ru ? "английского Викисловаря" : "English Wiktionary"
+    }</a>,
+    {ru ? "извлечёнными через" : "extracted via"}
+    <a href="https://kaikki.org/dictionary/Russian/index.html"
+    >Kaikki / Wiktextract</a>.
+    {
+      ru
+      ? "Адаптированные словарные данные доступны по лицензии"
+      : "The adapted dictionary data is available under"
+    }
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    {
+      ru
+      ? "Словарные значения отобраны и объединены, добавлены транслитерация и условные категории. Каждая импортированная статья ссылается на источник и историю авторов. Определения остаются на английском; цитаты и примеры из источника не импортированы. Степень грубости зависит от контекста."
+      : "Dictionary senses are selected and combined, with reading aids and approximate categories added. Each imported entry links to its source and contributor history. Definitions remain in English; source quotations and examples are not imported. Intensity depends on context."
+    }
+  </p>
+</section>
+<section>
   <h2>{ru ? "Транслитерация" : "Transliteration"}</h2>
   <p>
     {
