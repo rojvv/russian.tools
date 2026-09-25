@@ -4,9 +4,11 @@ import { getI18n } from "$lib/i18n-context";
 import {
   type Edit,
   editText,
+  fixKeyboardLayout,
   keyboardLimit,
   keyboardRows,
   keyCharacter,
+  type LayoutDirection,
   physicalCharacter,
 } from "$lib/keyboard";
 import Seo from "$lib/Seo.svelte";
@@ -76,6 +78,20 @@ function travel(back: boolean) {
     undo = [...undo, current];
   }
   restore(next);
+}
+
+function fixLayout(direction: LayoutDirection) {
+  if (composing) return;
+  const previous = snapshot();
+  const selected = previous.start !== previous.end;
+  const start = selected ? previous.start : 0;
+  const end = selected ? previous.end : previous.value.length;
+  const value = previous.value.slice(0, start)
+    + fixKeyboardLayout(previous.value.slice(start, end), direction)
+    + previous.value.slice(end);
+  if (value === previous.value) return;
+  remember(previous);
+  restore({ ...previous, value });
 }
 
 function keydown(event: KeyboardEvent) {
@@ -164,6 +180,25 @@ function preserveCaret(event: PointerEvent) {
   maxlength={keyboardLimit}
   placeholder="Пишите здесь…"
 ></textarea>
+
+<div class="layout-fixer" role="group" aria-label={i18n.t("keyboardFixTitle")}>
+  <span>{i18n.t("keyboardFixTitle")}</span>
+  <button
+    disabled={!text}
+    onpointerdown={preserveCaret}
+    onclick={() => fixLayout("en-to-ru")}
+  >
+    {i18n.t("keyboardFixToRussian")}
+  </button>
+  <button
+    disabled={!text}
+    onpointerdown={preserveCaret}
+    onclick={() => fixLayout("ru-to-en")}
+  >
+    {i18n.t("keyboardFixToEnglish")}
+  </button>
+</div>
+<p class="note">{i18n.t("keyboardFixHint")}</p>
 
 <label class="mapping">
   <input type="checkbox" bind:checked={mapping} />
@@ -268,6 +303,7 @@ button[aria-pressed="true"] { border-color: var(--foreground); background: var(-
 @media (hover: hover) { button:not(:disabled):hover { border-color: var(--focus); background: var(--hover); } button[aria-pressed="true"]:hover { background: var(--foreground); } }
 button:not(:disabled):active { transform: translateY(1px); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 20px; }
+.layout-fixer { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0 8px; }
 [role="status"], .note { font-size: 12px; color: var(--muted); }
 .note { margin-bottom: 12px; }
 @media (max-width: 600px) { .key-row { gap: 3px; } .key { font-size: 17px; min-height: 48px; border-radius: 5px; } .controls button { padding: 8px; font-size: 12px; } .controls { gap: 4px; } }

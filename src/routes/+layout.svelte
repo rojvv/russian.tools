@@ -91,7 +91,7 @@ const toolTitle = $derived(
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<main class:editor-layout={page.route.id === "/stress"}>
+<main class:editor-layout={page.route.id === "/stress" || page.route.id === "/transliterate"}>
   <header>
     <h1>
       <a href={languagePath("/", i18n.locale ?? "en")}>russian.tools</a>

@@ -45,6 +45,26 @@ export const keyboardRows = [
   ),
 ];
 
+export type LayoutDirection = "en-to-ru" | "ru-to-en";
+
+const englishShiftRows = ["~!@#$%^&*()_+", "QWERTYUIOP{}|", "ASDFGHJKL:\"", "ZXCVBNM<>?"];
+const layoutPairs = keyboardRows.flatMap((keys, rowIndex) =>
+  keys.flatMap((key, index) => [
+    [key.hint.toLowerCase(), key.lower] as const,
+    [englishShiftRows[rowIndex][index], key.upper] as const,
+  ])
+);
+const layoutMaps = {
+  "en-to-ru": new Map(layoutPairs),
+  "ru-to-en": new Map(layoutPairs.map(([english, russian]) => [russian, english])),
+};
+
+/** Recover text typed using US QWERTY or Russian ЙЦУКЕН key positions. */
+export function fixKeyboardLayout(value: string, direction: LayoutDirection): string {
+  const mapping = layoutMaps[direction];
+  return Array.from(value, character => mapping.get(character) ?? character).join("");
+}
+
 export function keyCharacter(key: KeyboardKey, shift: boolean, caps: boolean): string {
   const letter = key.lower !== key.lower.toUpperCase();
   return (letter ? shift !== caps : shift) ? key.upper : key.lower;

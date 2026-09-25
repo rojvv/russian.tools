@@ -235,8 +235,9 @@ async function copy() {
 </form>
 
 <style>
-.directions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-section { margin-top: 24px; }
+form { display: flex; flex-direction: column; flex: 1; }
+.directions { display: flex; flex-shrink: 0; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+section { flex-shrink: 0; margin-top: 24px; }
 h2 { font-size: 18px; margin: 0 0 8px; }
 fieldset { min-width: 0; margin: 16px 0; padding: 12px; border: 1px solid var(--border); border-radius: 8px; }
 legend { max-width: 100%; overflow-wrap: anywhere; font-size: 13px; color: var(--muted); }
@@ -248,7 +249,7 @@ button[aria-pressed="true"] { background: var(--foreground); color: var(--backgr
 .editors { display: grid; flex: 1; min-height: 114px; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: minmax(114px, 1fr); gap: 20px; }
 .editors > div { display: flex; flex-direction: column; min-height: 0; }
 label { display: block; margin-bottom: 8px; font-weight: 500; }
-textarea { display: block; flex: 1; width: 100%; height: 220px; min-height: 150px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 18px; line-height: 1.8; resize: vertical; }
+textarea { display: block; flex: 1; width: 100%; height: 0; min-height: 80px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; font-size: 18px; line-height: 1.8; resize: none; }
 textarea::placeholder { color: var(--placeholder); }
 .actions { display: flex; flex-shrink: 0; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
 button { min-height: 44px; padding: 9px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: inherit; font: inherit; cursor: pointer; }

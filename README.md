@@ -321,7 +321,15 @@ are skipped. Answers accept dictionary alternatives, optional stress marks, and
 е for ё. Typing a correct answer automatically advances to the next word. Checking an incorrect answer or revealing locks the answer; only correct answers score. A live count tracks correct answers, and the final overview shows each prompt, your answer, and the expected forms.
 English and Russian interfaces, keyboard input, and system color schemes are supported.
 
-## Virtual Russian Keyboard
+## Russian Keyboard & Layout Fixer
+
+At `/keyboard`, fix text typed in the wrong layout with English → Russian
+(`ghbdtn` → `привет`) or Russian → English (`руддщ` → `hello`). Conversion uses
+US QWERTY and Russian ЙЦУКЕН key positions, including shifted punctuation
+(`Ghbdtn? vbh/` → `Привет, мир.`). It preserves letter case, whitespace, and
+unmapped characters. Select a passage to convert just that selection, or leave
+nothing selected to convert the whole editor. Each conversion supports undo and
+redo and uses the existing copy button. Processing stays entirely in the browser.
 
 At `/keyboard`, type using a clickable standard Russian ЙЦУКЕН layout, including
 ё, numbers, punctuation, one-shot Shift, Caps Lock, space, newline, and backspace.

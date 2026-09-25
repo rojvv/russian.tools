@@ -13,10 +13,15 @@ export const messages = {
     latinPosition: "Character",
 
     abbreviationTitle: "Abbreviation Decoder",
-    keyboardTitle: "Virtual Keyboard",
-    keyboardSeoTitle: "Virtual Russian Keyboard – Type Cyrillic Online",
+    keyboardTitle: "Keyboard & Layout Fixer",
+    keyboardSeoTitle: "Russian Keyboard & Layout Fixer – Type Cyrillic Online",
     keyboardDescription:
-      "Type Russian with a virtual ЙЦУКЕН keyboard or map your physical keys to Cyrillic. Copy your text instantly.",
+      "Fix text typed in the wrong English or Russian keyboard layout, or type Cyrillic with a virtual keyboard. Copy your text instantly.",
+    keyboardFixTitle: "Fix keyboard layout",
+    keyboardFixToRussian: "English → Russian",
+    keyboardFixToEnglish: "Russian → English",
+    keyboardFixHint:
+      "ghbdtn → привет · руддщ → hello. Converts selected text, or all text if nothing is selected. Uses US English and Russian key positions, including punctuation. Undo restores the original.",
     keyboardMapping: "Map physical keys to Russian in this text box",
     keyboardSpace: "Space",
     keyboardEnter: "Enter",
@@ -186,10 +191,15 @@ export const messages = {
     latinPosition: "Символ",
 
     abbreviationTitle: "Расшифровка сокращений",
-    keyboardTitle: "Виртуальная клавиатура",
-    keyboardSeoTitle: "Виртуальная русская клавиатура онлайн",
+    keyboardTitle: "Клавиатура и исправление раскладки",
+    keyboardSeoTitle: "Русская клавиатура и исправление раскладки онлайн",
     keyboardDescription:
-      "Печатайте по-русски на виртуальной клавиатуре ЙЦУКЕН или с помощью физических клавиш. Сразу копируйте готовый текст.",
+      "Исправляйте текст, набранный в неверной английской или русской раскладке, или печатайте на виртуальной клавиатуре. Сразу копируйте готовый текст.",
+    keyboardFixTitle: "Исправить раскладку",
+    keyboardFixToRussian: "Английская → Русская",
+    keyboardFixToEnglish: "Русская → Английская",
+    keyboardFixHint:
+      "ghbdtn → привет · руддщ → hello. Преобразуется выделенный текст, а если выделения нет — весь текст. Используются позиции клавиш английской раскладки США и русской, включая знаки препинания. Кнопка «Отменить» вернёт исходный текст.",
     keyboardMapping: "Вводить русские буквы физическими клавишами в этом поле",
     keyboardSpace: "Пробел",
     keyboardEnter: "Перенос строки",
