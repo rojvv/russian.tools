@@ -86,7 +86,6 @@ export const curseCopy = {
     submit: "Search",
     empty: "No matching entries. Try a different word or clear the filters.",
     usage: "Usage",
-    source: "Dictionary reference",
     example: "Example",
     variants: "Related forms / spellings:",
     scope:
@@ -112,7 +111,6 @@ export const curseCopy = {
     submit: "Найти",
     empty: "Совпадений нет. Попробуйте другое слово или сбросьте фильтры.",
     usage: "Употребление",
-    source: "Словарная статья",
     example: "Пример",
     variants: "Другие формы / написания:",
     scope:

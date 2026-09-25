@@ -153,7 +153,7 @@ onMount(() => {
 <p class="hint">
   {copy.attribution} <a href="https://creativecommons.org/licenses/by-sa/4.0/"
   >CC BY-SA 4.0</a>.
-  <a href={languagePath("/acknowledgements", locale)}>{
+  <a href={languagePath("/acknowledgements#curse-words", locale)}>{
     locale === "ru" ? "Источники" : "Sources"
   }</a>
 </p>

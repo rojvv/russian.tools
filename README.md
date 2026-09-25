@@ -206,7 +206,8 @@ At `/curse`, browse **1,000 distinct Russian swear words, insults, and derogator
 expressions**. The 101 curated entries have bilingual meanings, usage notes,
 and original translated examples, including `иди́ на́ хуй` / `idi na khuy`.
 Another 899 entries use English Wiktionary definitions extracted by Kaikki,
-attributed per card under CC BY-SA 4.0. These definitions stay in English and
+attributed on the acknowledgements page under CC BY-SA 4.0, with references
+for each sourced entry. These definitions stay in English and
 are labeled as such in the Russian interface. Stress is shown where supplied.
 
 Search accepts Cyrillic, Latin reading aids, English meanings, and selected

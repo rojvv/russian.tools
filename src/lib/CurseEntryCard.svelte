@@ -42,14 +42,6 @@ const copy = $derived(curseCopy[locale]);
     <p class="example" lang="ru">{entry.example.ru}</p>
     <p lang="en">{entry.example.en}</p>
   {/if}
-  {#if entry.source}
-    <p class="hint">
-      <a href={entry.source}>{entry.imported ? "Wiktionary" : copy.source}</a>
-      {#if entry.imported}
-        · <a href="https://creativecommons.org/licenses/by-sa/4.0/"
-        >CC BY-SA 4.0</a>{/if}
-    </p>
-  {/if}
 </article>
 
 <style>

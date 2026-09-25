@@ -146,6 +146,7 @@ test("every tool sitemap URL renders a matching canonical and allows indexing", 
 });
 
 test("curse browser renders filtered results and localized navigation without JavaScript", async () => {
+  const { curseWords } = await server.ssrLoadModule("/src/lib/curse-data.ts");
   for (const locale of ["en", "ru"]) {
     const catalog = await request(`/curse?lang=${locale}`);
     const catalogHtml = await catalog.text();
@@ -154,6 +155,15 @@ test("curse browser renders filtered results and localized navigation without Ja
     assert.match(catalogHtml, /1000/);
     assert.doesNotMatch(catalogHtml, /rel="(?:next|prev)"/);
     assert.match(catalogHtml, /CC BY-SA 4.0/);
+    for (const [article] of catalogHtml.matchAll(/<article\b[\s\S]*?<\/article>/g)) {
+      assert.doesNotMatch(article, /wiktionary\.org|creativecommons\.org|Dictionary reference|Словарная статья/);
+    }
+    const credits = await (await request(`/acknowledgements?lang=${locale}`)).text();
+    assert.match(credits, /id="curse-words"/);
+    assert.match(credits, /CC BY-SA 4.0/);
+    for (const entry of curseWords.filter(entry => entry.source)) {
+      assert.ok(credits.includes(`href="${entry.source}"`), entry.word);
+    }
     assert.equal([...catalogHtml.matchAll(/href="\/curse\/[^"?]+\?lang=/g)].length, 1000);
     const last = await request(`/curse?p=25&lang=${locale}`);
     const lastHtml = await last.text();
@@ -193,8 +203,7 @@ test("curse browser renders filtered results and localized navigation without Ja
     assert.equal(expanded.status, 200);
     assert.match(expandedHtml, /id="word-pizdit"/);
     assert.ok(expandedHtml.includes("пи́здить"));
-    assert.ok(expandedHtml.includes("href=\"https://ru.wiktionary.org/wiki/пиздить\""));
-    assert.ok(expandedHtml.includes(locale === "ru" ? "Словарная статья" : "Dictionary reference"));
+    assert.ok(expandedHtml.includes(`/acknowledgements?lang=${locale}#curse-words`));
     assert.ok((await (await request(`/?lang=${locale}`)).text()).includes(`/curse?lang=${locale}`));
   }
   const empty = await request("/curse?q=%3Cscript%3E&lang=en");
@@ -256,7 +265,8 @@ test("curse entry URLs negotiate language, consolidate variants, and reject unkn
     assert.ok(payload.nodes.some(node => node?.type === "data" && JSON.stringify(node.data).includes("idinakhuy")));
     assert.equal((await request(`/curse/not-a-word?lang=${locale}`)).status, 404);
     const imported = await (await request(`/curse/${encodeURIComponent("ебаться")}?lang=${locale}`)).text();
-    assert.match(imported, /CC BY-SA 4.0/);
+    assert.ok(imported.includes(`/acknowledgements?lang=${locale}#curse-words`));
+    assert.doesNotMatch(imported.match(/<article\b[\s\S]*?<\/article>/)[0], /wiktionary\.org|creativecommons\.org/);
     if (locale === "ru") assert.match(imported, /Значение на английском/);
   }
 });

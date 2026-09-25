@@ -1,8 +1,10 @@
 <script lang="ts">
+import { curseWords } from "$lib/curse-data";
 import { getI18n } from "$lib/i18n-context";
 import Seo from "$lib/Seo.svelte";
 const i18n = getI18n();
 const ru = $derived(i18n.locale === "ru");
+const curseReferences = curseWords.filter((entry) => entry.source);
 </script>
 
 <Seo
@@ -119,7 +121,9 @@ const ru = $derived(i18n.locale === "ru");
   </p>
 </section>
 <section>
-  <h2>{ru ? "Словарь ругательств" : "Curse words"}</h2>
+  <h2 id="curse-words">
+    {ru ? "Словарь ругательств" : "Curse words"}
+  </h2>
   <p>
     {
       ru
@@ -140,10 +144,22 @@ const ru = $derived(i18n.locale === "ru");
     <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
     {
       ru
-      ? "Словарные значения отобраны и объединены, добавлены транслитерация и условные категории. Каждая импортированная статья ссылается на источник и историю авторов. Определения остаются на английском; цитаты и примеры из источника не импортированы. Степень грубости зависит от контекста."
-      : "Dictionary senses are selected and combined, with reading aids and approximate categories added. Each imported entry links to its source and contributor history. Definitions remain in English; source quotations and examples are not imported. Intensity depends on context."
+      ? "Словарные значения отобраны и объединены, добавлены транслитерация и условные категории. Ссылки на источники приведены ниже; история каждой словарной статьи содержит сведения об авторах. Определения остаются на английском; цитаты и примеры из источника не импортированы. Степень грубости зависит от контекста."
+      : "Dictionary senses are selected and combined, with reading aids and approximate categories added. Entry references appear below; each dictionary article’s history identifies its contributors. Definitions remain in English; source quotations and examples are not imported. Intensity depends on context."
     }
   </p>
+  <details>
+    <summary>
+      {ru ? "Источники по словам" : "References by word"} ({
+        curseReferences.length
+      })
+    </summary>
+    <ul class="curse-references">
+      {#each curseReferences as entry (entry.id)}
+        <li><a href={entry.source} lang="ru">{entry.word}</a></li>
+      {/each}
+    </ul>
+  </details>
 </section>
 <section>
   <h2>{ru ? "Транслитерация" : "Transliteration"}</h2>
@@ -199,4 +215,8 @@ const ru = $derived(i18n.locale === "ru");
 section { margin-top: 32px; }
 h2 { font-size: 20px; font-weight: 500; margin: 0 0 10px; }
 p + p { margin-top: 12px; }
+details { margin-top: 16px; }
+summary { cursor: pointer; }
+.curse-references { columns: 12rem; column-gap: 24px; padding-left: 20px; }
+.curse-references li { break-inside: avoid; margin-bottom: 4px; }
 </style>

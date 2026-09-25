@@ -26,7 +26,7 @@ const seo = $derived(curseEntrySeo(data.entry, locale));
 <CurseEntryCard entry={data.entry} {locale} />
 <p class="scope">{copy.scope}</p>
 <p>
-  <a href={languagePath("/acknowledgements", locale)}>{
+  <a href={languagePath("/acknowledgements#curse-words", locale)}>{
     locale === "ru" ? "Источники" : "Sources"
   }</a>
 </p>

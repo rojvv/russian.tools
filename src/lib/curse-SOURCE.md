@@ -24,7 +24,9 @@ Other starter references include Russian Wiktionary entries for
 Copyright English Wiktionary contributors. The 899 imported definitions and
 this adapted dictionary data are available under
 [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/).
-Each card links to its Wiktionary article, whose history identifies contributors.
+The acknowledgements page lists each entry's Wiktionary article, whose history
+identifies contributors. The browser and entry pages link to this section
+through a Sources link; references are not displayed within individual cards.
 Extraction: [Kaikki / Wiktextract](https://kaikki.org/dictionary/Russian/index.html).
 Downloaded on 2026-09-25 from the
 [vulgar](https://kaikki.org/dictionary/Russian/tags/hR/vulgar/index.html) and
