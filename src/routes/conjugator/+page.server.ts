@@ -1,4 +1,5 @@
 import type { Verb } from "$lib/conjugation";
+import { conjugationSeo } from "$lib/conjugation-seo";
 import { readVerbQuery } from "$lib/conjugation-url";
 import { messages } from "$lib/i18n";
 import { validSearchText } from "$lib/search-text";
@@ -26,7 +27,7 @@ export const load: PageServerLoad = async ({ url, fetch, locals, setHeaders }) =
     setHeaders({ "Retry-After": "60", "Cache-Control": "no-store" });
     error(503, messages[locals.locale].dictionaryError);
   }
-  const seo = dictionarySeo("/conjugator", query, matches[0]?.bare);
+  const seo = conjugationSeo(query, matches[0]);
   if (!seo.noindex) {
     const target = canonicalRedirect(url, seo.canonical, locals.locale);
     if (target) redirect(308, target);

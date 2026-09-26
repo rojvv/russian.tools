@@ -1,10 +1,10 @@
 <script lang="ts">
+import { conjugationSeo } from "$lib/conjugation-seo";
 import { loadDictionary } from "$lib/dictionary-data";
 import type { MessageKey } from "$lib/i18n";
 import { getI18n } from "$lib/i18n-context";
 import NativeForms from "$lib/NativeForms.svelte";
 import { validSearchText } from "$lib/search-text";
-import { dictionarySeo } from "$lib/seo";
 import Seo from "$lib/Seo.svelte";
 const i18n = getI18n();
 import { afterNavigate, replaceState } from "$app/navigation";
@@ -199,7 +199,7 @@ const resultTitle = $derived(
 <Seo
   title={`${resultTitle} | russian.tools`}
   description={verb ? `${verb.bare}: ${i18n.t("verbDescription")}` : i18n.t("verbDescription")}
-  {...dictionarySeo("/conjugator", query, verb?.bare)}
+  {...conjugationSeo(query, verb)}
 />
 
 <form

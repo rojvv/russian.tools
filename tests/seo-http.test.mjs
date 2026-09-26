@@ -163,6 +163,46 @@ test("word URLs reported as noindex in Search Console remain indexable and liste
   }
 });
 
+test("empty conjugations and invalid headwords are excluded from both language sitemaps", async () => {
+  for (const locale of ["en", "ru"]) {
+    for (
+      const [route, dictionary, words] of [
+        ["conjugator", "verbs", ["зафиксировать", "производиться"]],
+        ["decliner", "nouns", ["MP3-плеер", "рoв"]],
+      ]
+    ) {
+      const xml = await (await request(`/sitemaps/${dictionary}${locale === "ru" ? "-ru" : ""}.xml`)).text();
+      for (const word of words) {
+        const path = `/${route}?${encodeURIComponent(word)}&lang=${locale}`;
+        assert.ok(!xml.includes(path.replaceAll("&", "&amp;")), path);
+        const response = await request(path);
+        assert.equal(response.status, 200, path);
+        const html = await response.text();
+        assert.match(html, /name="robots" content="noindex, follow"/, path);
+        assert.doesNotMatch(html, /rel="canonical"|hreflang=/, path);
+      }
+    }
+  }
+});
+
+test("case variants share one sitemap URL matching the redirect target", async () => {
+  for (const locale of ["en", "ru"]) {
+    const xml = await (await request(`/sitemaps/nouns${locale === "ru" ? "-ru" : ""}.xml`)).text();
+    const variant = `/decliner?${encodeURIComponent("Телец")}&lang=${locale}`;
+    const canonical = `/decliner?${encodeURIComponent("телец")}&lang=${locale}`;
+    assert.ok(!xml.includes(variant.replaceAll("&", "&amp;")));
+    assert.ok(xml.includes(canonical.replaceAll("&", "&amp;")));
+    const response = await request(variant);
+    assert.equal(response.status, 308);
+    assert.equal(response.headers.get("location"), canonical);
+    const page = await request(canonical);
+    assert.equal(page.status, 200);
+    const html = await page.text();
+    assert.ok(html.includes(`rel="canonical" href="https://russian.tools${canonical.replaceAll("&", "&amp;")}"`));
+    assert.doesNotMatch(html, /name="robots" content="noindex/);
+  }
+});
+
 test("invalid searches stay noindex without an unrelated tool canonical", async () => {
   const response = await request("/conjugator?%3Cinvalid%3E&lang=en");
   assert.equal(response.status, 200);

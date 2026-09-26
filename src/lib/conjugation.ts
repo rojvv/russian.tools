@@ -48,6 +48,12 @@ export function createTable(verb: Verb, aspect: "imperfective" | "perfective"): 
   ];
 }
 
+/** Match the default table rendered for a shared verb URL. */
+export function hasConjugationForms(verb: Verb): boolean {
+  return createTable(verb, verb.aspect === "perfective" ? "perfective" : "imperfective")
+    .some(section => section.rows.some(row => row.form.trim()));
+}
+
 export function exportRows(infinitive: string, aspect: string, sections: Section[]): string[][] {
   return [
     ["Verb", infinitive],

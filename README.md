@@ -326,7 +326,10 @@ English and Russian pages have explicit `lang=en` and `lang=ru` URLs, for exampl
 `/decliner?книга&lang=ru`. The URL language overrides browser preferences and
 cookies. Word pages include server-rendered forms, word-specific titles and
 headings, localized canonical URLs, and reciprocal `hreflang` links. Inexact
-suggestions and invalid queries remain `noindex`.
+suggestions, invalid queries, and verbs with no forms in their default conjugation
+table remain `noindex`. Dictionary sitemaps exclude those entries and Latin or
+mixed-script headwords, and consolidate case variants using the first normalized
+headword selected by lookup. Missing verb forms are not invented.
 
 URLs without a supported language temporarily redirect to the visitor's preferred
 language URL (with private, non-cacheable responses). Navigation links point directly
